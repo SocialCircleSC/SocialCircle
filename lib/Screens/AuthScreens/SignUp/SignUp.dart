@@ -1,11 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:community/Screens/AuthScreens/Login/AltLogIn.dart';
-import 'package:community/Screens/AuthScreens/Login/LoginButton.dart';
 import 'package:community/Screens/AuthScreens/Login/LoginScreen.dart';
 import 'package:community/Screens/AuthScreens/SignUp/SignUpButton.dart';
 import 'package:community/Screens/AuthScreens/SignUp/SignUpForm.dart';
-import 'package:community/Screens/AuthScreens/SignUp/checkBox.dart';
 import 'package:community/themes/theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -64,26 +62,13 @@ class SignUpScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 5,
             ),
             Padding(
               padding: DefaultPadding,
               child: SignUpForm(),
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: DefaultPadding,
-              child: checkBox("I agree to the terms and conditions."),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: DefaultPadding,
-              child: SignUpButton(),
-            ),
+           
             SizedBox(height: 10,),
             Padding(
               padding: DefaultPadding,

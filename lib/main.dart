@@ -34,7 +34,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: NavBar(),
+      home: LoginScreen(),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:community/Screens/AuthScreens/SignUp/SignUpButton.dart';
 import 'package:flutter/material.dart';
 
 const PrimaryColor = Color(0xFF8B008B);
@@ -9,6 +10,9 @@ const BlackColor = Color(0xFF272726);
 const TextFieldColor = Color(0xFF979797);
 
 const DefaultPadding = EdgeInsets.symmetric(horizontal: 30);
+const LogInButtonPadding = EdgeInsets.symmetric(horizontal: 140, vertical: 15);
+const SignUpButtonPadding = EdgeInsets.symmetric(horizontal: 125, vertical: 15);
+const CheckBoxPadding = EdgeInsets.symmetric(horizontal: 0, vertical: 0);
 
 TextStyle titleText =
     TextStyle(color: PrimaryColor, fontSize: 32, fontWeight: FontWeight.w700);
