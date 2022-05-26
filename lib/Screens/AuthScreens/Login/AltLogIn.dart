@@ -18,6 +18,7 @@ class AltLogin extends StatelessWidget {
             image: AssetImage('lib/assets/facebook_icon.png'),
           ),
           textButton: 'Facebook',
+          
         ),
         BuildButton(
           iconImage: Image(
