@@ -1,13 +1,16 @@
 // ignore_for_file: prefer_const_constructors, dead_code
 
-import 'package:community/Screens/NavScreens/NavBar.dart';
+import 'dart:developer';
+
+import 'package:community/Screens/GettingStarted.dart/ChooseChurch.dart';
+import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
+import 'package:community/firestore/SignUpData.dart';
 import 'package:community/themes/theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import "package:community/models/user_model.dart";
 import 'package:fluttertoast/fluttertoast.dart';
-
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);
@@ -139,21 +142,22 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
         ),
 
-        Container(
-            height: 40,
-            width: 1000,
-            child: CheckboxListTile(
-              title:
-                  Text("I agree to the terms and conditions of Social Circle"),
-              value: checkedValue,
-              onChanged: (bool? value) {
-                setState(() {
-                  checkedValue = value!;
-                });
-              },
-              controlAffinity:
-                  ListTileControlAffinity.leading, //  <-- leading Checkbox
-            )),
+
+        // Container(
+        //     height: 40,
+        //     width: 1000,
+        //     child: CheckboxListTile(
+        //       title:
+        //           Text("I agree to the terms and conditions of Social Circle"),
+        //       value: checkedValue,
+        //       onChanged: (bool? value) {
+        //         setState(() {
+        //           checkedValue = value!;
+        //         });
+        //       },
+        //       controlAffinity:
+        //           ListTileControlAffinity.leading, //  <-- leading Checkbox
+        //     )),
 
         SizedBox(
           height: 20,
@@ -175,21 +179,32 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   void signUp(String email, String password) async {
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        Fluttertoast.showToast(msg: "The Password is too weak");
-      } else if (e.code == 'email-already-in-use') {
-        Fluttertoast.showToast(msg: "The Password is too weak");
+    
+    if (passwordController.text != confirmPasswordController.text) {
+      Fluttertoast.showToast(
+          msg:
+              "Please make sure your password is the same as your confirm passowrd");
+    } else {
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: emailController.text, password: passwordController.text);
+        userSetup(firstNameController.text, lastNameController.text,
+            emailController.text);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          Fluttertoast.showToast(msg: "The Password is too weak");
+        } else if (e.code == 'email-already-in-use') {
+          Fluttertoast.showToast(msg: "The Password is too weak");
+        }
+      } catch (e) {
+        print(e);
       }
-    } catch (e) {
-      print(e);
-    }
 
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => NavBar()));
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => ChooseChurch()));
+    }
   }
+
+
 }

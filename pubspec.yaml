@@ -27,11 +27,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cloud_firestore: ^3.1.10
+  cloud_firestore: ^3.1.4
   cupertino_icons: ^1.0.2
   firebase_core: ^1.13.1
   firebase_auth: ^3.3.9
   google_sign_in: "^4.5.1"
+  get: ^4.3.8
+  firestore_search: ^0.1.9
 
   flutter:
     sdk: flutter
@@ -67,6 +69,8 @@ flutter:
     - lib/assets/fp_profile.jpg
     - lib/assets/facebook_icon.png
     - lib/assets/google_icon.png
+    - lib/assets/holderimage.jpg
+    - lib/assets/churchImage.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

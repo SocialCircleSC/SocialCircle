@@ -1,16 +1,11 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors
 
-import 'package:community/Screens/AuthScreens/Login/AltLogIn.dart';
 import 'package:community/Screens/AuthScreens/Login/LoginForm.dart';
-import 'package:community/Screens/AuthScreens/SignUp/RegisScreen.dart';
 import 'package:community/Screens/AuthScreens/SignUp/SignUp.dart';
 import 'package:community/themes/theme.dart';
-import 'package:community/Screens/HomeScreen/HomeScreen.dart';
-import 'package:community/Screens/NavScreens/NavBar.dart';
-import 'package:community/Screens/ResetPassword/ResetPasswordScreen.dart';
+import 'package:community/Screens/AuthScreens/ResetPassword/ResetPasswordScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -75,11 +70,11 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
           SizedBox(
-            height: 10,
+            height: 30,
           ),
           LoginForm(),
           SizedBox(
-            height: 20,
+            height: 50,
           ),
           GestureDetector(
             onTap: () {
@@ -101,14 +96,14 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 20,
           ),
 
-          Text(
-            "Or log in with:",
-            style: subTitle.copyWith(color: BlackColor),
-          ),
+          // Text(
+          //   "Or log in with:",
+          //   style: subTitle.copyWith(color: BlackColor),
+          // ),
           SizedBox(
             height: 20,
           ),
-          AltLogin(),
+          // AltLogin(),
         ]),
       ),
     );
