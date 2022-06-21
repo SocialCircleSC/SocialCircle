@@ -1,5 +1,6 @@
 import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 
 class ChurchScreen extends StatefulWidget {
   const ChurchScreen({Key? key}) : super(key: key);
@@ -95,31 +96,12 @@ class _ChurchScreenState extends State<ChurchScreen> {
                       style: TextStyle(
                         color: PrimaryColor,
                         fontSize: 15,
-                        fontFamily: '',
+                        fontFamily: 'Roboto',
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ),
-
-                // SizedBox(
-                //   height: 15,
-                // ),
-                // Padding(
-                //   padding: semiLeftPadding,
-                //   child: Align(
-                //     alignment: Alignment.centerLeft,
-                //     child: Text(
-                //       "Hours: ",
-                //       style: TextStyle(
-                //         color: BlackColor,
-                //         fontSize: 15,
-                //         fontFamily: 'Roboto',
-                //         fontWeight: FontWeight.w500,
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 // SizedBox(
                 //   height: 10,
                 // ),

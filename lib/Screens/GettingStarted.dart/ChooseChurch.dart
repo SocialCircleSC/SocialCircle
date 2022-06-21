@@ -22,34 +22,36 @@ class ChooseChurch extends StatefulWidget {
 class _ChooseChurchState extends State<ChooseChurch> {
   String searchString = "";
 
-
-  //List<Map<String, dynamic>> allChurches = [];
-
-  final List<Map<String, dynamic>> allChurches = [
-    {"id": 1, "name": "Andy", "age": 29},
-    {"id": 2, "name": "Aragon", "age": 40},
-    {"id": 3, "name": "Bob", "age": 5},
-    {"id": 4, "name": "Barbara", "age": 35},
-    {"id": 5, "name": "Candy", "age": 21},
-    {"id": 6, "name": "Colin", "age": 55},
-    {"id": 7, "name": "Audra", "age": 30},
-    {"id": 8, "name": "Banana", "age": 14},
-    {"id": 9, "name": "Caversky", "age": 100},
-    {"id": 10, "name": "Becky", "age": 32},
-  ];
+  List<Map<String, dynamic>> allChurches = [];
 
   // This list holds the data for the list view
   List<Map<String, dynamic>> foundChurches = [];
 
-  getData() async {
-    await FirebaseFirestore.instance.collection("Churches").orderBy('Church Name', descending: true).get().then((value) {
-      for(var i in value.docs) {
-        allChurches.add(i.data());
+  Future getChurchList() async {
+    List<Map<String, dynamic>> answer = [];
+
+    var data = await FirebaseFirestore.instance
+        .collection('Churches')
+        .orderBy('Church Name', descending: true)
+        .get()
+        .then((value) {
+      for (var i in value.docs) {
+        answer.add({"name": i.data()});
       }
+    });
+
+    setState(() {
+      allChurches = answer;
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getChurchList();
+  }
 
+  @override
   initState() {
     // at the beginning, all users are shown
     foundChurches = allChurches;
@@ -108,14 +110,13 @@ class _ChooseChurchState extends State<ChooseChurch> {
                 height: 20,
               ),
               Expanded(
-                child: foundChurches.isNotEmpty
+                child: allChurches.isNotEmpty //Found Churches
                     ? ListView.builder(
-                        itemCount: foundChurches.length,
+                        itemCount: allChurches.length, //FoundChurches
                         itemBuilder: (context, index) => Card(
                           child: ListTile(
                             title: Text(allChurches[index].toString()),
-                            subtitle: Text(
-                                '${allChurches[index].toString()} '),
+                            subtitle: Text('${allChurches[index].toString()} '),
                           ),
                         ),
                       )
@@ -131,84 +132,3 @@ class _ChooseChurchState extends State<ChooseChurch> {
     );
   }
 }
-
-
-
-
-
-// Padding(
-//           padding: CenterPadding,
-//           child: Column(children: [
-//             const SizedBox(
-//               height: 100,
-//             ),
-//             Text("Find Your Church!", style: titleText),
-//             SizedBox(
-//               height: 20,
-//             ),
-
-//             TextButton(
-//               style: TextButton.styleFrom(
-//                 primary: WhiteColor,
-//                 backgroundColor: PrimaryColor,
-//                 padding: CenterPadding,
-//               ),
-//               child: Text("Or Add My Church!"),
-//               onPressed: () {
-//                 Navigator.of(context).pushReplacement(
-//                     MaterialPageRoute(builder: (context) => NavBar()));
-//               },
-//             ),
-//           ]),
-//         ),
-
-
-//Alt Search Bar
-// TextEditingController searchController = TextEditingController();
-//   List churches = [];
-
-//   late Future resultsLoaded;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     searchController.addListener(() {
-//       onSearchChanged;
-//     });
-//   }
-
-//   @override
-//   void dispose() {
-//     searchController.removeListener(() {
-//       onSearchChanged();
-//     });
-//     searchController.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   void didChangeDependencies() {
-//     super.didChangeDependencies();
-//     resultsLoaded = getChurchList();
-//   }
-
-//   getChurchList() async {
-//     var data = await FirebaseFirestore.instance
-//         .collection("Churches") 
-//         .get()
-//         .then((QuerySnapshot querySnapShot) {
-//       for (var doc in querySnapShot.docs) {
-//         churches.add(doc["Church Name"]);
-//       }
-//     });
-
-//     data;
-
-//     return churches;
-//   }
-  
-
-//   onSearchChanged() {
-//     //Make it show a list like the other search bar
-//     print(churches);
-//   }
