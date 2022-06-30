@@ -10,6 +10,10 @@ Future<void> userSetup(String fname, String lname, String email) async {
   String aboutMe = "Empty";
   String status = "Member";
 
+  users.doc(uid).collection('Posts').doc().set({
+    'User ID': uid,
+  });
+
   users.doc(uid).set({
     'First Name': fname,
     'Last Name': lname,

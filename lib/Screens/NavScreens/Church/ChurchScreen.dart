@@ -91,7 +91,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
             builder:
                 (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
               if (!snapshot.hasData) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
 
               return SingleChildScrollView(
@@ -129,7 +129,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           removeParenthese(currentChurch[1].values.toString()),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.blueGrey,
                             fontSize: 15,
                             fontFamily: 'Roboto',
@@ -147,7 +147,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           removeParenthese(currentChurch[2].values.toString()),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: BlackColor,
                             fontSize: 15,
                             fontFamily: '',
@@ -159,21 +159,40 @@ class _ChurchScreenState extends State<ChurchScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Padding(
+                    Padding(
                       padding: semiLeftPadding,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "See Hours",
-                          style: TextStyle(
-                            color: PrimaryColor,
-                            fontSize: 15,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w500,
+                      child: RichText(
+                        text: 
+                        const TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'See Hours                   ',
+                              style: TextStyle(
+                             color: PrimaryColor,
+                             fontSize: 15,
+                             fontFamily: 'Roboto',
+                             fontWeight: FontWeight.w500,
+                           ),
                           ),
+
+                          TextSpan(
+                              text: 'See Members',
+                              style: TextStyle(
+                             color: PrimaryColor,
+                             fontSize: 15,
+                             fontFamily: 'Roboto',
+                             fontWeight: FontWeight.w500,
+                           ),
+                          ),
+                        ],
                         ),
                       ),
                     ),
+
+                    const SizedBox(
+                      height: 10,
+                    ),
+
                     const Divider(
                       color: BlackColor,
                     ),

@@ -56,7 +56,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: MaterialApp(
         home: Scaffold(
           backgroundColor: Colors.white,
-          body: SingleChildScrollView(
+          body: 
+          
+           FutureBuilder(
+            future: Future.wait([
+              getUserInfo(),
+            ]),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+              if (!snapshot.hasData) {
+                return const CircularProgressIndicator();
+              }
+
+          return SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 const Padding(
@@ -144,12 +156,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 )
               ],
             ),
-          ),
+          );
+        },
+        ),
         ),
         debugShowCheckedModeBanner: false, //Removing Debug Banner
       ),
-    );
+      );
   }
+}
+
 
   //logout button
   Future<void> logout(BuildContext context) async {
@@ -161,4 +177,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String removeParenthese(String data) {
     return data.substring(1, data.length - 1);
   }
-}
+

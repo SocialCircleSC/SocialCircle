@@ -16,6 +16,15 @@ Future<void> churchSetup(
   FirebaseAuth auth = FirebaseAuth.instance;
   final User? user = auth.currentUser;
   final uid = user?.uid;
+
+  users
+      .doc(uid)
+      .collection('Posts')
+      .doc()
+      .set({
+        'Church ID': uid,
+      });
+
   String empty = "empty";
 
   if (wS2.isEmpty) {
@@ -44,5 +53,6 @@ Future<void> churchSetup(
     'Weekly Service 3': wS3,
     'Weekly Service 4': wS4,
     'Weekly Service 5': wS5,
+    'Status': 'Church',
   });
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 const PrimaryColor = Color(0xFF8B008B);
@@ -19,10 +21,10 @@ const SignUpButtonPadding = EdgeInsets.symmetric(horizontal: 125, vertical: 15);
 const CheckBoxPadding = EdgeInsets.symmetric(horizontal: 0, vertical: 0);
 
 TextStyle titleText =
-    TextStyle(color: PrimaryColor, fontSize: 32, fontWeight: FontWeight.w700);
+    const TextStyle(color: PrimaryColor, fontSize: 32, fontWeight: FontWeight.w700);
 TextStyle subTitle =
-    TextStyle(color: SecondaryColor, fontSize: 18, fontWeight: FontWeight.w500);
-TextStyle textButton = TextStyle(
+    const TextStyle(color: SecondaryColor, fontSize: 18, fontWeight: FontWeight.w500);
+TextStyle textButton = const TextStyle(
   color: PrimaryColor,
   fontSize: 18,
   fontWeight: FontWeight.w700,

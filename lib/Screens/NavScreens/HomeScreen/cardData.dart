@@ -1,9 +1,19 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community/themes/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 
-class cardData extends StatelessWidget {
+class cardData extends StatefulWidget {
   const cardData({Key? key}) : super(key: key);
+
+  @override
+  State<cardData> createState() => _cardDataState();
+}
+
+class _cardDataState extends State<cardData> {
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +53,66 @@ class cardData extends StatelessWidget {
               children: <Widget>[
                 //Padding(padding: EdgeInsets.symmetric(vertical: 60)),
                 Expanded(
-                    child: Image.network(
-                        'https://googleflutter.com/sample_image.jpg')),
+                  child: Image.network(
+                    'https://googleflutter.com/sample_image.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 25,
+                ),
+                LikeButton(
+                  size: 20,
+                  circleColor: CircleColor(
+                      start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                  bubblesColor: BubblesColor(
+                    dotPrimaryColor: SecondaryColor,
+                    dotSecondaryColor: SecondaryColor,
+                  ),
+                  likeBuilder: (bool isLiked) {
+                    return Icon(
+                      Icons.thumb_up,
+                      color: isLiked ? PrimaryColor : Colors.blueGrey,
+                      size: 20,
+                    );
+                  },
+                  likeCount: 665,
+                  countBuilder: (count, bool isLiked, String text) {
+                    var color = isLiked ? PrimaryColor : Colors.blueGrey;
+                    Widget result;
+                    if (count == 0) {
+                      result = Text(
+                        "love",
+                        style: TextStyle(color: color),
+                      );
+                    } else {
+                      result = Text(
+                        text,
+                        style: TextStyle(color: color),
+                      );
+                    }
+                    return result;
+                  },
+                ),
+                SizedBox(
+                  width: 70,
+                ),
+                Expanded(
+                    child: TextButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.comment,
+                          color: Colors.blueGrey,
+                        ),
+                        label: const Text(
+                          "Comment",
+                          style: TextStyle(color: Colors.blueGrey),
+                        ))),
               ],
             ),
           ],
