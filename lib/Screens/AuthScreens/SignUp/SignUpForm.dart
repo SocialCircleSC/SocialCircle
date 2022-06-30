@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, dead_code
 
-import 'dart:developer';
 
 import 'package:community/Screens/GettingStarted.dart/ChooseChurch.dart';
 import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
@@ -142,23 +141,6 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
         ),
 
-
-        // Container(
-        //     height: 40,
-        //     width: 1000,
-        //     child: CheckboxListTile(
-        //       title:
-        //           Text("I agree to the terms and conditions of Social Circle"),
-        //       value: checkedValue,
-        //       onChanged: (bool? value) {
-        //         setState(() {
-        //           checkedValue = value!;
-        //         });
-        //       },
-        //       controlAffinity:
-        //           ListTileControlAffinity.leading, //  <-- leading Checkbox
-        //     )),
-
         SizedBox(
           height: 20,
         ),
@@ -179,7 +161,6 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   void signUp(String email, String password) async {
-    
     if (passwordController.text != confirmPasswordController.text) {
       Fluttertoast.showToast(
           msg:
@@ -191,20 +172,18 @@ class _SignUpFormState extends State<SignUpForm> {
                 email: emailController.text, password: passwordController.text);
         userSetup(firstNameController.text, lastNameController.text,
             emailController.text);
+
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => ChooseChurch()));
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           Fluttertoast.showToast(msg: "The Password is too weak");
         } else if (e.code == 'email-already-in-use') {
-          Fluttertoast.showToast(msg: "The Password is too weak");
+          Fluttertoast.showToast(msg: "Email already exists");
         }
       } catch (e) {
         print(e);
       }
-
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => ChooseChurch()));
     }
   }
-
-
 }

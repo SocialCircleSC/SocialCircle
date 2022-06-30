@@ -14,7 +14,7 @@ Future<void> main() async {
   //Force device to be in portrait mode
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(const MainPage());
+    runApp(MainPage());
   });
 }
 
@@ -36,6 +36,7 @@ class _MainPageState extends State<MainPage> {
         return false;
       },
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: LoginScreen(),
       ),
     );

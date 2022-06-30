@@ -2,6 +2,7 @@
 
 import 'package:community/Screens/AuthScreens/Login/LoginForm.dart';
 import 'package:community/Screens/AuthScreens/SignUp/SignUp.dart';
+import 'package:community/Screens/GettingStarted.dart/ChooseUserType.dart';
 import 'package:community/themes/theme.dart';
 import 'package:community/Screens/AuthScreens/ResetPassword/ResetPasswordScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -55,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SignUpScreen(),
+                      builder: (context) => ChooseUser(),
                     ),
                   );
                 },

@@ -3,8 +3,11 @@ import 'package:community/Screens/NavScreens/Give/GiveScreen.dart';
 import 'package:community/Screens/NavScreens/HomeScreen/HomeScreen.dart';
 import 'package:community/Screens/NavScreens/HomeScreen/PostScreen.dart';
 import 'package:community/Screens/NavScreens/Profile/ProfileScreen.dart';
+import 'package:community/main.dart';
 import 'package:community/themes/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class NavBar extends StatefulWidget {
@@ -12,8 +15,6 @@ class NavBar extends StatefulWidget {
 
   @override
   State<NavBar> createState() => _NavBarState();
-
-  
 }
 
 class _NavBarState extends State<NavBar> {
@@ -34,13 +35,25 @@ class _NavBarState extends State<NavBar> {
             SnackBar(content: Text('The System Back Button is Deactivated')));
         return false;
       },
-
-      
       child: MaterialApp(
         home: Scaffold(
           body: pageOptions[selectedPage],
           backgroundColor: Colors.white,
           appBar: AppBar(
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert, color: BlackColor),
+                onSelected: handleClick,
+                itemBuilder: (BuildContext context) {
+                  return {'Logout'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
             title: const Text(
               'SocialCircle',
               style: TextStyle(
@@ -50,19 +63,19 @@ class _NavBarState extends State<NavBar> {
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
-    
+
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const PostScreen()),
-            );
+                context,
+                MaterialPageRoute(builder: (context) => const PostScreen()),
+              );
             },
             child: Icon(Icons.add),
-            backgroundColor: PrimaryColor,  
-            foregroundColor: WhiteColor,  
-            ),
-    
+            backgroundColor: PrimaryColor,
+            foregroundColor: WhiteColor,
+          ),
+
           // ignore: prefer_const_literals_to_create_immutables
           bottomNavigationBar: GNav(
             gap: 8,
@@ -97,5 +110,21 @@ class _NavBarState extends State<NavBar> {
         debugShowCheckedModeBanner: false, //Removing Debug Banner
       ),
     );
+  }
+
+  void handleClick(String value) {
+    switch (value) {
+      case 'Logout':
+        _signOut();
+        break;
+    }
+  }
+
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const MainPage()));
+    Fluttertoast.showToast(msg: "The Password is too weak");
+    
   }
 }

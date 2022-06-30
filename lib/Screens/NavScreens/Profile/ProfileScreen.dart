@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/Screens/AuthScreens/Login/LoginScreen.dart';
 import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +12,45 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  List<Map<String, dynamic>> userInfo = [];
+
+  Future getUserInfo() async {
+    List<Map<String, dynamic>> userData = [];
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
+
+    var data = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .get()
+        .then((value) {
+      userData.add({"First Name": value.get('First Name')});
+      userData.add({"Last Name": value.get('Last Name')});
+      userData.add({"Current Church": value.get('Current Church')});
+      userData.add({"About Me": value.get('About Me')});
+      userData.add({"Status": value.get('Status')});
+    });
+
+    setState(() {
+      userInfo = userData;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getUserInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
     return WillPopScope(
       onWillPop: () async {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('The System Back Button is Deactivated')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The System Back Button is Deactivated')));
         return false;
       },
       child: MaterialApp(
@@ -25,37 +58,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(
-              children: const <Widget>[
-                Padding(
+              children: <Widget>[
+                const Padding(
                   padding: CenterPadding2,
                   child: CircleAvatar(
                     backgroundImage: AssetImage('lib/assets/holderimage.jpg'),
                     radius: 50,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Text(
-                  "Olaoluwa Olojede",
-                  style: TextStyle(
+                  removeParenthese(userInfo[0].values.toString()) +
+                      " " +
+                      removeParenthese(userInfo[1].values.toString()),
+                  style: const TextStyle(
                     color: BlackColor,
                     fontSize: 22,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Text(
-                  "The Grace of God Ministries",
-                  style: TextStyle(
+                  removeParenthese(userInfo[2].values.toString()),
+                  style: const TextStyle(
                     color: BlackColor,
                     fontSize: 15,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Padding(
@@ -63,7 +98,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Status: " + "Member",
+                      "Status: " +
+                          "" +
+                          removeParenthese(userInfo[3].values.toString()),
+                      // ignore: prefer_const_constructors
                       style: TextStyle(
                         color: BlackColor,
                         fontSize: 15,
@@ -72,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Padding(
@@ -80,8 +118,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "About Me: " + "Hi",
-                      style: TextStyle(
+                      "About Me: " +
+                          removeParenthese(userInfo[4].values.toString()),
+                      style: const TextStyle(
                         color: BlackColor,
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
@@ -89,10 +128,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
-                Text(
+                const Text(
                   "Posts and Replies",
                   style: TextStyle(
                     color: BlackColor,
@@ -100,7 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Divider(
+                const Divider(
                   color: BlackColor,
                 )
               ],
@@ -116,17 +155,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginScreen()));
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
+  }
+
+  String removeParenthese(String data) {
+    return data.substring(1, data.length - 1);
   }
 }
-
-
-// Column(
-//             children: [
-//               ElevatedButton(
-//                   onPressed: () {
-//                     logout(context);
-//                   },
-//                   child: Text("LogOut")),
-//             ],
-//           ),
