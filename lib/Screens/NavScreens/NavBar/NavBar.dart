@@ -93,8 +93,8 @@ class _NavBarState extends State<NavBar> {
                 text: "Home",
               ),
               GButton(
-                icon: Icons.church,
-                text: "Church",
+                icon: Icons.people,
+                text: "Circle",
               ),
               GButton(
                 icon: Icons.monetization_on_rounded,
@@ -124,7 +124,7 @@ class _NavBarState extends State<NavBar> {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const MainPage()));
-    Fluttertoast.showToast(msg: "The Password is too weak");
+    Fluttertoast.showToast(msg: "Logout Successful");
     
   }
 }

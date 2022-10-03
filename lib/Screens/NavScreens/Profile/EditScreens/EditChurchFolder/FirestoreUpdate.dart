@@ -1,24 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> userSetup(String fname, String lname, String email) async {
+Future<void> updateProfile(
+    String fName, String lName, String email, String aboutMe) async {
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
   FirebaseAuth auth = FirebaseAuth.instance;
   final User? user = auth.currentUser;
   final uid = user?.uid;
 
-  String aboutMe = "Empty";
-  String status = "Member";
-
-  users.doc(uid).collection('Posts').doc().set({
-    'User ID': uid,
-  });
-
-  users.doc(uid).set({
-    'First Name': fname,
-    'Last Name': lname,
+  users.doc(uid).update({
+    'First Name': fName,
+    'Last Name': lName,
     'Email Address': email,
     'About Me': aboutMe,
-    'Status': status,
-  });
+    });
 }

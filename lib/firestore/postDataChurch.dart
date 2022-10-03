@@ -1,22 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> postData(String postText, String status) async {
-  var type;
-  if (status == 'Member') {
-    type = 'Users';
-  } else {
-    type = 'Churches';
-  }
+Future<void> postDataChu(String postText, String status, String cName) async {
   FirebaseAuth auth = FirebaseAuth.instance;
   final User? user = auth.currentUser;
   final uid = user?.uid;
-  CollectionReference post = FirebaseFirestore.instance
-      .collection(type)
+
+
+  //Post Church Data
+  CollectionReference postToMember = FirebaseFirestore.instance
+      .collection('Churches')
       .doc(uid)
       .collection('Posts');
 
-  post.doc().set({
+  postToMember.doc().set({
+    'Name': cName,
     'Post Text': postText,
     'ID': uid,
     'Likes': 0,

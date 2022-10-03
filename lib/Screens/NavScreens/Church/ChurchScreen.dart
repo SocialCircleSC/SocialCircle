@@ -28,7 +28,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
         .doc(uid)
         .get()
         .then((value) {
-      userID = value.get("Current Church ID");
+      userID = value.get("Church ID");
     });
 
     setState(() {

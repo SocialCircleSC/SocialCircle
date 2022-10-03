@@ -1,7 +1,7 @@
 import 'package:community/Screens/GettingStarted.dart/ChooseChurch.dart';
 import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
-import 'package:community/firestore/ChurchSignUpData.dart';
-import 'package:community/firestore/SignUpData.dart';
+import 'package:community/firestore/churchSignUpData.dart';
+import 'package:community/firestore/memberSignUpData.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import "package:flutter/material.dart";

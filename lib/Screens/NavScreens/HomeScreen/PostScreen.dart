@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
-import 'package:community/firestore/postData.dart';
+import 'package:community/firestore/postDataChurch.dart';
+import 'package:community/firestore/postDataMember.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -21,7 +22,8 @@ class PostScreen extends StatefulWidget {
 class _PostScreenState extends State<PostScreen> {
   TextEditingController postTextController = TextEditingController();
 
-  
+  String userType = "Member";
+
   // int count = 0;
 
   // void addImages() {
@@ -51,8 +53,6 @@ class _PostScreenState extends State<PostScreen> {
   //     print(count);
   //   });
 
-    
-
   // }
 
   // late File imageFile;
@@ -69,10 +69,19 @@ class _PostScreenState extends State<PostScreen> {
   //   }
   // }
 
+  var churchInfo;
   var userInfo;
+  var firstName;
+  var lastName;
+  var churchID;
+  var churchName;
 
   Future getUserInfo() async {
     String userData = "";
+    String userFirstName = "";
+    String userLastName = "";
+    String userChurchID = "";
+    String userChurchName = "";
 
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
@@ -84,10 +93,40 @@ class _PostScreenState extends State<PostScreen> {
         .get()
         .then((value) {
       userData = value.get('Status');
+      userFirstName = value.get('First Name');
+      userLastName = value.get('Last Name');
+      userChurchID = value.get('Current Church ID');
     });
 
     setState(() {
       userInfo = userData;
+      firstName = userFirstName;
+      lastName = userLastName;
+      churchID = userChurchID;
+      churchName = userChurchName;
+    });
+  }
+
+  Future getChurchInfo() async {
+    String churchData = "";
+    String churchDataName = "";
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
+
+    var data = await FirebaseFirestore.instance
+        .collection('Churches')
+        .doc(uid)
+        .get()
+        .then((value) {
+      churchData = value.get('Status');
+      churchDataName = value.get('Church Name');
+    });
+
+    setState(() {
+      churchInfo = churchData;
+      churchName = churchDataName;
     });
   }
 
@@ -95,6 +134,7 @@ class _PostScreenState extends State<PostScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     getUserInfo();
+    getChurchInfo();
   }
 
   @override
@@ -127,7 +167,13 @@ class _PostScreenState extends State<PostScreen> {
             FlatButton(
               textColor: Colors.white,
               onPressed: () {
-                postData(postTextController.text, userInfo);
+                if (userType == userInfo) {
+                  postDataMem(postTextController.text, userInfo, firstName,
+                      lastName, churchID);
+                } else {
+                  postDataChu(postTextController.text, churchInfo, churchName);
+                }
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const NavBar()),
