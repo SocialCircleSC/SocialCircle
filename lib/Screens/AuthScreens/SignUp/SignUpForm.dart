@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, dead_code
 
-
 import 'package:community/Screens/GettingStarted.dart/ChooseChurch.dart';
 import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
 import 'package:community/firestore/memberSignUpData.dart';
@@ -10,6 +9,7 @@ import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:community/storage/storage_services.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);
@@ -19,6 +19,7 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  final Storage storage = Storage();
   bool _isObscure = true;
   bool checkedValue = false;
   bool newValue = true;

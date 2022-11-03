@@ -16,14 +16,15 @@ const CenterPadding = EdgeInsets.symmetric(horizontal: 50);
 const LeftPadding = EdgeInsets.symmetric(horizontal: 15);
 const semiLeftPadding = EdgeInsets.symmetric(horizontal: 10);
 const CenterPadding2 = EdgeInsets.symmetric(horizontal: 120);
+const CenterPadding3 = EdgeInsets.symmetric(horizontal: 100);
 const LogInButtonPadding = EdgeInsets.symmetric(horizontal: 140, vertical: 15);
 const SignUpButtonPadding = EdgeInsets.symmetric(horizontal: 125, vertical: 15);
 const CheckBoxPadding = EdgeInsets.symmetric(horizontal: 0, vertical: 0);
 
-TextStyle titleText =
-    const TextStyle(color: PrimaryColor, fontSize: 32, fontWeight: FontWeight.w700);
-TextStyle subTitle =
-    const TextStyle(color: SecondaryColor, fontSize: 18, fontWeight: FontWeight.w500);
+TextStyle titleText = const TextStyle(
+    color: PrimaryColor, fontSize: 32, fontWeight: FontWeight.w700);
+TextStyle subTitle = const TextStyle(
+    color: SecondaryColor, fontSize: 18, fontWeight: FontWeight.w500);
 TextStyle textButton = const TextStyle(
   color: PrimaryColor,
   fontSize: 18,

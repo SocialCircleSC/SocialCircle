@@ -37,6 +37,7 @@ dependencies:
   like_button: ^2.0.4
   firebase_storage: ^10.2.18
   file_picker: ^4.0.3
+  image_cropper: ^3.0.0
   image_picker: ^0.8.5+3
 
   flutter:

@@ -10,7 +10,9 @@ import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:community/storage/storage_services.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -22,24 +24,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   File? image;
   String imagePath = 'lib/assets/holderimage.jpg';
-
-  Future pickImage() async {
-    try {
-      final image = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-      );
-      if (image != null) return;
-
-      final imageTemporary = File(image!.path);
-
-      setState(() {
-        this.image = imageTemporary;
-        imagePath = (image.path).toString();
-      });
-    } on PlatformException catch (e) {
-      print('Failed to pick image: $e');
-    }
-  }
 
   List<Map<String, dynamic>> userInfo = [];
 
@@ -75,6 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Storage storage = Storage();
     // ignore: prefer_const_constructors
     return WillPopScope(
       onWillPop: () async {
@@ -99,9 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   children: <Widget>[
                     // ignore: prefer_const_constructors
-                    //  image != null
-                    //     ? Image.file(image!)
-                    //     : Text("No Image selected"),
+
                     const Padding(
                       padding: CenterPadding2,
                       child: CircleAvatar(
@@ -204,7 +187,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               onTap: () {
                                                 Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(builder: (context) => const EditProfileDetails()),
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const EditProfileDetails()),
                                                 );
                                               },
                                               child: const Text(
@@ -216,31 +201,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               ),
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => const EditProfilePicture()),
-                                                );
-                                              },
-                                              child: const Text(
-                                                'Change Profile Picture',
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  color: PrimaryColor,
-                                                ),
+                                          TextButton(
+                                              style: TextButton.styleFrom(
+                                                primary: WhiteColor,
+                                                backgroundColor: PrimaryColor,
                                               ),
-                                            ),
-                                          ),
+                                              child: const Text(
+                                                  "Change Profile Picture"),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const EditProfilePicture()),
+                                                );
+                                              }),
+                                        
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: GestureDetector(
                                               onTap: () {
                                                 Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(builder: (context) => const ChooseChurch()),
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const ChooseChurch()),
                                                 );
                                               },
                                               child: const Text(

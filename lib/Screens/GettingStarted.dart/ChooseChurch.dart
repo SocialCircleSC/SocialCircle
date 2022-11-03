@@ -3,6 +3,8 @@
 
 import 'package:community/Screens/AuthScreens/Login/LoginScreen.dart';
 import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
+import 'package:community/Screens/NavScreens/Profile/EditScreens/EditProfileDetails.dart';
+import 'package:community/Screens/NavScreens/Profile/EditScreens/EditProfilePicture.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -162,7 +164,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const NavBar()));
+                                      builder: (context) => const EditProfilePicture()));
                             },
                           ),
                         ),

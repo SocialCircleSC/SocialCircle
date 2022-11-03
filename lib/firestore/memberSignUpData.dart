@@ -7,14 +7,17 @@ Future<void> userSetup(String fname, String lname, String email) async {
   final User? user = auth.currentUser;
   final uid = user?.uid;
 
-  String aboutMe = "Empty";
+  String empty = "Empty";
   String status = "Member";
 
   users.doc(uid).set({
     'First Name': fname,
     'Last Name': lname,
     'Email Address': email,
-    'About Me': aboutMe,
+    'About Me': empty,
     'Status': status,
+    'ProfilePicName' : empty,
+    'ProfilePicUrl': empty,
   });
+
 }

@@ -6,7 +6,7 @@ import 'package:community/themes/theme.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EditProfilePicture extends StatefulWidget {
   const EditProfilePicture({Key? key}) : super(key: key);
@@ -24,32 +24,9 @@ class _EditProfilePictureState extends State<EditProfilePicture> {
   @override
   Widget build(BuildContext context) {
     final Storage storage = Storage();
-
-    FutureBuilder(
-        future: storage.listFiles(),
-        builder: (BuildContext context,
-            AsyncSnapshot<firebase_storage.ListResult> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.hasData) {
-            return Container(
-              height: 100,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: snapshot.data!.items.length,
-                itemBuilder: (BuildContext context, int index){
-                  return ElevatedButton(onPressed: (() {
-                    
-                  }), child: Text(snapshot.data!.items[index].name));
-                }),
-              );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting ||
-              !snapshot.hasData) {
-            return CircularProgressIndicator();
-          }
-          return Container();
-        });
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
 
     return Scaffold(
         appBar: AppBar(
@@ -68,39 +45,117 @@ class _EditProfilePictureState extends State<EditProfilePicture> {
             ),
           ),
           title: const Text(
-            "Edit Profile Details",
+            "Choose Profile Picture",
             style: TextStyle(color: BlackColor),
           ),
         ),
 
         // ignore: prefer_const_constructors
-        body: TextButton(
-          style: TextButton.styleFrom(
-            primary: WhiteColor,
-            backgroundColor: PrimaryColor,
-            //padding: SignUpButtonPadding,
-          ),
-          child: Text("Update"),
-          onPressed: () async {
-            final results = await FilePicker.platform.pickFiles(
-              allowMultiple: false,
-              type: FileType.custom,
-              allowedExtensions: ['png', 'jpg'],
-            );
+        body: Column(
+          children: [
+            //Show Images
+            FutureBuilder(
+                future: storage.downloadURL('20220806_143654.jpg'),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
+                    return Padding(
+                      padding: CenterPadding3,
+                      child: Container(
+                        width: 150,
+                        height: 200,
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(snapshot.data!),
+                          radius: 50,
+                        ),
+                      ),
+                    );
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting ||
+                      !snapshot.hasData) {
+                    return CircularProgressIndicator();
+                  }
+                  return Container();
+                }),
 
-            if (results == null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('No File Selected')));
-              return null;
-            }
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: WhiteColor,
+                backgroundColor: PrimaryColor,
+                //padding: SignUpButtonPadding,
+              ),
+              child: Text("Choose Picture"),
+              onPressed: () async {
+                final results = await FilePicker.platform.pickFiles(
+                  allowMultiple: false,
+                  type: FileType.custom,
+                  allowedExtensions: ['png', 'jpg'],
+                );
 
-            final path = results.files.single.path!;
-            final fileName = results.files.single.name;
+                if (results == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('No File Selected')));
+                  return null;
+                }
 
-            storage
-                .uploadFile(path, fileName)
-                .then((value) => print('Done Uploading File'));
-          },
+                final path = results.files.single.path!;
+                final fileName = results.files.single.name;
+
+                storage.createStorageFile(uid, path, fileName);
+
+                storage
+                    .uploadFile(uid, path, fileName)
+                    .then((value) => print('Done Uploading File'));
+              },
+            ),
+
+            TextButton(
+                style: TextButton.styleFrom(
+                  primary: WhiteColor,
+                  backgroundColor: PrimaryColor,
+                  //padding: SignUpButtonPadding,
+                ),
+                child: Text("Confirm"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const NavBar()),
+                  );
+                }),
+
+            // //Show list of the images in the database
+            // FutureBuilder(
+            //     future: storage.listFiles(),
+            //     builder: (BuildContext context,
+            //         AsyncSnapshot<firebase_storage.ListResult> snapshot) {
+            //       if (snapshot.connectionState == ConnectionState.done &&
+            //           snapshot.hasData) {
+            //         return Container(
+            //           padding: const EdgeInsets.symmetric(horizontal: 10),
+            //           height: 50,
+            //           child: ListView.builder(
+            //               scrollDirection: Axis.horizontal,
+            //               shrinkWrap: true,
+            //               itemCount: snapshot.data!.items.length,
+            //               itemBuilder: (BuildContext context, int index) {
+            //                 return Padding(
+            //                   padding: const EdgeInsets.all(8.0),
+            //                   child: ElevatedButton(
+            //                       onPressed: (() {}),
+            //                       child:
+            //                           Text(snapshot.data!.items[index].name)),
+            //                 );
+            //               }),
+            //         );
+            //       }
+            //       if (snapshot.connectionState == ConnectionState.waiting ||
+            //           !snapshot.hasData) {
+            //         return CircularProgressIndicator();
+            //       }
+            //       return Container();
+            //     }),
+          ],
         ));
   }
 }
