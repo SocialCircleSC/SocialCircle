@@ -57,6 +57,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getUserInfo();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     final Storage storage = Storage();
@@ -85,14 +87,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: <Widget>[
                     // ignore: prefer_const_constructors
 
-                    const Padding(
-                      padding: CenterPadding2,
-                      child: CircleAvatar(
-                        backgroundImage:
-                            AssetImage('lib/assets/holderimage.jpg'),
-                        radius: 50,
-                      ),
-                    ),
+                    FutureBuilder(
+                        future: storage.downloadURL('20220806_143654.jpg'),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              snapshot.hasData) {
+                            return Padding(
+                              padding: CenterPadding3,
+                              child: Container(
+                                width: 150,
+                                height: 200,
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(snapshot.data!),
+                                  radius: 50,
+                                ),
+                              ),
+                            );
+                          }
+                          if (snapshot.connectionState ==
+                                  ConnectionState.waiting ||
+                              !snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          }
+                          return Container();
+                        }),
                     const SizedBox(
                       height: 15,
                     ),
@@ -216,7 +236,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           const EditProfilePicture()),
                                                 );
                                               }),
-                                        
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: GestureDetector(

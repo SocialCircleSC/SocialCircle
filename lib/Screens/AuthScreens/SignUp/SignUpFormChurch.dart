@@ -10,6 +10,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/services.dart';
 
+
+//Fill out entire screen with content
+//Make the bottom navigation bar thin
+//Make it look like the YouVersion Bible App
+//Make it 
+//Remove 
+//Add event to calendar 
+
 class SignUpFormChurch extends StatefulWidget {
   const SignUpFormChurch({Key? key}) : super(key: key);
 
@@ -21,7 +29,6 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
   bool _isObscure = true;
   bool checkedValue = false;
   bool newValue = true;
-
   String empty = "empty";
 
   final auth = FirebaseAuth.instance;
