@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:community/screens/navscreens/homescreen/card_data.dart';
+import 'package:community/screens/navscreens/homescreen/card_info.dart';
 import 'package:flutter/material.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -39,12 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
             return Scaffold(
               body: Column(
+                // ignore: prefer_const_literals_to_create_immutables
                 children: [
                   Expanded(
                     child: ListView.builder(
                         itemCount: _posts.length,
                         itemBuilder: (context, index) {
-                          return CardData();
+                          return CardInfo();
                         }),
                   ),
                 ],
