@@ -1,15 +1,13 @@
 // ignore_for_file: prefer_const_constructors, dead_code
 
-import 'package:community/Screens/GettingStarted.dart/ChooseChurch.dart';
-import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
+import 'package:community/screens/gettingstarted/choose_church.dart';
 import 'package:community/firestore/memberSignUpData.dart';
 import 'package:community/themes/theme.dart';
-import 'package:firebase_core/firebase_core.dart';
 import "package:flutter/material.dart";
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:community/storage/storage_services.dart';
+import 'package:community/sizes/size.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);
@@ -143,7 +141,7 @@ class _SignUpFormState extends State<SignUpForm> {
         ),
 
         SizedBox(
-          height: 20,
+          height: displayHeight(context) * 0.02,
         ),
 
         TextButton(

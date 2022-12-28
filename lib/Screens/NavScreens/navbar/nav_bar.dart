@@ -1,8 +1,8 @@
-import 'package:community/Screens/NavScreens/Church/ChurchScreen.dart';
-import 'package:community/Screens/NavScreens/Give/GiveScreen.dart';
-import 'package:community/Screens/NavScreens/HomeScreen/HomeScreen.dart';
-import 'package:community/Screens/NavScreens/HomeScreen/PostScreen.dart';
-import 'package:community/Screens/NavScreens/Profile/ProfileScreen.dart';
+import 'package:community/screens/navscreens/church/church_screen.dart';
+import 'package:community/screens/navscreens/give/give_screen.dart';
+import 'package:community/screens/navscreens/homescreen/home_screen.dart';
+import 'package:community/screens/navscreens/homescreen/post_screen.dart';
+import 'package:community/screens/navscreens/profile/profile_screen/profile_screen.dart';
 import 'package:community/main.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,8 +78,9 @@ class _NavBarState extends State<NavBar> {
 
           // ignore: prefer_const_literals_to_create_immutables
           bottomNavigationBar: GNav(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 35),
             gap: 8,
-            backgroundColor: Colors.white70,
+            backgroundColor: Color(0x00000000),
             color: Colors.black,
             activeColor: Colors.black,
             onTabChange: (index) {
@@ -125,6 +126,5 @@ class _NavBarState extends State<NavBar> {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const MainPage()));
     Fluttertoast.showToast(msg: "Logout Successful");
-    
   }
 }

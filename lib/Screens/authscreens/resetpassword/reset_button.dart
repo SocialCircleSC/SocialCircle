@@ -1,8 +1,9 @@
 import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:community/sizes/size.dart';
 
 class ResetButton extends StatelessWidget {
-  const ResetButton({ Key? key }) : super(key: key);
+  const ResetButton({Key? key}) : super(key: key);
 
   final String buttonText = "Reset Password";
 
@@ -10,7 +11,7 @@ class ResetButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      height: MediaQuery.of(context).size.height * 0.08,
+      height: displayHeight(context) * 0.08,
       width: double.infinity,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16), color: PrimaryColor),

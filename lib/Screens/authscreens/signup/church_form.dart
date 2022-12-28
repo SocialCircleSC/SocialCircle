@@ -1,22 +1,18 @@
-import 'package:community/Screens/GettingStarted.dart/ChooseChurch.dart';
-import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
+import 'package:community/Screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/firestore/churchSignUpData.dart';
-import 'package:community/firestore/memberSignUpData.dart';
 import 'package:community/themes/theme.dart';
-import 'package:firebase_core/firebase_core.dart';
 import "package:flutter/material.dart";
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/services.dart';
-
+import 'package:community/sizes/size.dart';
 
 //Fill out entire screen with content
 //Make the bottom navigation bar thin
 //Make it look like the YouVersion Bible App
-//Make it 
-//Remove 
-//Add event to calendar 
+//Make it
+//Remove
+//Add event to calendar
 
 class SignUpFormChurch extends StatefulWidget {
   const SignUpFormChurch({Key? key}) : super(key: key);
@@ -54,9 +50,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             controller: churchNameController,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -73,9 +67,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             controller: addressController,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -92,9 +84,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             controller: emailController,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -111,9 +101,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             controller: phoneNumberController,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -130,9 +118,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(150)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(150)],
             controller: bibleVerseController,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -149,9 +135,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             controller: weeklyService1Controller,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -169,9 +153,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             controller: weeklyService2Controller,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -188,9 +170,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             controller: weeklyService3Controller,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -207,9 +187,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             controller: weeklyService4Controller,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -226,9 +204,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             controller: weeklyService5Controller,
             // ignore: prefer_const_constructors
             decoration: InputDecoration(
@@ -245,9 +221,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             obscureText: !_isObscure,
             controller: passwordController,
             decoration: InputDecoration(
@@ -277,9 +251,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: TextField(
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(45)
-            ],
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
             obscureText: !_isObscure,
             controller: confirmPasswordController,
             decoration: InputDecoration(
@@ -305,8 +277,8 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
           ),
         ),
 
-        const SizedBox(
-          height: 20,
+        SizedBox(
+          height: displayHeight(context) * 0.01,
         ),
 
         TextButton(
@@ -339,8 +311,8 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
       Fluttertoast.showToast(msg: "Bible Verse field cannot be empty");
     } else if (weeklyService1Controller.text.isEmpty) {
       Fluttertoast.showToast(msg: "You need atleast one weekly service");
-    } 
-    
+    }
+
     // else if (weeklyService2Controller.text.isEmpty) {
     //   weeklyService2Controller.text = empty;
     // } else if (weeklyService3Controller.text.isEmpty) {
@@ -350,7 +322,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
     // } else if (weeklyService5Controller.text.isEmpty) {
     //   weeklyService5Controller.text = empty;
     // }
-     else {
+    else {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(

@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
+import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/storage/storage_services.dart';
 import 'package:community/themes/theme.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:community/sizes/size.dart';
 
 class EditProfilePicture extends StatefulWidget {
   const EditProfilePicture({Key? key}) : super(key: key);
@@ -63,8 +63,8 @@ class _EditProfilePictureState extends State<EditProfilePicture> {
                     return Padding(
                       padding: CenterPadding3,
                       child: Container(
-                        width: 150,
-                        height: 200,
+                        width: displayWidth(context) * 0.5,
+                        height: displayHeight(context) * 0.3,
                         child: CircleAvatar(
                           backgroundImage: NetworkImage(snapshot.data!),
                           radius: 50,

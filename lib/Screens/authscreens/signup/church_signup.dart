@@ -1,11 +1,8 @@
-import 'package:community/Screens/AuthScreens/Login/LoginScreen.dart';
-import 'package:community/Screens/AuthScreens/SignUp/SignUpForm.dart';
-import 'package:community/Screens/AuthScreens/SignUp/SignUpFormChurch.dart';
+import 'package:community/screens/authscreens/login/login_screen.dart';
+import 'package:community/screens/authscreens/signup/church_form.dart';
 import 'package:community/themes/theme.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:community/sizes/size.dart';
 
 class SignUpChurch extends StatefulWidget {
   const SignUpChurch({Key? key}) : super(key: key);
@@ -53,8 +50,8 @@ class _SignUpChurchState extends State<SignUpChurch> {
                   style: titleText,
                 ),
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: displayHeight(context) * 0.01,
               ),
               Padding(
                 padding: DefaultPadding,
@@ -64,8 +61,8 @@ class _SignUpChurchState extends State<SignUpChurch> {
                       "Already a member?",
                       style: subTitle,
                     ),
-                    const SizedBox(
-                      width: 5,
+                    SizedBox(
+                      width: displayWidth(context) * 0.01,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -85,18 +82,15 @@ class _SignUpChurchState extends State<SignUpChurch> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: displayHeight(context) * 0.01,
               ),
               const Padding(
                 padding: DefaultPadding,
                 child: SignUpFormChurch(),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              const SizedBox(
-                height: 5,
+              SizedBox(
+                height: displayHeight(context) * 0.06,
               ),
             ],
           ),

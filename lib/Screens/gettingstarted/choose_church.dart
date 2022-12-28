@@ -1,15 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
-
-import 'package:community/Screens/AuthScreens/Login/LoginScreen.dart';
-import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
-import 'package:community/Screens/NavScreens/Profile/EditScreens/EditProfileDetails.dart';
-import 'package:community/Screens/NavScreens/Profile/EditScreens/EditProfilePicture.dart';
+import 'package:community/screens/authscreens/login/login_screen.dart';
+import 'package:community/screens/navscreens/profile/editscreens/edit_profile_picture.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community/sizes/size.dart';
 
 class ChooseChurch extends StatefulWidget {
   const ChooseChurch({Key? key}) : super(key: key);
@@ -30,7 +27,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
   List<Map<String, dynamic>> foundChurches = [];
 
   String removeParenthese(String data) {
-      return data.substring(1, data.length - 1);
+    return data.substring(1, data.length - 1);
   }
 
   Future<void> addChurchData(String churchName, String churchID) {
@@ -40,7 +37,6 @@ class _ChooseChurchState extends State<ChooseChurch> {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     final uid = user?.uid;
-
 
     return users.doc(uid).update({
       'Church Name': removeParenthese(churchName),
@@ -138,16 +134,16 @@ class _ChooseChurchState extends State<ChooseChurch> {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: displayHeight(context) * 0.01,
               ),
               TextField(
                 onChanged: (value) => filterChurches(value),
                 decoration: const InputDecoration(
                     labelText: 'Search', suffixIcon: Icon(Icons.search)),
               ),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: displayHeight(context) * 0.01,
               ),
               Expanded(
                 child: allChurches.isNotEmpty //Found Churches
@@ -160,11 +156,13 @@ class _ChooseChurchState extends State<ChooseChurch> {
                                 '${churchAddress[index].values.toString()} '),
                             onTap: () {
                               addChurchData(
-                                  allChurches[index].values.toString(), churchID[index].values.toString());
+                                  allChurches[index].values.toString(),
+                                  churchID[index].values.toString());
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const EditProfilePicture()));
+                                      builder: (context) =>
+                                          const EditProfilePicture()));
                             },
                           ),
                         ),

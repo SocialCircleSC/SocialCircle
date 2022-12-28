@@ -1,13 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
-
-import 'package:community/Screens/AuthScreens/Login/LoginScreen.dart';
-import 'package:community/Screens/AuthScreens/SignUp/SignUpForm.dart';
+import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
+import 'package:community/Screens/AuthScreens/signup/general_form.dart';
 import 'package:community/themes/theme.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:community/sizes/size.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -21,25 +20,23 @@ class SignUpScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-
-         appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        //title: const Text('Post to Church', style: TextStyle(color: PrimaryColor),),
-        leading: IconButton(
-          onPressed: (() {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) =>  LoginScreen()),
-            );
-          }),
-          icon: const Icon(
-            Icons.arrow_back_sharp,
-            color: PrimaryColor,
-          ),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          //title: const Text('Post to Church', style: TextStyle(color: PrimaryColor),),
+          leading: IconButton(
+            onPressed: (() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+            }),
+            icon: const Icon(
+              Icons.arrow_back_sharp,
+              color: PrimaryColor,
+            ),
           ),
         ),
-
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +50,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: displayHeight(context) * 0.01,
               ),
               Padding(
                 padding: DefaultPadding,
@@ -64,7 +61,7 @@ class SignUpScreen extends StatelessWidget {
                       style: subTitle,
                     ),
                     SizedBox(
-                      width: 5,
+                      width: displayWidth(context) * 0.02,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -85,13 +82,13 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: displayHeight(context) * 0.01,
               ),
               Padding(
                 padding: DefaultPadding,
                 child: SignUpForm(),
               ),
-    
+
               SizedBox(
                 height: 10,
               ),
@@ -100,9 +97,9 @@ class SignUpScreen extends StatelessWidget {
               //   child: Text("Or Sign Up with"),
               // ),
               SizedBox(
-                height: 5,
+                height: displayHeight(context) * 0.01,
               ),
-    
+
               // Center(
               //   child: Row(
               //       mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +112,7 @@ class SignUpScreen extends StatelessWidget {
               //         ),
               //       ]),
               // ),
-    
+
               //AltLogin(),
             ],
           ),

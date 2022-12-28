@@ -1,14 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
-import 'package:community/Screens/NavScreens/Profile/EditScreens/EditChurchFolder/FirestoreUpdate.dart';
+import 'package:community/screens/navscreens/navbar/nav_bar.dart';
+import 'package:community/screens/navscreens/profile/editscreens/editchurchfolder/FirestoreUpdate.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:community/sizes/size.dart';
 
 class EditProfileDetails extends StatefulWidget {
   const EditProfileDetails({Key? key}) : super(key: key);
@@ -139,7 +139,7 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
             ),
 
             SizedBox(
-              height: 20,
+              height: displayHeight(context) * 0.01,
             ),
 
             TextButton(
@@ -170,8 +170,8 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
       updateProfile(firstNameController.text, lastNameController.text,
           emailController.text, aboutMeController.text);
 
-      Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => NavBar()));
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => NavBar()));
     }
   }
 }

@@ -1,10 +1,10 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors
 
-import 'package:community/Screens/AuthScreens/Login/LoginForm.dart';
-import 'package:community/Screens/AuthScreens/SignUp/SignUp.dart';
-import 'package:community/Screens/GettingStarted.dart/ChooseUserType.dart';
+import 'package:community/screens/authscreens/login/login_form.dart';
+import 'package:community/screens/gettingstarted/choose_user_type.dart';
 import 'package:community/themes/theme.dart';
-import 'package:community/Screens/AuthScreens/ResetPassword/ResetPasswordScreen.dart';
+import 'package:community/screens/authScreens/resetpassword/reset_password_screen.dart';
+import 'package:community/sizes/size.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -33,14 +33,14 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SizedBox(
-            height: 120,
+            height: displayHeight(context) * 0.2,
           ),
           Text(
             "Welcome!",
             style: titleText,
           ),
           SizedBox(
-            height: 5,
+            height: displayHeight(context) * 0.01,
           ),
           Row(
             children: [
@@ -48,9 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 "Don't have an Account?",
                 style: subTitle,
               ),
-              SizedBox(
-                width: 5,
-              ),
+              SizedBox(width: displayWidth(context) * 0.02),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -71,11 +69,11 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
           SizedBox(
-            height: 30,
+            height: displayHeight(context) * 0.009,
           ),
           LoginForm(),
           SizedBox(
-            height: 50,
+            height: displayHeight(context) * 0.05,
           ),
           GestureDetector(
             onTap: () {
@@ -94,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: displayHeight(context) * 0.01,
           ),
 
           // Text(
@@ -102,13 +100,11 @@ class _LoginScreenState extends State<LoginScreen> {
           //   style: subTitle.copyWith(color: BlackColor),
           // ),
           SizedBox(
-            height: 20,
+            height: displayHeight(context) * 0.01,
           ),
           // AltLogin(),
         ]),
       ),
     );
   }
-
-
 }

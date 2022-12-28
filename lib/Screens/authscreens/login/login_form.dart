@@ -1,8 +1,9 @@
-import 'package:community/Screens/NavScreens/NavBar/NavBar.dart';
+import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:community/sizes/size.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -68,8 +69,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
           ),
-    
-          SizedBox(height: 20),
+          SizedBox(height: displayHeight(context) * 0.02),
           TextButton(
             style: TextButton.styleFrom(
               primary: WhiteColor,

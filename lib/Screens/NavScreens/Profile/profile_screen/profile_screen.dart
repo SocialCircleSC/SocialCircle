@@ -1,18 +1,14 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/Screens/AuthScreens/Login/LoginScreen.dart';
-import 'package:community/Screens/GettingStarted.dart/ChooseChurch.dart';
-import 'package:community/Screens/NavScreens/Profile/EditScreens/EditChurchFolder/EditChurch.dart';
-import 'package:community/Screens/NavScreens/Profile/EditScreens/EditProfileDetails.dart';
-import 'package:community/Screens/NavScreens/Profile/EditScreens/EditProfilePicture.dart';
+import 'package:community/screens/authScreens/login/login_screen.dart';
+import 'package:community/screens/gettingstarted/choose_church.dart';
+import 'package:community/screens/navscreens/profile/editscreens/edit_profile_details.dart';
+import 'package:community/screens/navscreens/profile/editscreens/edit_profile_picture.dart';
 import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:community/storage/storage_services.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:community/sizes/size.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -57,8 +53,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getUserInfo();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final Storage storage = Storage();
@@ -97,8 +91,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             return Padding(
                               padding: CenterPadding3,
                               child: Container(
-                                width: 150,
-                                height: 200,
+                                width: displayWidth(context) * 0.1,
+                                height: displayHeight(context) * 0.1,
                                 child: CircleAvatar(
                                   backgroundImage: NetworkImage(snapshot.data!),
                                   radius: 50,
@@ -113,8 +107,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           }
                           return Container();
                         }),
-                    const SizedBox(
-                      height: 15,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
                     Text(
                       removeParenthese(userInfo[0].values.toString()) +
@@ -137,8 +131,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         fontWeight: FontWeight.w300,
                       ),
                     ),
-                    const SizedBox(
-                      height: 15,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
                     Padding(
                       padding: LeftPadding,
@@ -157,8 +151,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 15,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
                     Padding(
                       padding: LeftPadding,
@@ -175,8 +169,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 15,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
                     Padding(
                       padding: LeftPadding,
@@ -263,8 +257,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                           )),
                     ),
-                    const SizedBox(
-                      height: 15,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
                     const Text(
                       "Posts and Replies",

@@ -1,12 +1,7 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/Screens/NavScreens/HomeScreen/CardData.dart';
-import 'package:community/Screens/NavScreens/Profile/ProfileScreen.dart';
-import 'package:community/themes/theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:community/screens/navscreens/homescreen/card_data.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

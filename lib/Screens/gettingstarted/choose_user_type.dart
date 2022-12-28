@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/Screens/AuthScreens/Login/LoginScreen.dart';
-import 'package:community/Screens/AuthScreens/SignUp/SignUp.dart';
-import 'package:community/Screens/AuthScreens/SignUp/SignUpChurch.dart';
+import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
+import 'package:community/Screens/AuthScreens/signup/general_signup.dart';
+import 'package:community/Screens/AuthScreens/signup/church_signup.dart';
 import 'package:community/themes/theme.dart';
+import 'package:community/sizes/size.dart';
 import 'package:flutter/material.dart';
 
 class ChooseUser extends StatefulWidget {
@@ -13,7 +13,6 @@ class ChooseUser extends StatefulWidget {
 }
 
 class _ChooseUserState extends State<ChooseUser> {
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -46,8 +45,8 @@ class _ChooseUserState extends State<ChooseUser> {
         body: Column(
             // ignore: prefer_const_literals_to_create_immutables
             children: [
-              const SizedBox(
-                height: 70,
+              SizedBox(
+                height: displayHeight(context) * 0.1,
               ),
               const Padding(
                 padding: CenterPadding2,
@@ -60,8 +59,8 @@ class _ChooseUserState extends State<ChooseUser> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 15,
+              SizedBox(
+                height: displayHeight(context) * 0.01,
               ),
               ElevatedButton(
                 onPressed: () {
@@ -82,8 +81,8 @@ class _ChooseUserState extends State<ChooseUser> {
                   onPrimary: WhiteColor,
                 ),
               ),
-              const SizedBox(
-                height: 15,
+              SizedBox(
+                height: displayHeight(context) * 0.01,
               ),
               ElevatedButton(
                 onPressed: () {

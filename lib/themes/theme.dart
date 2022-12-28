@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:community/sizes/size.dart';
 
 const PrimaryColor = Color(0xFF8B008B);
 const SecondaryColor = Color(0xFFC54B8C);
@@ -15,7 +16,7 @@ const DefaultPadding = EdgeInsets.symmetric(horizontal: 30);
 const CenterPadding = EdgeInsets.symmetric(horizontal: 50);
 const LeftPadding = EdgeInsets.symmetric(horizontal: 15);
 const semiLeftPadding = EdgeInsets.symmetric(horizontal: 10);
-const CenterPadding2 = EdgeInsets.symmetric(horizontal: 120);
+const CenterPadding2 = EdgeInsets.symmetric(horizontal: 150);
 const CenterPadding3 = EdgeInsets.symmetric(horizontal: 100);
 const LogInButtonPadding = EdgeInsets.symmetric(horizontal: 140, vertical: 15);
 const SignUpButtonPadding = EdgeInsets.symmetric(horizontal: 125, vertical: 15);

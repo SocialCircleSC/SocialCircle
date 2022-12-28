@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
+import 'package:community/sizes/size.dart';
 
 class ChurchScreen extends StatefulWidget {
   const ChurchScreen({Key? key}) : super(key: key);
@@ -97,14 +97,14 @@ class _ChurchScreenState extends State<ChurchScreen> {
               return SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    const Image(
+                    Image(
                       image: AssetImage('lib/assets/churchImage.jpg'),
-                      height: 170,
+                      height: displayHeight(context) * 0.25,
                       width: double.infinity,
                       fit: BoxFit.fill,
                     ),
-                    const SizedBox(
-                      height: 5,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
                     Padding(
                       padding: semiLeftPadding,
@@ -120,8 +120,8 @@ class _ChurchScreenState extends State<ChurchScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 15,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
                     Padding(
                       padding: semiLeftPadding,
@@ -138,8 +138,8 @@ class _ChurchScreenState extends State<ChurchScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 15,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
                     Padding(
                       padding: semiLeftPadding,
@@ -156,48 +156,44 @@ class _ChurchScreenState extends State<ChurchScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
                     Padding(
                       padding: semiLeftPadding,
                       child: RichText(
-                        text: 
-                        const TextSpan(
+                        text: const TextSpan(
                           children: <TextSpan>[
                             TextSpan(
                               text: 'See Hours                   ',
                               style: TextStyle(
-                             color: PrimaryColor,
-                             fontSize: 15,
-                             fontFamily: 'Roboto',
-                             fontWeight: FontWeight.w500,
-                           ),
-                          ),
-
-                          TextSpan(
+                                color: PrimaryColor,
+                                fontSize: 15,
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            TextSpan(
                               text: 'See Members',
                               style: TextStyle(
-                             color: PrimaryColor,
-                             fontSize: 15,
-                             fontFamily: 'Roboto',
-                             fontWeight: FontWeight.w500,
-                           ),
-                          ),
-                        ],
+                                color: PrimaryColor,
+                                fontSize: 15,
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
-
                     const Divider(
                       color: BlackColor,
                     ),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: displayHeight(context) * 0.01,
                     ),
                     const Text(
                       "Posts and Replies",
