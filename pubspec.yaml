@@ -34,7 +34,7 @@ dependencies:
   google_sign_in: "^4.5.1"
   get: ^4.3.8
   firestore_search: ^0.1.9
-  like_button: ^2.0.4
+  like_button: ^2.0.5
   firebase_storage: ^10.2.18
   file_picker: ^4.0.3
   image_cropper: ^3.0.0
