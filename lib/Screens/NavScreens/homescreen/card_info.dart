@@ -5,7 +5,7 @@ import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:community/sizes/size.dart';
-import 'package:like_button/like_button.dart';
+import 'package:favorite_button/favorite_button.dart';
 
 class CardInfo extends StatefulWidget {
   const CardInfo({Key? key}) : super(key: key);
@@ -19,12 +19,11 @@ class _CardInfoState extends State<CardInfo> {
   var churchID;
   List<Map<String, dynamic>> postData = [];
   var randomData;
+  var postID;
 
   //Get the member's church ID
   Future getChurchID() async {
     String ID = "";
-
-    String test = "Test";
 
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
@@ -45,10 +44,36 @@ class _CardInfoState extends State<CardInfo> {
     }
   }
 
+  //Get the post ID
+  Future getLikePostID() async {
+    String ID = "";
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
+
+    var data = await FirebaseFirestore.instance
+        .collection('Churches')
+        .doc(uid)
+        .collection('Posts')
+        .doc(postID)
+        .get()
+        .then((value) {
+      ID = value.get('Post ID');
+    });
+
+    if (this.mounted) {
+      setState(() {
+        postID = ID;
+      });
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     getChurchID();
+    getLikePostID();
   }
 
   @override
@@ -120,49 +145,28 @@ class _CardInfoState extends State<CardInfo> {
                             //   height: displayHeight(context) * 0.01,
                             // ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 96),
+                              padding: const EdgeInsets.only(left: 5),
                               child: Row(
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(12.0),
-                                    child: LikeButton(
-                                      onTap: onLikeButtonTapped,
-                                      circleColor: const CircleColor(
-                                          start: Color(0xff00ddff),
-                                          end: Color(0xff0099cc)),
-                                      bubblesColor: const BubblesColor(
-                                        dotPrimaryColor: SecondaryColor,
-                                        dotSecondaryColor: SecondaryColor,
+                                    child: FavoriteButton(
+                                      isFavorite: true,
+                                      iconSize: 35,
+                                      // iconDisabledColor: Colors.white,
+                                      valueChanged: (_isFavorite) {
+                                        debugPrint(
+                                            'Is Favorite : $_isFavorite');
+                                      },
+                                    ),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: document['Likes'].toString(),
+                                      style: TextStyle(
+                                        color: BlackColor,
+                                        fontSize: 12,
                                       ),
-                                      likeBuilder: (bool isLiked) {
-                                        return Icon(
-                                          Icons.thumb_up,
-                                          color: isLiked
-                                              ? PrimaryColor
-                                              : Colors.blueGrey,
-                                          size: 17,
-                                        );
-                                      },
-                                      likeCount: document['Likes'],
-                                      countBuilder:
-                                          (count, bool isLiked, String text) {
-                                        var color = isLiked
-                                            ? PrimaryColor
-                                            : Colors.blueGrey;
-                                        Widget result;
-                                        if (count == 0) {
-                                          result = Text(
-                                            "",
-                                            style: TextStyle(color: color),
-                                          );
-                                        } else {
-                                          result = Text(
-                                            text,
-                                            style: TextStyle(color: color),
-                                          );
-                                        }
-                                        return result;
-                                      },
                                     ),
                                   ),
                                   Padding(
@@ -204,18 +208,18 @@ class _CardInfoState extends State<CardInfo> {
     );
   }
 
-  Future<bool> onLikeButtonTapped(bool isLiked) async{
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
     //if isLiked = true, then add 1 to the likes
     //if isLiked = false, then substract 1 from the likes
 
-    var collection = FirebaseFirestore.instance
-      .collection("Churches")
-      .doc(churchID)
-     .collection("Posts")
-      .doc()//get the document ID
-      .update({'key' : 'value'}) // <-- Updated data
-      .then((_) => print('Success'))
-      .catchError((error) => print('Failed: $error'));
+    // var collection = FirebaseFirestore.instance
+    //     .collection("Churches")
+    //     .doc(churchID)
+    //     .collection("Posts")
+    //     .doc() //get the document ID
+    //     .update({'key': 'value'}) // <-- Updated data
+    //     .then((_) => print('Success'))
+    //     .catchError((error) => print('Failed: $error'));
 
     return !isLiked;
   }

@@ -17,6 +17,7 @@ Future<void> postDataChu(String postText, String status, String cName) async {
     'Name': cName,
     'Post Text': postText,
     'ID': uid,
+    //'Post ID': postToMember.doc().id,
     'Likes': 0,
     'Status': status,
   });

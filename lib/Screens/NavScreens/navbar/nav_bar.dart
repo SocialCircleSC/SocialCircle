@@ -38,7 +38,7 @@ class _NavBarState extends State<NavBar> {
       child: MaterialApp(
         home: Scaffold(
           body: pageOptions[selectedPage],
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.grey[50],
           appBar: AppBar(
             actions: <Widget>[
               PopupMenuButton<String>(
@@ -60,7 +60,7 @@ class _NavBarState extends State<NavBar> {
                 color: Colors.black,
               ),
             ),
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.white,
             elevation: 0,
           ),
 
