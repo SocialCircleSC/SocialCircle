@@ -9,15 +9,15 @@ Future<void> postDataChu(String postText, String status, String cName) async {
 
   //Post Church Data
   CollectionReference postToMember = FirebaseFirestore.instance
-      .collection('Churches')
+      .collection('circles')
       .doc(uid)
-      .collection('Posts');
+      .collection('posts');
 
   postToMember.doc().set({
     'Name': cName,
     'Post Text': postText,
     'ID': uid,
-    //'Post ID': postToMember.doc().id,
+    'Post ID': postToMember.doc().id,
     'Likes': 0,
     'Status': status,
   });

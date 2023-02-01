@@ -22,7 +22,7 @@ class SignUpFormChurch extends StatefulWidget {
 }
 
 class _SignUpFormChurchState extends State<SignUpFormChurch> {
-  bool _isObscure = true;
+  bool _isObscure = false;
   bool checkedValue = false;
   bool newValue = true;
   String empty = "empty";
@@ -114,108 +114,6 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
           ),
         ),
 
-        //Bible Verse Motto Controller
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: TextField(
-            inputFormatters: [LengthLimitingTextInputFormatter(150)],
-            controller: bibleVerseController,
-            // ignore: prefer_const_constructors
-            decoration: InputDecoration(
-              labelText: "Bible Verse Motto",
-              labelStyle: const TextStyle(color: TextFieldColor),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: PrimaryColor),
-              ),
-            ),
-          ),
-        ),
-
-        //Weekly Service 1 Controller
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: TextField(
-            inputFormatters: [LengthLimitingTextInputFormatter(45)],
-            controller: weeklyService1Controller,
-            // ignore: prefer_const_constructors
-            decoration: InputDecoration(
-              labelText: "Weekly Service 1",
-              hintText: "ex. Sunday Service 10AM  - 12 PM",
-              labelStyle: const TextStyle(color: TextFieldColor),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: PrimaryColor),
-              ),
-            ),
-          ),
-        ),
-
-        //Weekly Service 2 Controller
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: TextField(
-            inputFormatters: [LengthLimitingTextInputFormatter(45)],
-            controller: weeklyService2Controller,
-            // ignore: prefer_const_constructors
-            decoration: InputDecoration(
-              labelText: "Weekly Service 2",
-              labelStyle: const TextStyle(color: TextFieldColor),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: PrimaryColor),
-              ),
-            ),
-          ),
-        ),
-
-        //Weekly Service 3 Controller
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: TextField(
-            inputFormatters: [LengthLimitingTextInputFormatter(45)],
-            controller: weeklyService3Controller,
-            // ignore: prefer_const_constructors
-            decoration: InputDecoration(
-              labelText: "Weekly Service 3",
-              labelStyle: const TextStyle(color: TextFieldColor),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: PrimaryColor),
-              ),
-            ),
-          ),
-        ),
-
-        //Weekly Service 4 Controller
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: TextField(
-            inputFormatters: [LengthLimitingTextInputFormatter(45)],
-            controller: weeklyService4Controller,
-            // ignore: prefer_const_constructors
-            decoration: InputDecoration(
-              labelText: "Weekly Service 4",
-              labelStyle: const TextStyle(color: TextFieldColor),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: PrimaryColor),
-              ),
-            ),
-          ),
-        ),
-
-        //Weekly Service 5 Controller
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: TextField(
-            inputFormatters: [LengthLimitingTextInputFormatter(45)],
-            controller: weeklyService5Controller,
-            // ignore: prefer_const_constructors
-            decoration: InputDecoration(
-              labelText: "Weekly Service 5",
-              labelStyle: const TextStyle(color: TextFieldColor),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: PrimaryColor),
-              ),
-            ),
-          ),
-        ),
 
         //Password Controller
         Padding(
@@ -303,25 +201,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
               "Please make sure your password is the same as your confirm passowrd");
     }
     // ignore: unrelated_type_equality_checks
-    else if (addressController.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Address field cannot be empty");
-    } else if (phoneNumberController.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Phone Number field cannot be empty");
-    } else if (bibleVerseController.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Bible Verse field cannot be empty");
-    } else if (weeklyService1Controller.text.isEmpty) {
-      Fluttertoast.showToast(msg: "You need atleast one weekly service");
-    }
 
-    // else if (weeklyService2Controller.text.isEmpty) {
-    //   weeklyService2Controller.text = empty;
-    // } else if (weeklyService3Controller.text.isEmpty) {
-    //   weeklyService3Controller.text = empty;
-    // } else if (weeklyService4Controller.text.isEmpty) {
-    //   weeklyService4Controller.text = empty;
-    // } else if (weeklyService5Controller.text.isEmpty) {
-    //   weeklyService5Controller.text = empty;
-    // }
     else {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
@@ -329,16 +209,12 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
                 email: emailController.text, password: passwordController.text);
 
         churchSetup(
-            churchNameController.text,
-            addressController.text,
-            phoneNumberController.text,
-            bibleVerseController.text,
-            emailController.text,
-            weeklyService1Controller.text,
-            weeklyService2Controller.text,
-            weeklyService3Controller.text,
-            weeklyService4Controller.text,
-            weeklyService5Controller.text);
+          churchNameController.text,
+          addressController.text,
+          phoneNumberController.text,
+          bibleVerseController.text,
+          emailController.text,
+        );
 
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const NavBar()));

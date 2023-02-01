@@ -33,7 +33,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
   Future<void> addChurchData(String churchName, String churchID) {
     // Call the user's CollectionReference to add a new user
 
-    CollectionReference users = FirebaseFirestore.instance.collection('Users');
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     final uid = user?.uid;
@@ -50,12 +50,12 @@ class _ChooseChurchState extends State<ChooseChurch> {
     List<Map<String, dynamic>> answerAddress = [];
 
     var data = await FirebaseFirestore.instance
-        .collection('Churches')
-        .orderBy('Church Name', descending: true)
+        .collection('circles')
+        .orderBy('Name', descending: true)
         .get()
         .then((value) {
       for (var i in value.docs) {
-        answer.add({"name": i.get('Church Name')});
+        answer.add({"name": i.get('Name')});
         answerAddress.add({"name": i.get('Street Address')});
         answerId.add({"docID": i.id});
       }

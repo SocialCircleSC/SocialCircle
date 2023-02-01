@@ -19,7 +19,6 @@ class _CardInfoState extends State<CardInfo> {
   var churchID;
   List<Map<String, dynamic>> postData = [];
   var randomData;
-  var postID;
 
   //Get the member's church ID
   Future getChurchID() async {
@@ -30,7 +29,7 @@ class _CardInfoState extends State<CardInfo> {
     final uid = user?.uid;
 
     var data = await FirebaseFirestore.instance
-        .collection('Users')
+        .collection('users')
         .doc(uid)
         .get()
         .then((value) {
@@ -44,36 +43,13 @@ class _CardInfoState extends State<CardInfo> {
     }
   }
 
-  //Get the post ID
-  Future getLikePostID() async {
-    String ID = "";
 
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final uid = user?.uid;
 
-    var data = await FirebaseFirestore.instance
-        .collection('Churches')
-        .doc(uid)
-        .collection('Posts')
-        .doc(postID)
-        .get()
-        .then((value) {
-      ID = value.get('Post ID');
-    });
-
-    if (this.mounted) {
-      setState(() {
-        postID = ID;
-      });
-    }
-  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     getChurchID();
-    getLikePostID();
   }
 
   @override
@@ -86,9 +62,9 @@ class _CardInfoState extends State<CardInfo> {
       },
       child: StreamBuilder(
           stream: FirebaseFirestore.instance
-              .collection("Churches")
+              .collection("circles")
               .doc(churchID)
-              .collection("Posts")
+              .collection("posts")
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -123,7 +99,7 @@ class _CardInfoState extends State<CardInfo> {
                                 backgroundImage:
                                     const AssetImage('assets/fp_profile.jpg'),
                               ),
-                              title: Text(document['Name']),
+                              title: Text(document['First Name'] + document['Last Name']),
                               subtitle: Text(
                                 document['Status'],
                                 style: TextStyle(
@@ -135,7 +111,7 @@ class _CardInfoState extends State<CardInfo> {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  document['Post Text'],
+                                  document['Text'],
                                   style: TextStyle(
                                       color: Colors.black.withOpacity(0.6)),
                                 ),
@@ -151,10 +127,12 @@ class _CardInfoState extends State<CardInfo> {
                                   Padding(
                                     padding: const EdgeInsets.all(12.0),
                                     child: FavoriteButton(
-                                      isFavorite: true,
+                                      isFavorite: false,
                                       iconSize: 35,
                                       // iconDisabledColor: Colors.white,
                                       valueChanged: (_isFavorite) {
+                                        onFavButtonTapped(_isFavorite,
+                                            document['ID'], document['Likes']);
                                         debugPrint(
                                             'Is Favorite : $_isFavorite');
                                       },
@@ -208,18 +186,28 @@ class _CardInfoState extends State<CardInfo> {
     );
   }
 
-  Future<bool> onLikeButtonTapped(bool isLiked) async {
-    //if isLiked = true, then add 1 to the likes
-    //if isLiked = false, then substract 1 from the likes
-
-    // var collection = FirebaseFirestore.instance
-    //     .collection("Churches")
-    //     .doc(churchID)
-    //     .collection("Posts")
-    //     .doc() //get the document ID
-    //     .update({'key': 'value'}) // <-- Updated data
-    //     .then((_) => print('Success'))
-    //     .catchError((error) => print('Failed: $error'));
+  Future<bool> onFavButtonTapped(bool isLiked, String id, int numLikes) async {
+    // if isLiked = true, then add 1 to the likes
+    // if isLiked = false, then substract 1 from the likes
+    if (isLiked) {
+      FirebaseFirestore.instance
+          .collection("circles")
+          .doc(churchID)
+          .collection("posts")
+          .doc(id) //get the document ID
+          .update({'Likes': numLikes + 1}) // <-- Updated data
+          .then((_) => print('Success'))
+          .catchError((error) => print('Failed: $error'));
+    } else {
+      FirebaseFirestore.instance
+          .collection("circles")
+          .doc(churchID)
+          .collection("posts")
+          .doc(id) //get the document ID
+          .update({'Likes': numLikes - 1}) // <-- Updated data
+          .then((_) => print('Success'))
+          .catchError((error) => print('Failed: $error'));
+    }
 
     return !isLiked;
   }

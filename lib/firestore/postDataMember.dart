@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> postDataMem(String postText, String status, String fName, String lName, String churchID) async {
+Future<void> postDataMem(String postText, String status, String fName,
+    String lName, String churchID) async {
   FirebaseAuth auth = FirebaseAuth.instance;
   final User? user = auth.currentUser;
   final uid = user?.uid;
@@ -20,10 +21,10 @@ Future<void> postDataMem(String postText, String status, String fName, String lN
     'Status': status,
   });
 
-    //Post Church Data
+  //Post Church Data
   CollectionReference postToChurch = FirebaseFirestore.instance
       .collection('Churches')
-      .doc(churchID)
+      .doc(uid)
       .collection('Posts');
 
   postToChurch.doc().set({
@@ -31,6 +32,7 @@ Future<void> postDataMem(String postText, String status, String fName, String lN
     "Share Status": "Not Shared",
     'Post Text': postText,
     'ID': uid,
+    'Post ID': postToChurch.doc().id,
     'Likes': 0,
     'Status': status,
   });
