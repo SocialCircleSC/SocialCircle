@@ -28,5 +28,6 @@ Future<void> userSetup(String fname, String lname, String email) async {
     "Status": 'Member',
     "Text": "Welcome to Social Circle! Start Engaging with your church by sharing your first post!",
     "Likes": 0,
+    "Like Status": false,
   });
 }

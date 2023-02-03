@@ -23,28 +23,53 @@ class _CardInfoState extends State<CardInfo> {
   //Get the member's church ID
   Future getChurchID() async {
     String ID = "";
+    bool exist = false;
 
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     final uid = user?.uid;
 
-    var data = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((value) {
-      ID = value.get('Church ID');
-    });
-
-    if (this.mounted) {
-      setState(() {
-        churchID = ID;
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get()
+          .then((doc) {
+        exist = doc.exists;
       });
+      if (exist == true) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .get()
+            .then((value) {
+          ID = value.get('Church ID');
+        });
+
+        if (this.mounted) {
+          setState(() {
+            churchID = ID;
+          });
+        }
+      } else {
+        await FirebaseFirestore.instance
+            .collection('circles')
+            .doc(uid)
+            .get()
+            .then((value) {
+          ID = value.get('Church ID');
+        });
+
+        if (this.mounted) {
+          setState(() {
+            churchID = ID;
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint("There is an error somewhere");
     }
   }
-
-
-
 
   @override
   void didChangeDependencies() {
@@ -99,7 +124,8 @@ class _CardInfoState extends State<CardInfo> {
                                 backgroundImage:
                                     const AssetImage('assets/fp_profile.jpg'),
                               ),
-                              title: Text(document['First Name'] + document['Last Name']),
+                              title: Text(document['First Name'] +
+                                  document['Last Name']),
                               subtitle: Text(
                                 document['Status'],
                                 style: TextStyle(
@@ -127,12 +153,14 @@ class _CardInfoState extends State<CardInfo> {
                                   Padding(
                                     padding: const EdgeInsets.all(12.0),
                                     child: FavoriteButton(
-                                      isFavorite: false,
+                                      isFavorite: document['Like Status'],
                                       iconSize: 35,
                                       // iconDisabledColor: Colors.white,
                                       valueChanged: (_isFavorite) {
-                                        onFavButtonTapped(_isFavorite,
-                                            document['ID'], document['Likes']);
+                                        onFavButtonTapped(
+                                            document['ID'],
+                                            document['Likes'],
+                                            document['Like Status']);
                                         debugPrint(
                                             'Is Favorite : $_isFavorite');
                                       },
@@ -186,16 +214,18 @@ class _CardInfoState extends State<CardInfo> {
     );
   }
 
-  Future<bool> onFavButtonTapped(bool isLiked, String id, int numLikes) async {
+  Future<void> onFavButtonTapped(
+      String id, int numLikes, bool likeStatus) async {
     // if isLiked = true, then add 1 to the likes
     // if isLiked = false, then substract 1 from the likes
-    if (isLiked) {
+    if (likeStatus == false) {
       FirebaseFirestore.instance
           .collection("circles")
           .doc(churchID)
           .collection("posts")
           .doc(id) //get the document ID
-          .update({'Likes': numLikes + 1}) // <-- Updated data
+          .update(
+              {'Likes': numLikes + 1, 'Like Status': true}) // <-- Updated data
           .then((_) => print('Success'))
           .catchError((error) => print('Failed: $error'));
     } else {
@@ -204,12 +234,11 @@ class _CardInfoState extends State<CardInfo> {
           .doc(churchID)
           .collection("posts")
           .doc(id) //get the document ID
-          .update({'Likes': numLikes - 1}) // <-- Updated data
+          .update(
+              {'Likes': numLikes - 1, 'Like Status': false}) // <-- Updated data
           .then((_) => print('Success'))
           .catchError((error) => print('Failed: $error'));
     }
-
-    return !isLiked;
   }
 }
 

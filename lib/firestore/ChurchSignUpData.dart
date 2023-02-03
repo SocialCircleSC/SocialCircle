@@ -38,8 +38,9 @@ Future<void> churchSetup(
     "First Name": churchName,
     "Last Name": ' ',
     "Status": 'Church',
-    "Text": "Welcome to" + churchName + "'s Circle",
+    "Text": "Welcome to " + churchName + "'s Circle",
     "Likes": 0,
+    "Like Status": false,
     }
   );
 }

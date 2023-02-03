@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:community/screens/authscreens/login/login_screen.dart';
+import 'package:community/screens/navscreens/homescreen/home_screen.dart';
+import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/screens/navscreens/profile/editscreens/edit_profile_picture.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +25,51 @@ class _ChooseChurchState extends State<ChooseChurch> {
   List<Map<String, dynamic>> churchAddress = [];
   List<Map<String, dynamic>> churchID = [];
 
+  //Global variables for the user's info.
+  var cID = " ";
+  var mEmail = " ";
+  var mFName = " ";
+  var mLName = " ";
+  var mID = " ";
+  var mStatus = " ";
+
+  Future getMemberInfo() async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
+
+    var churchIDEN = " ";
+    var email = " ";
+    var fName = " ";
+    var lName = " ";
+    var memberID = " ";
+    var status = " ";
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((value) {
+      churchIDEN = value.data()!['Church ID'];
+      email = value.data()!["Email Address"];
+      fName = value.data()!["First Name"];
+      lName = value.data()!["Last Name"];
+      memberID = value.data()!["ID"];
+      status = value.data()!["Status"];
+    });
+
+    setState(() {
+      cID = churchIDEN;
+      mEmail = email;
+      mFName = fName;
+      mLName = lName;
+      mID = memberID;
+      mStatus = status;
+    });
+
+  }
+
   // This list holds the data for the list view
   List<Map<String, dynamic>> foundChurches = [];
 
@@ -30,7 +77,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
     return data.substring(1, data.length - 1);
   }
 
-  Future<void> addChurchData(String churchName, String churchID) {
+  Future<void> addChurchData(String churchName, String church) {
     // Call the user's CollectionReference to add a new user
 
     CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -40,8 +87,29 @@ class _ChooseChurchState extends State<ChooseChurch> {
 
     return users.doc(uid).update({
       'Church Name': removeParenthese(churchName),
-      'Church ID': removeParenthese(churchID)
+      'Church ID': removeParenthese(church)
     }).catchError((error) => print("Failed to add chruch: $error"));
+  }
+
+  //Place user into church member list
+  Future addChurchMemberList(String churchIDENTITY, String email, String fname,
+      String lname, String memID, String status) async {
+    CollectionReference circle =
+        FirebaseFirestore.instance.collection('circles');
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
+
+
+    debugPrint("HI HI HUDB FHFH HJFHFD HJFJSSH FHDFKJFD HFKFDUFHBFDH");
+    debugPrint(churchIDENTITY);
+    circle.doc(removeParenthese(churchIDENTITY)).collection('members').add({
+      'Email Address': email,
+      'User ID': memID,
+      'First Name': fname,
+      'Last Name': lname,
+      'Status': status,
+    }).catchError((error) => print("Failed to add church: $error"));
   }
 
   Future getChurchList() async {
@@ -73,6 +141,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     getChurchList();
+    getMemberInfo();
   }
 
   @override
@@ -158,11 +227,12 @@ class _ChooseChurchState extends State<ChooseChurch> {
                               addChurchData(
                                   allChurches[index].values.toString(),
                                   churchID[index].values.toString());
+                              addChurchMemberList(
+                                  churchID[0].values.toString(), mEmail, mFName, mLName, mID, mStatus);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const EditProfilePicture()));
+                                      builder: (context) => NavBar()));
                             },
                           ),
                         ),
