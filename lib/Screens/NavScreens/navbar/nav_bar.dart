@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, prefer_const_constructors
+
 import 'package:community/screens/navscreens/church/church_screen.dart';
 import 'package:community/screens/navscreens/give/give_screen.dart';
 import 'package:community/screens/navscreens/homescreen/home_screen.dart';
@@ -9,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:community/sizes/size.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -26,6 +29,8 @@ class _NavBarState extends State<NavBar> {
     GiveScreen(),
     ProfileScreen(),
   ];
+
+  bool pressAttention = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +59,10 @@ class _NavBarState extends State<NavBar> {
                 },
               ),
             ],
-            title: const Text(
-              'SocialCircle',
-              style: TextStyle(
-                color: Colors.black,
-              ),
+            //This should be the logo not text
+            title: Text(
+              "Social-Circle",
+              style: TextStyle(color: BlackColor),
             ),
             backgroundColor: Colors.white,
             elevation: 0,
@@ -88,7 +92,8 @@ class _NavBarState extends State<NavBar> {
                 selectedPage = index;
               });
             },
-            tabs: const [
+            // ignore: prefer_const_literals_to_create_immutables
+            tabs: [
               GButton(
                 icon: Icons.home,
                 text: "Home",
