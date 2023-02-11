@@ -1,7 +1,6 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: deprecated_member_use, prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/firestore/delete_post.dart';
 import 'package:community/firestore/like_button.dart';
 import 'package:community/screens/navscreens/homescreen/edit_post.dart';
 import 'package:community/themes/theme.dart';
@@ -10,16 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:community/sizes/size.dart';
 import 'package:favorite_button/favorite_button.dart';
 
-class CardInfo extends StatefulWidget {
-  const CardInfo({Key? key}) : super(key: key);
+class GroupCard extends StatefulWidget {
+  const GroupCard({ Key? key }) : super(key: key);
 
   @override
-  State<CardInfo> createState() => _CardInfoState();
+  State<GroupCard> createState() => _GroupCardState();
 }
 
-class _CardInfoState extends State<CardInfo> {
-  // Initial Selected Value
-  String? dropdownvalue;
+class _GroupCardState extends State<GroupCard> {
+
+    // Initial Selected Value
+  String dropdownvalue = 'Edit';
 
   // List of items in our dropdown menu
   var items = [
@@ -97,6 +97,8 @@ class _CardInfoState extends State<CardInfo> {
     getChurchID();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -111,8 +113,6 @@ class _CardInfoState extends State<CardInfo> {
               .collection(collection)
               .doc(churchID)
               .collection(subCollection)
-              .limit(25)
-              .orderBy('TimeStamp', descending: true)
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -135,9 +135,10 @@ class _CardInfoState extends State<CardInfo> {
                     children: [
                       FlatButton(
                           child: Text("Circle"),
+                          // ignore: prefer_const_constructors
                           shape: Border(
                               bottom:
-                                  BorderSide(color: PrimaryColor, width: 3)),
+                                  BorderSide(color: Colors.white, width: 3)),
                           textColor: Colors.black,
                           //pressAttention is intially false
                           onPressed: () {}),
@@ -145,7 +146,7 @@ class _CardInfoState extends State<CardInfo> {
                           child: Text("Groups"),
                           shape: Border(
                               bottom:
-                                  BorderSide(color: Colors.white, width: 3)),
+                                  BorderSide(color: PrimaryColor, width: 3)),
                           textColor: Colors.black,
                           //Intiallly is true
                           onPressed: () {}),
@@ -210,8 +211,7 @@ class _CardInfoState extends State<CardInfo> {
                                             onFavButtonTapped(
                                                 document['ID'],
                                                 document['Likes'],
-                                                document['Like Status'],
-                                                churchID);
+                                                document['Like Status'], churchID);
                                             debugPrint(
                                                 'Is Favorite : $_isFavorite');
                                           },
@@ -259,7 +259,6 @@ class _CardInfoState extends State<CardInfo> {
                                                 color: BlackColor,
                                                 fontSize: 12),
                                             value: dropdownvalue,
-                                            hint: Text("More"),
                                             iconSize: 20,
                                             items: items.map((String items) {
                                               //This is where you can check for status and stuff like that to drop down or not
@@ -273,42 +272,34 @@ class _CardInfoState extends State<CardInfo> {
                                             onChanged: (String? newValue) {
                                               dropdownvalue = newValue!;
                                               if (newValue == items[0]) {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const EditPost()),
-                                                );
+
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const EditPost()),
+                                                  );
                                               } else if (newValue == items[1]) {
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Text("Confirm"),
-                                                        content: Text(
-                                                            "Are you sure you want to delete this post?"),
-                                                        actions: [
-                                                          TextButton(
-                                                            child: Text("Yes"),
-                                                            onPressed: () {
-                                                              deletePost(
-                                                                  document.id,
-                                                                  churchID);
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                          ),
-                                                          TextButton(
-                                                            child: Text("No"),
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                          ),
-                                                        ],
-                                                      );
-                                                    });
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          title: Text("Confirm"),
+                                                          content: Text("Are you sure you want to delete this post?"),
+                                                          actions: [
+                                                            TextButton(
+                                                              child: Text("Yes"),
+                                                              onPressed:  () {},
+                                                            ),
+                                                            TextButton(
+                                                              child: Text("No"),
+                                                              onPressed:  () {},
+                                                            ),
+                                                          ],
+
+                                                        );
+                                                      });
                                               }
                                             }),
                                       ),

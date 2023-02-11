@@ -20,6 +20,7 @@ Future<void> userSetup(String fname, String lname, String email) async {
     'Status': status,
     'ProfilePicName': empty,
     'ProfilePicUrl': empty,
+    'TimeStamp': FieldValue.serverTimestamp(),
   });
 
   users.doc(uid).collection('posts').doc().set({
@@ -29,5 +30,6 @@ Future<void> userSetup(String fname, String lname, String email) async {
     "Text": "Welcome to Social Circle! Start Engaging with your church by sharing your first post!",
     "Likes": 0,
     "Like Status": false,
+    'TimeStamp': FieldValue.serverTimestamp(),
   });
 }

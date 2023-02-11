@@ -2,6 +2,7 @@
 
 import 'package:community/screens/navscreens/church/church_screen.dart';
 import 'package:community/screens/navscreens/give/give_screen.dart';
+import 'package:community/screens/navscreens/groups/group_screen.dart';
 import 'package:community/screens/navscreens/homescreen/home_screen.dart';
 import 'package:community/screens/navscreens/homescreen/post_screen.dart';
 import 'package:community/screens/navscreens/profile/profile_screen/profile_screen.dart';
@@ -25,6 +26,7 @@ class _NavBarState extends State<NavBar> {
 
   final pageOptions = [
     HomeScreen(),
+    GroupScreen(),
     ChurchScreen(),
     GiveScreen(),
     ProfileScreen(),
@@ -100,6 +102,10 @@ class _NavBarState extends State<NavBar> {
               ),
               GButton(
                 icon: Icons.people,
+                text: "Groups",
+              ),
+              GButton(
+                icon: Icons.business,
                 text: "Circle",
               ),
               GButton(

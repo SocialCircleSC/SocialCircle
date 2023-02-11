@@ -20,6 +20,7 @@ Future<void> churchSetup(
     'Phone Number': phoneN,
     'Email Address': email,
     'Church ID': uid,
+    'TimeStamp': FieldValue.serverTimestamp(),
   });
 
   users.doc(uid).collection('members').doc().set({
@@ -31,6 +32,7 @@ Future<void> churchSetup(
     "BirthdayD": 00,
     "BirthdayM": 00,
     "BirthdayY": 0000,
+    'TimeStamp': FieldValue.serverTimestamp(),
     }
   );
   
@@ -41,6 +43,7 @@ Future<void> churchSetup(
     "Text": "Welcome to " + churchName + "'s Circle",
     "Likes": 0,
     "Like Status": false,
+    'TimeStamp': FieldValue.serverTimestamp(),
     }
   );
 }
