@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/firestore/delete_post.dart';
 import 'package:community/firestore/like_button.dart';
@@ -20,6 +22,10 @@ class CardInfo extends StatefulWidget {
 class _CardInfoState extends State<CardInfo> {
   // Initial Selected Value
   String? dropdownvalue;
+  String collect = "";
+  String collectID = "";
+
+  bool likeStatus = false;
 
   // List of items in our dropdown menu
   var items = [
@@ -27,74 +33,38 @@ class _CardInfoState extends State<CardInfo> {
     'Delete',
   ];
 
-  String collection = "circles";
-  String subCollection = "posts";
   bool switchState = false;
-  var useID;
   //Get Church ID
   var churchID;
-  List<Map<String, dynamic>> postData = [];
-  var randomData;
-  bool exist = false;
+  var userID;
 
   //Get the member's church ID
   Future getChurchID() async {
-    String ID = "";
+    String cID = "";
 
+    //Get church ID
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     final uid = user?.uid;
 
-    try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get()
-          .then((doc) {
-        setState(() {
-          exist = true;
-        });
-      });
-      if (exist = true) {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .get()
-            .then((value) {
-          ID = value.get('Church ID');
-        });
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((value) {
+      cID = value.get('Church ID');
+    });
 
-        if (this.mounted) {
-          setState(() {
-            churchID = ID;
-            //memID = uid;
-          });
-        }
-      } else {
-        await FirebaseFirestore.instance
-            .collection('circles')
-            .doc(uid)
-            .get()
-            .then((value) {
-          ID = value.get('Church ID');
-        });
-
-        if (this.mounted) {
-          setState(() {
-            churchID = ID;
-            //memID = ID;
-          });
-        }
-      }
-    } catch (e) {
-      debugPrint("There is an error somewhere");
-    }
+    setState(() {
+      churchID = cID;
+      userID = uid;
+    });
   }
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
     getChurchID();
+    super.didChangeDependencies();
   }
 
   @override
@@ -108,9 +78,9 @@ class _CardInfoState extends State<CardInfo> {
       child: StreamBuilder(
           //change here
           stream: FirebaseFirestore.instance
-              .collection(collection)
+              .collection("circles")
               .doc(churchID)
-              .collection(subCollection)
+              .collection("posts")
               .limit(25)
               .orderBy('TimeStamp', descending: true)
               .snapshots(),
@@ -193,33 +163,31 @@ class _CardInfoState extends State<CardInfo> {
                                     ),
                                   ),
                                 ),
-                                // SizedBox(
-                                //   height: displayHeight(context) * 0.01,
-                                // ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 5),
                                   child: Row(
                                     children: <Widget>[
                                       Padding(
                                         padding: const EdgeInsets.all(12.0),
-                                        child: FavoriteButton(
-                                          isFavorite: document['Like Status'],
-                                          iconSize: 35,
-                                          // iconDisabledColor: Colors.white,
-                                          valueChanged: (_isFavorite) {
-                                            onFavButtonTapped(
-                                                document['ID'],
+                                        child: Center(
+                                          child: FavoriteButton(
+                                            isFavorite: getStatus(
                                                 document['Likes'],
-                                                document['Like Status'],
-                                                churchID);
-                                            debugPrint(
-                                                'Is Favorite : $_isFavorite');
-                                          },
+                                                document['ID']),
+                                            iconSize: 35,
+                                            // iconDisabledColor: Colors.white,
+                                            valueChanged: (_isFavorite) {
+                                              onFavButtonTapped(userID,
+                                                  churchID, document.id);
+                                              debugPrint(
+                                                  'Is Favorite : $_isFavorite');
+                                            },
+                                          ),
                                         ),
                                       ),
                                       RichText(
                                         text: TextSpan(
-                                          text: document['Likes'].toString(),
+                                          text: getLikeCount(document['Likes']),
                                           style: TextStyle(
                                             color: BlackColor,
                                             fontSize: 12,
@@ -271,14 +239,15 @@ class _CardInfoState extends State<CardInfo> {
                                             icon:
                                                 Icon(Icons.keyboard_arrow_down),
                                             onChanged: (String? newValue) {
-                                              dropdownvalue = newValue!;
                                               if (newValue == items[0]) {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const EditPost()),
-                                                );
+                                                _goToEditScreen(
+                                                    context,
+                                                    churchID,
+                                                    document['First Name'],
+                                                    document['Last Name'],
+                                                    document['Status'],
+                                                    document['Text'],
+                                                    document.id);
                                               } else if (newValue == items[1]) {
                                                 showDialog(
                                                     context: context,
@@ -328,4 +297,37 @@ class _CardInfoState extends State<CardInfo> {
           }),
     );
   }
+}
+
+String getLikeCount(document) {
+  int likeCount = 0;
+  var exMap = {};
+  exMap = document;
+  likeCount = exMap.length;
+  return likeCount.toString();
+}
+
+bool getStatus(document, id) {
+  var example = [];
+  example.add(document);
+  debugPrint(example.toString());
+  bool status = false;
+  if (example.contains(id)) {
+    status = true;
+  }
+  return status;
+}
+
+void _goToEditScreen(BuildContext context, String cID, String fName,
+    String lName, String status, String textPost, String docID) async {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => EditPost(
+              circleID: cID,
+              fName: fName,
+              lName: lName,
+              status: status,
+              docID: docID,
+              textField: textPost)));
 }

@@ -8,27 +8,30 @@ Future<void> churchSetup(
   String bibleVerse,
   String email,
 ) async {
-  CollectionReference users = FirebaseFirestore.instance.collection('circles');
+  CollectionReference circle = FirebaseFirestore.instance.collection('circles');
+  CollectionReference typeUser = FirebaseFirestore.instance.collection('users');
   FirebaseAuth auth = FirebaseAuth.instance;
   final User? user = auth.currentUser;
   final uid = user?.uid;
 
-  users.doc(uid).set({
+  circle.doc(uid).set({
     //Maybe add church description?
-    'Name': churchName,
+    "First Name": churchName,
+    "Last Name": ' ',
     'Street Address': address,
     'Phone Number': phoneN,
     'Email Address': email,
+    'Status': 'Church',
     'Church ID': uid,
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 
-  users.doc(uid).collection('members').doc().set({
+  circle.doc(uid).collection('members').doc().set({
     "Email Address": email,
     "ID": "N/A",
     "First Name": churchName,
     "Last Name": ' ',
-    "Status": 'Member',
+    "Status": 'Church',
     "BirthdayD": 00,
     "BirthdayM": 00,
     "BirthdayY": 0000,
@@ -36,14 +39,31 @@ Future<void> churchSetup(
     }
   );
   
-  users.doc(uid).collection('posts').doc().set({
+  circle.doc(uid).collection('posts').doc().set({
     "First Name": churchName,
     "Last Name": ' ',
+    "ID": uid,
     "Status": 'Church',
     "Text": "Welcome to " + churchName + "'s Circle",
-    "Likes": 0,
-    "Like Status": false,
+    "Likes": {
+      uid: false
+    },
     'TimeStamp': FieldValue.serverTimestamp(),
     }
   );
+
+  // Upload to user collecetion
+
+   typeUser.doc(uid).set({
+    //Maybe add church description?
+    "First Name": churchName,
+    "Last Name": ' ',
+    'Street Address': address,
+    'Phone Number': phoneN,
+    'Email Address': email,
+    'Status': 'Church',
+    'Church ID': uid,
+    'TimeStamp': FieldValue.serverTimestamp(),
+  });
+
 }

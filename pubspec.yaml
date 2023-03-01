@@ -39,6 +39,7 @@ dependencies:
   image_cropper: ^3.0.0
   image_picker: ^0.8.5+3
   favorite_button: ^0.0.4
+  uuid: ^3.0.6
 
   flutter:
     sdk: flutter

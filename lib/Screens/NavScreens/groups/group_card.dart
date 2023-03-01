@@ -208,12 +208,12 @@ class _GroupCardState extends State<GroupCard> {
                                           iconSize: 35,
                                           // iconDisabledColor: Colors.white,
                                           valueChanged: (_isFavorite) {
-                                            onFavButtonTapped(
-                                                document['ID'],
-                                                document['Likes'],
-                                                document['Like Status'], churchID);
-                                            debugPrint(
-                                                'Is Favorite : $_isFavorite');
+                                            // onFavButtonTapped(
+                                            //     document['ID'],
+                                            //     document['Likes'],
+                                            //     document['Like Status'], churchID);
+                                            // debugPrint(
+                                            //     'Is Favorite : $_isFavorite');
                                           },
                                         ),
                                       ),
@@ -273,12 +273,12 @@ class _GroupCardState extends State<GroupCard> {
                                               dropdownvalue = newValue!;
                                               if (newValue == items[0]) {
 
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const EditPost()),
-                                                  );
+                                                  // Navigator.push(
+                                                  //   context,
+                                                  //   MaterialPageRoute(
+                                                  //       builder: (context) =>
+                                                  //           const EditPost()),
+                                                  // );
                                               } else if (newValue == items[1]) {
                                                   showDialog(
                                                       context: context,

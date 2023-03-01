@@ -1,30 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-  
-  
-  Future<void> onFavButtonTapped(
-      String id, int numLikes, bool likeStatus, String churchID) async {
-    // if isLiked = true, then add 1 to the likes
-    // if isLiked = false, then substract 1 from the likes
-    if (likeStatus == false) {
-      FirebaseFirestore.instance
-          .collection("circles")
-          .doc(churchID)
-          .collection("posts")
-          .doc(id) //get the document ID
-          .update(
-              {'Likes': numLikes + 1, 'Like Status': true}) // <-- Updated data
-          .then((_) => print('Success'))
-          .catchError((error) => print('Failed: $error'));
+//Get the number of likes, and update like status
+Future<void> onFavButtonTapped(
+    String userID, String churchID, String likePost) async {
+  //If the the post has already been liked, remove user from the array Else add user to the array
+  FirebaseFirestore.instance
+      .collection("circles")
+      .doc(churchID)
+      .collection("posts")
+      .doc(likePost)
+      .get()
+      .then((value) {
+    if (value['Likes'].contains(userID)) {
+      //Do Nothing
     } else {
-      FirebaseFirestore.instance
-          .collection("circles")
-          .doc(churchID)
-          .collection("posts")
-          .doc(id) //get the document ID
-          .update(
-              {'Likes': numLikes - 1, 'Like Status': false}) // <-- Updated data
-          .then((_) => print('Success'))
-          .catchError((error) => print('Failed: $error'));
+      //Add to the array
+      FieldValue.arrayUnion([userID, false]);
     }
-  }
+  });
+}

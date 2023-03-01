@@ -1,26 +1,40 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community/firestore/updateDataChurch.dart';
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
-import 'package:community/firestore/postDataChurch.dart';
 import 'package:community/themes/theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 
 class EditPost extends StatefulWidget {
-  const EditPost({Key? key}) : super(key: key);
+  // Church ID, First Name, Last Name, Status
+  final String circleID;
+  final String fName;
+  final String lName;
+  final String status;
+  final String docID;
+  final String textField;
+
+  const EditPost(
+      {Key? key,
+      required this.circleID,
+      required this.fName,
+      required this.lName,
+      required this.status,
+      required this.docID,
+      required this.textField})
+      : super(key: key);
 
   @override
   State<EditPost> createState() => _EditPostState();
 }
 
 class _EditPostState extends State<EditPost> {
-  TextEditingController postTextController = TextEditingController();
+  late TextEditingController postTextController = TextEditingController(text: widget.textField);
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('The System Back Button is Deactivated')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: const Text('The System Back Button is Deactivated')));
         return false;
       },
       child: Scaffold(
@@ -45,7 +59,14 @@ class _EditPostState extends State<EditPost> {
           actions: <Widget>[
             FlatButton(
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                updatePost(
+                    widget.circleID, postTextController.text, widget.docID);
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const NavBar()),
+              );
+              },
               child: const Text(
                 'Edit Post',
                 style: TextStyle(color: PrimaryColor),
@@ -73,13 +94,13 @@ class _EditPostState extends State<EditPost> {
                   const Text("Add Image")
                 ],
               ),
-              TextField(
+              TextFormField(
                 controller: postTextController,
                 keyboardType: TextInputType.multiline,
                 maxLines: 7,
                 // ignore: prefer_const_constructors
                 decoration: InputDecoration(
-                  hintText: "What would you like to say?",
+                  //hintText: "What would you like to say?",
                   // ignore: prefer_const_constructors
                   focusedBorder: UnderlineInputBorder(
                     borderSide: const BorderSide(color: PrimaryColor),

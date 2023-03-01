@@ -18,8 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
             content: Text('The System Back Button is Deactivated')));
         return false;
       },
-      child: 
-      CardInfo(),
+      child:
+        CardInfo(),
     );
   }
 }
