@@ -8,6 +8,8 @@ Future<void> postDataChu(String postText, String status, String fName,
   final User? user = auth.currentUser;
   final uid = user?.uid;
 
+  var arr = [userID, false];
+
   await FirebaseFirestore.instance
       .collection('circles')
       .doc(churchID)
@@ -20,7 +22,7 @@ Future<void> postDataChu(String postText, String status, String fName,
         'Status': status,
         'Likes': {
           userID: false
-        }, 
+        },
         'TimeStamp': FieldValue.serverTimestamp(),
   });
 

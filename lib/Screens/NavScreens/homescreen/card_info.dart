@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/firestore/delete_post.dart';
-import 'package:community/firestore/like_button.dart';
 import 'package:community/screens/navscreens/homescreen/edit_post.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -177,10 +176,12 @@ class _CardInfoState extends State<CardInfo> {
                                             iconSize: 35,
                                             // iconDisabledColor: Colors.white,
                                             valueChanged: (_isFavorite) {
-                                              onFavButtonTapped(userID,
-                                                  churchID, document.id);
-                                              debugPrint(
-                                                  'Is Favorite : $_isFavorite');
+                                              onFavButtonTapped(
+                                                  userID,
+                                                  churchID,
+                                                  document.id,
+                                                  _isFavorite,
+                                                  document['Likes']);
                                             },
                                           ),
                                         ),
@@ -301,21 +302,40 @@ class _CardInfoState extends State<CardInfo> {
 
 String getLikeCount(document) {
   int likeCount = 0;
-  var exMap = {};
+  var exMap;
   exMap = document;
-  likeCount = exMap.length;
+  exMap.forEach((key, value) {
+    if (value.toString() == 'true') {
+      likeCount += 1;
+    }
+  });
   return likeCount.toString();
 }
 
 bool getStatus(document, id) {
-  var example = [];
-  example.add(document);
-  debugPrint(example.toString());
-  bool status = false;
-  if (example.contains(id)) {
-    status = true;
-  }
+  var example;
+  example = document;
+  bool status;
+  status = example[id];
   return status;
+}
+
+Future<void> onFavButtonTapped(String userID, String churchID, String likePost,
+    dynamic likeStatus, document) async {
+  //bool like = !likeStatus;
+  //If the the post has already been liked, remove user from the array Else add user to the array
+  FirebaseFirestore.instance
+      .collection("circles")
+      .doc(churchID)
+      .collection("posts")
+      .doc(likePost)
+      .update({
+    'Likes': {
+      userID: !likeStatus,
+    }
+  });
+
+  getStatus(document, likePost);
 }
 
 void _goToEditScreen(BuildContext context, String cID, String fName,

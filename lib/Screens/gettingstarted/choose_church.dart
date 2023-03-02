@@ -119,11 +119,11 @@ class _ChooseChurchState extends State<ChooseChurch> {
 
     var data = await FirebaseFirestore.instance
         .collection('circles')
-        .orderBy('Name', descending: true)
+        .orderBy('First Name', descending: true)
         .get()
         .then((value) {
       for (var i in value.docs) {
-        answer.add({"name": i.get('Name')});
+        answer.add({"name": i.get('First Name')});
         answerAddress.add({"name": i.get('Street Address')});
         answerId.add({"docID": i.id});
       }

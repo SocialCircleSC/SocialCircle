@@ -14,6 +14,8 @@ Future<void> churchSetup(
   final User? user = auth.currentUser;
   final uid = user?.uid;
 
+  var arr = [uid, false];
+
   circle.doc(uid).set({
     //Maybe add church description?
     "First Name": churchName,
@@ -36,9 +38,8 @@ Future<void> churchSetup(
     "BirthdayM": 00,
     "BirthdayY": 0000,
     'TimeStamp': FieldValue.serverTimestamp(),
-    }
-  );
-  
+  });
+
   circle.doc(uid).collection('posts').doc().set({
     "First Name": churchName,
     "Last Name": ' ',
@@ -46,15 +47,14 @@ Future<void> churchSetup(
     "Status": 'Church',
     "Text": "Welcome to " + churchName + "'s Circle",
     "Likes": {
-      uid: false
+      uid: false,
     },
     'TimeStamp': FieldValue.serverTimestamp(),
-    }
-  );
+  });
 
   // Upload to user collecetion
 
-   typeUser.doc(uid).set({
+  typeUser.doc(uid).set({
     //Maybe add church description?
     "First Name": churchName,
     "Last Name": ' ',
@@ -65,5 +65,4 @@ Future<void> churchSetup(
     'Church ID': uid,
     'TimeStamp': FieldValue.serverTimestamp(),
   });
-
 }

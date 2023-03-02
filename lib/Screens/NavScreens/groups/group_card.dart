@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/firestore/like_button.dart';
 import 'package:community/screens/navscreens/homescreen/edit_post.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
