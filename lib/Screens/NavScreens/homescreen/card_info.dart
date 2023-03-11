@@ -179,7 +179,6 @@ class _CardInfoState extends State<CardInfo> {
                                                   await postDoc.get();
 
                                               List likedusers = post["LikedBy"];
-
                                               if (likedusers.contains(
                                                       userID.toString()) ==
                                                   true) {
@@ -198,9 +197,11 @@ class _CardInfoState extends State<CardInfo> {
                                             },
                                             icon: Icon(
                                               Icons.favorite,
-                                              color: getStatus(
-                                                  document["LikedBy"],
-                                                  document.id),
+                                              color: document["LikedBy"]
+                                                          .contains(userID) ==
+                                                      true
+                                                  ? Colors.red
+                                                  : Colors.grey,
                                             )),
                                       ),
                                       RichText(
@@ -324,15 +325,6 @@ String getLikeCount(document) {
   exMap = document;
   likeCount = exMap.length;
   return likeCount.toString();
-}
-
-Color getStatus(document, id) {
-  List example = document;
-  if (example.contains(id) == true) {
-    return Colors.red;
-  } else {
-    return Colors.grey;
-  }
 }
 
 void _goToEditScreen(BuildContext context, String cID, String fName,
