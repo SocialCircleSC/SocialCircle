@@ -47,7 +47,7 @@ Future<void> churchSetup(
     "Status": 'Church',
     "Text": "Welcome to " + churchName + "'s Circle",
     "Likes": {
-      uid: false,
+      uid: 4288585374,
     },
     'TimeStamp': FieldValue.serverTimestamp(),
   });

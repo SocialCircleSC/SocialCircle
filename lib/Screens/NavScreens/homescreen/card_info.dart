@@ -166,29 +166,47 @@ class _CardInfoState extends State<CardInfo> {
                                   padding: const EdgeInsets.only(left: 5),
                                   child: Row(
                                     children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.all(12.0),
-                                        child: Center(
-                                          child: FavoriteButton(
-                                            isFavorite: getStatus(
-                                                document['Likes'],
-                                                document['ID']),
-                                            iconSize: 35,
-                                            // iconDisabledColor: Colors.white,
-                                            valueChanged: (_isFavorite) {
-                                              onFavButtonTapped(
-                                                  userID,
-                                                  churchID,
-                                                  document.id,
-                                                  _isFavorite,
-                                                  document['Likes']);
+                                      Center(
+                                        child: IconButton(
+                                            onPressed: () async {
+                                              DocumentReference postDoc =
+                                                  FirebaseFirestore.instance
+                                                      .collection("circles")
+                                                      .doc(churchID)
+                                                      .collection("posts")
+                                                      .doc(document.id);
+                                              DocumentSnapshot post =
+                                                  await postDoc.get();
+
+                                              List likedusers = post["LikedBy"];
+
+                                              if (likedusers.contains(
+                                                      userID.toString()) ==
+                                                  true) {
+                                                postDoc.update({
+                                                  "LikedBy":
+                                                      FieldValue.arrayRemove(
+                                                          [userID])
+                                                });
+                                              } else {
+                                                postDoc.update({
+                                                  "LikedBy":
+                                                      FieldValue.arrayUnion(
+                                                          [userID])
+                                                });
+                                              }
                                             },
-                                          ),
-                                        ),
+                                            icon: Icon(
+                                              Icons.favorite,
+                                              color: getStatus(
+                                                  document["LikedBy"],
+                                                  document.id),
+                                            )),
                                       ),
                                       RichText(
                                         text: TextSpan(
-                                          text: getLikeCount(document['Likes']),
+                                          text:
+                                              getLikeCount(document['LikedBy']),
                                           style: TextStyle(
                                             color: BlackColor,
                                             fontSize: 12,
@@ -304,38 +322,17 @@ String getLikeCount(document) {
   int likeCount = 0;
   var exMap;
   exMap = document;
-  exMap.forEach((key, value) {
-    if (value.toString() == 'true') {
-      likeCount += 1;
-    }
-  });
+  likeCount = exMap.length;
   return likeCount.toString();
 }
 
-bool getStatus(document, id) {
-  var example;
-  example = document;
-  bool status;
-  status = example[id];
-  return status;
-}
-
-Future<void> onFavButtonTapped(String userID, String churchID, String likePost,
-    dynamic likeStatus, document) async {
-  //bool like = !likeStatus;
-  //If the the post has already been liked, remove user from the array Else add user to the array
-  FirebaseFirestore.instance
-      .collection("circles")
-      .doc(churchID)
-      .collection("posts")
-      .doc(likePost)
-      .update({
-    'Likes': {
-      userID: !likeStatus,
-    }
-  });
-
-  getStatus(document, likePost);
+Color getStatus(document, id) {
+  List example = document;
+  if (example.contains(id) == true) {
+    return Colors.red;
+  } else {
+    return Colors.grey;
+  }
 }
 
 void _goToEditScreen(BuildContext context, String cID, String fName,
