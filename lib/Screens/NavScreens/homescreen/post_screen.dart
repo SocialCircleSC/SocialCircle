@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/firestore/postDataChurch.dart';
+import 'package:community/storage/storage_services.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 
 class PostScreen extends StatefulWidget {
@@ -23,6 +29,7 @@ class _PostScreenState extends State<PostScreen> {
   var lastN;
   var status;
   var docID;
+  var picturePath = "";
 
   //Get the member's church ID
   Future getChurchID() async {
@@ -42,11 +49,11 @@ class _PostScreenState extends State<PostScreen> {
         .doc(uid)
         .get()
         .then((value) {
-          ID = value.get('Church ID');
-          fN = value.get('First Name');
-          lN = value.get('Last Name');
-          stat = value.get('Status');
-          uID = value.id;
+      ID = value.get('Church ID');
+      fN = value.get('First Name');
+      lN = value.get('Last Name');
+      stat = value.get('Status');
+      uID = value.id;
     });
 
     setState(() {
@@ -56,7 +63,6 @@ class _PostScreenState extends State<PostScreen> {
       status = stat;
       userID = uID;
     });
-
   }
 
   @override
@@ -65,6 +71,7 @@ class _PostScreenState extends State<PostScreen> {
     getChurchID();
   }
 
+  late String imageUrl;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -95,13 +102,18 @@ class _PostScreenState extends State<PostScreen> {
             FlatButton(
               textColor: Colors.white,
               onPressed: () {
-                postDataChu(
-                    postTextController.text, status, firstN, lastN, churchID, userID);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NavBar()),
-                );
-                Fluttertoast.showToast(msg: "Post Successful!");
+                if (postTextController.text.isEmpty) {
+                  Fluttertoast.showToast(
+                      msg: "Please type a message or text");
+                } else {
+                  postDataChu(postTextController.text, status, firstN, lastN,
+                      churchID, userID, picturePath);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const NavBar()),
+                  );
+                  Fluttertoast.showToast(msg: "Post Successful!");
+                }
               },
               child: const Text(
                 'Post',
@@ -123,8 +135,29 @@ class _PostScreenState extends State<PostScreen> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      //getFromGallery();
+                    onPressed: () async {
+                      ImagePicker imagePicker = ImagePicker();
+                      XFile? file = await imagePicker.pickImage(
+                          source: ImageSource.gallery);
+
+                      if (file == null) return;
+
+                      String uniqueFileName =
+                          DateTime.now().microsecondsSinceEpoch.toString();
+
+                      Reference ref = FirebaseStorage.instance
+                          .ref()
+                          .child('/Users')
+                          .child('/Churches')
+                          .child('/$churchID')
+                          .child(uniqueFileName);
+
+                      try {
+                        await ref.putFile(File(file.path));
+                        picturePath = await ref.getDownloadURL(); 
+                      } catch (e) {
+                        debugPrint(e.toString());
+                      }
                     },
                     icon: const Icon(Icons.camera_alt),
                   ),
