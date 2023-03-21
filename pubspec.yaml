@@ -38,10 +38,9 @@ dependencies:
   file_picker: ^4.0.3
   image_cropper: ^3.0.0
   image_picker: ^0.8.5+3
-  favorite_button: ^0.0.4
-  animated_react_button: ^0.0.4
-  like_button: ^2.0.5
   uuid: ^3.0.6
+  carousel_slider: ^4.2.1
+  sizer: ^2.0.15
 
   flutter:
     sdk: flutter

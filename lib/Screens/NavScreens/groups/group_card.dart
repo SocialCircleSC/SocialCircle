@@ -6,18 +6,16 @@ import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:community/sizes/size.dart';
-import 'package:favorite_button/favorite_button.dart';
 
 class GroupCard extends StatefulWidget {
-  const GroupCard({ Key? key }) : super(key: key);
+  const GroupCard({Key? key}) : super(key: key);
 
   @override
   State<GroupCard> createState() => _GroupCardState();
 }
 
 class _GroupCardState extends State<GroupCard> {
-
-    // Initial Selected Value
+  // Initial Selected Value
   String dropdownvalue = 'Edit';
 
   // List of items in our dropdown menu
@@ -95,8 +93,6 @@ class _GroupCardState extends State<GroupCard> {
     super.didChangeDependencies();
     getChurchID();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -200,22 +196,6 @@ class _GroupCardState extends State<GroupCard> {
                                   padding: const EdgeInsets.only(left: 5),
                                   child: Row(
                                     children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.all(12.0),
-                                        child: FavoriteButton(
-                                          isFavorite: document['Like Status'],
-                                          iconSize: 35,
-                                          // iconDisabledColor: Colors.white,
-                                          valueChanged: (_isFavorite) {
-                                            // onFavButtonTapped(
-                                            //     document['ID'],
-                                            //     document['Likes'],
-                                            //     document['Like Status'], churchID);
-                                            // debugPrint(
-                                            //     'Is Favorite : $_isFavorite');
-                                          },
-                                        ),
-                                      ),
                                       RichText(
                                         text: TextSpan(
                                           text: document['Likes'].toString(),
@@ -271,34 +251,33 @@ class _GroupCardState extends State<GroupCard> {
                                             onChanged: (String? newValue) {
                                               dropdownvalue = newValue!;
                                               if (newValue == items[0]) {
-
-                                                  // Navigator.push(
-                                                  //   context,
-                                                  //   MaterialPageRoute(
-                                                  //       builder: (context) =>
-                                                  //           const EditPost()),
-                                                  // );
+                                                // Navigator.push(
+                                                //   context,
+                                                //   MaterialPageRoute(
+                                                //       builder: (context) =>
+                                                //           const EditPost()),
+                                                // );
                                               } else if (newValue == items[1]) {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          title: Text("Confirm"),
-                                                          content: Text("Are you sure you want to delete this post?"),
-                                                          actions: [
-                                                            TextButton(
-                                                              child: Text("Yes"),
-                                                              onPressed:  () {},
-                                                            ),
-                                                            TextButton(
-                                                              child: Text("No"),
-                                                              onPressed:  () {},
-                                                            ),
-                                                          ],
-
-                                                        );
-                                                      });
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text("Confirm"),
+                                                        content: Text(
+                                                            "Are you sure you want to delete this post?"),
+                                                        actions: [
+                                                          TextButton(
+                                                            child: Text("Yes"),
+                                                            onPressed: () {},
+                                                          ),
+                                                          TextButton(
+                                                            child: Text("No"),
+                                                            onPressed: () {},
+                                                          ),
+                                                        ],
+                                                      );
+                                                    });
                                               }
                                             }),
                                       ),
