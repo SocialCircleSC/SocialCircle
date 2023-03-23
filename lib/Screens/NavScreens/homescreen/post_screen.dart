@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community/screens/navscreens/homescreen/bigger_picture.dart';
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/firestore/postDataChurch.dart';
+import 'package:community/sizes/size.dart';
 import 'package:community/storage/storage_services.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,6 +75,7 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   late String imageUrl;
+  File? imageCaro;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -103,8 +107,7 @@ class _PostScreenState extends State<PostScreen> {
               textColor: Colors.white,
               onPressed: () {
                 if (postTextController.text.isEmpty) {
-                  Fluttertoast.showToast(
-                      msg: "Please type a message or text");
+                  Fluttertoast.showToast(msg: "Please type a message or text");
                 } else {
                   postDataChu(postTextController.text, status, firstN, lastN,
                       churchID, userID, picturePath);
@@ -145,6 +148,10 @@ class _PostScreenState extends State<PostScreen> {
                       String uniqueFileName =
                           DateTime.now().microsecondsSinceEpoch.toString();
 
+                      setState(() {
+                        imageCaro = File(file.path);
+                      });
+
                       Reference ref = FirebaseStorage.instance
                           .ref()
                           .child('/Users')
@@ -154,7 +161,7 @@ class _PostScreenState extends State<PostScreen> {
 
                       try {
                         await ref.putFile(File(file.path));
-                        picturePath = await ref.getDownloadURL(); 
+                        picturePath = await ref.getDownloadURL();
                       } catch (e) {
                         debugPrint(e.toString());
                       }
@@ -164,6 +171,37 @@ class _PostScreenState extends State<PostScreen> {
                   const Text("Add Image")
                 ],
               ),
+              if (imageCaro != null)
+                Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      children: [
+                        CarouselSlider(
+                            options: CarouselOptions(
+                                viewportFraction: 1,
+                                height: displayHeight(context) * 0.35,
+                                enableInfiniteScroll: false),
+                            items: [imageCaro].map(((e) {
+                              return Builder(builder: (BuildContext context) {
+                                return GestureDetector(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(7),
+                                    child: Image.file(
+                                      e!, // File(e!.path),
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                );
+                              });
+                            })).toList())
+                      ],
+                    ),
+                  ),
+                ),
               TextField(
                 controller: postTextController,
                 keyboardType: TextInputType.multiline,
