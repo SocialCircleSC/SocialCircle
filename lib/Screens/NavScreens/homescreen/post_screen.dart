@@ -32,7 +32,6 @@ class _PostScreenState extends State<PostScreen> {
   var lastN;
   var status;
   var docID;
-  var picturePath = [];
 
   //Get the member's church ID
   Future getChurchID() async {
@@ -109,8 +108,8 @@ class _PostScreenState extends State<PostScreen> {
                 if (postTextController.text.isEmpty) {
                   Fluttertoast.showToast(msg: "Please type a message or text");
                 } else {
-                  // postDataChu(postTextController.text, status, firstN, lastN,
-                  //     churchID, userID, picturePath); Need to make picture path an array
+                  postDataChu(postTextController.text, status, firstN, lastN,
+                      churchID, userID, imageList);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const NavBar()),
@@ -141,33 +140,17 @@ class _PostScreenState extends State<PostScreen> {
                     onPressed: () async {
                       ImagePicker imagePicker = ImagePicker();
                       List<XFile>? file = await imagePicker.pickMultiImage();
-
-                      if (file == null) return;
-
-                      String uniqueFileName =
-                          DateTime.now().microsecondsSinceEpoch.toString();
-
-                      setState(() {
-                        for (int p = 0; p < file.length; p++) {
-                          imageList.add(File(file[p].path));
-                        }
-                      });
-
-                      Reference ref = FirebaseStorage.instance
-                          .ref()
-                          .child('/Users')
-                          .child('/Churches')
-                          .child('/$churchID')
-                          .child(uniqueFileName);
-
-                      try {
-                        for (int i = 0; i < file.length; i++) {
-                          await ref.putFile(File(file[i].path));
-                        }
-
-                        picturePath.add(await ref.getDownloadURL());
-                      } catch (e) {
-                        debugPrint(e.toString());
+                      if (file!.length > 15) {
+                        Fluttertoast.showToast(
+                            msg: "The max number of photos is 15. You have " +
+                                file.length.toString(),
+                            toastLength: Toast.LENGTH_LONG);
+                      } else {
+                        setState(() {
+                          for (int p = 0; p < file.length; p++) {
+                            imageList.add(file[p].path);
+                          }
+                        });
                       }
                     },
                     icon: const Icon(Icons.camera_alt),
@@ -196,7 +179,7 @@ class _PostScreenState extends State<PostScreen> {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(7),
                                       child: Image.file(
-                                        e, // File(e!.path),
+                                        File(e), // File(e!.path),
                                         width: displayWidth(context) * 0.9,
                                         height: displayHeight(context) * 0.3,
                                         fit: BoxFit.fill,
@@ -207,7 +190,6 @@ class _PostScreenState extends State<PostScreen> {
                                         setState(() {
                                           imageList.remove(e);
                                         });
-                                        
                                       },
                                       child: const Align(
                                         alignment: Alignment.topRight,

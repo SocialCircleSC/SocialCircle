@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/firestore/delete_post.dart';
@@ -165,7 +166,8 @@ class _CardInfoState extends State<CardInfo> {
                                   ),
                                 ),
                               ),
-                              if (document["Picture"] != "")//Only show image if it exists
+                              if (document["Picture"]
+                                  .isNotEmpty) //Only show image if it exists
                                 Padding(
                                   padding: const EdgeInsets.all(1.0),
                                   child: Align(
@@ -174,12 +176,14 @@ class _CardInfoState extends State<CardInfo> {
                                       children: [
                                         CarouselSlider(
                                             options: CarouselOptions(
-                                                viewportFraction: 1,
-                                                height: displayHeight(context) *
-                                                    0.35,
-                                                enableInfiniteScroll: false),
-                                            items:
-                                                [document['Picture']].map(((e) {
+                                              viewportFraction: 1,
+                                              enlargeCenterPage: true,
+                                              enableInfiniteScroll: false,
+                                              height:
+                                                  displayHeight(context) * 0.35,
+                                            ),
+                                            items: document['Picture']
+                                                .map<Widget>(((e) {
                                               return Builder(builder:
                                                   (BuildContext context) {
                                                 return GestureDetector(
