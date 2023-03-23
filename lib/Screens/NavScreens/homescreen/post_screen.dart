@@ -32,7 +32,7 @@ class _PostScreenState extends State<PostScreen> {
   var lastN;
   var status;
   var docID;
-  var picturePath = "";
+  var picturePath = [];
 
   //Get the member's church ID
   Future getChurchID() async {
@@ -75,7 +75,7 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   late String imageUrl;
-  File? imageCaro;
+  var imageList = [];
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -109,8 +109,8 @@ class _PostScreenState extends State<PostScreen> {
                 if (postTextController.text.isEmpty) {
                   Fluttertoast.showToast(msg: "Please type a message or text");
                 } else {
-                  postDataChu(postTextController.text, status, firstN, lastN,
-                      churchID, userID, picturePath);
+                  // postDataChu(postTextController.text, status, firstN, lastN,
+                  //     churchID, userID, picturePath); Need to make picture path an array
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const NavBar()),
@@ -140,8 +140,7 @@ class _PostScreenState extends State<PostScreen> {
                   IconButton(
                     onPressed: () async {
                       ImagePicker imagePicker = ImagePicker();
-                      XFile? file = await imagePicker.pickImage(
-                          source: ImageSource.gallery);
+                      List<XFile>? file = await imagePicker.pickMultiImage();
 
                       if (file == null) return;
 
@@ -149,7 +148,9 @@ class _PostScreenState extends State<PostScreen> {
                           DateTime.now().microsecondsSinceEpoch.toString();
 
                       setState(() {
-                        imageCaro = File(file.path);
+                        for (int p = 0; p < file.length; p++) {
+                          imageList.add(File(file[p].path));
+                        }
                       });
 
                       Reference ref = FirebaseStorage.instance
@@ -160,8 +161,11 @@ class _PostScreenState extends State<PostScreen> {
                           .child(uniqueFileName);
 
                       try {
-                        await ref.putFile(File(file.path));
-                        picturePath = await ref.getDownloadURL();
+                        for (int i = 0; i < file.length; i++) {
+                          await ref.putFile(File(file[i].path));
+                        }
+
+                        picturePath.add(await ref.getDownloadURL());
                       } catch (e) {
                         debugPrint(e.toString());
                       }
@@ -171,35 +175,54 @@ class _PostScreenState extends State<PostScreen> {
                   const Text("Add Image")
                 ],
               ),
-              if (imageCaro != null)
+              if (imageList.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(1.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      children: [
-                        CarouselSlider(
-                            options: CarouselOptions(
-                                viewportFraction: 1,
-                                height: displayHeight(context) * 0.35,
-                                enableInfiniteScroll: false),
-                            items: [imageCaro].map(((e) {
-                              return Builder(builder: (BuildContext context) {
-                                return GestureDetector(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(7),
-                                    child: Image.file(
-                                      e!, // File(e!.path),
-                                      width: 200,
-                                      height: 200,
-                                      fit: BoxFit.fill,
+                  child: Column(
+                    children: [
+                      CarouselSlider(
+                          options: CarouselOptions(
+                            viewportFraction: 0.8,
+                            enlargeCenterPage: true,
+                            height: displayHeight(context) * 0.35,
+                            enableInfiniteScroll: true,
+                            reverse: true,
+                          ),
+                          items: imageList.map<Widget>(((e) {
+                            return Builder(builder: (BuildContext context) {
+                              return GestureDetector(
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(7),
+                                      child: Image.file(
+                                        e, // File(e!.path),
+                                        width: displayWidth(context) * 0.9,
+                                        height: displayHeight(context) * 0.3,
+                                        fit: BoxFit.fill,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              });
-                            })).toList())
-                      ],
-                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          imageList.remove(e);
+                                        });
+                                        
+                                      },
+                                      child: const Align(
+                                        alignment: Alignment.topRight,
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            });
+                          })).toList())
+                    ],
                   ),
                 ),
               TextField(
