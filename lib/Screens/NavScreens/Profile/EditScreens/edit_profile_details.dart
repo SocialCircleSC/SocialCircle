@@ -78,7 +78,6 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
         ),
       ),
 
-      // ignore: prefer_const_constructors
       body: Padding(
         padding: CenterPadding,
         child: Column(

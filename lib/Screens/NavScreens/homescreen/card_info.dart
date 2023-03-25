@@ -12,9 +12,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:community/sizes/size.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:sizer/sizer.dart';
-
-import 'package:community/screens/navscreens/homescreen/bigger_picture.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 
 class CardInfo extends StatefulWidget {
   const CardInfo({Key? key}) : super(key: key);
@@ -71,6 +71,7 @@ class _CardInfoState extends State<CardInfo> {
     super.didChangeDependencies();
   }
 
+  late VideoPlayerController vController;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -101,33 +102,9 @@ class _CardInfoState extends State<CardInfo> {
               );
             }
             return Column(
-              children: [
-                Container(
-                  height: displayHeight(context) * 0.05,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FlatButton(
-                          child: Text("Circle"),
-                          shape: Border(
-                              bottom:
-                                  BorderSide(color: PrimaryColor, width: 3)),
-                          textColor: Colors.black,
-                          //pressAttention is intially false
-                          onPressed: () {}),
-                      FlatButton(
-                          child: Text("Groups"),
-                          shape: Border(
-                              bottom:
-                                  BorderSide(color: Colors.white, width: 3)),
-                          textColor: Colors.black,
-                          //Intiallly is true
-                          onPressed: () {}),
-                    ],
-                  ),
-                ),
+              children: <Widget>[
                 SizedBox(
-                  height: displayHeight(context) * 0.75,
+                  height: displayHeight(context) * 0.84,
                   child: ListView(
                     children: snapshot.data!.docs.map((document) {
                       return Card(
@@ -141,7 +118,6 @@ class _CardInfoState extends State<CardInfo> {
                                 height: displayHeight(context) * 0.01,
                               ),
                               ListTile(
-                                // ignore: prefer_const_constructors
                                 leading: CircleAvatar(
                                   backgroundImage:
                                       AssetImage('lib/assets/fp_profile.jpg'),
@@ -166,13 +142,13 @@ class _CardInfoState extends State<CardInfo> {
                                   ),
                                 ),
                               ),
-                              if (document["Picture"]
-                                  .isNotEmpty) //Only show image if it exists
+                              if (document["Type"] == "Image")
+                                //Only show image if it exists
                                 Padding(
                                   padding: const EdgeInsets.all(1.0),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Column(
+                                    child: Stack(
                                       children: [
                                         CarouselSlider(
                                             options: CarouselOptions(
@@ -196,21 +172,54 @@ class _CardInfoState extends State<CardInfo> {
                                                                     picture:
                                                                         e)));
                                                   },
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            7),
-                                                    child: Image.network(
-                                                      e,
-                                                      width:
-                                                          displayWidth(context),
-                                                      fit: BoxFit.fill,
-                                                    ),
+                                                  child: Stack(
+                                                    alignment:
+                                                        Alignment.bottomCenter,
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(7),
+                                                        child: Image.network(
+                                                          e,
+                                                          width: displayWidth(
+                                                              context),
+                                                          fit: BoxFit.fill,
+                                                        ),
+                                                      ),
+                                                      if (document['Picture']
+                                                              .length !=
+                                                          1)
+                                                        AnimatedSmoothIndicator(
+                                                          activeIndex: document[
+                                                                  "Picture"]
+                                                              .indexWhere((f) =>
+                                                                  f == e),
+                                                          count: document[
+                                                                  'Picture']
+                                                              .length,
+                                                        ),
+                                                    ],
                                                   ),
                                                 );
                                               });
-                                            })).toList())
+                                            })).toList()),
                                       ],
+                                    ),
+                                  ),
+                                ),
+                              if (document["Type"] == "Video")
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: SizedBox(
+                                    height: displayHeight(context) * 0.5,
+                                    width: displayWidth(context),
+                                    child: Chewie(
+                                      controller: ChewieController(
+                                          videoPlayerController:
+                                              VideoPlayerController.network(
+                                                  document["Picture"][0])
+                                                ..initialize()),
                                     ),
                                   ),
                                 ),
@@ -268,7 +277,6 @@ class _CardInfoState extends State<CardInfo> {
                                     Padding(
                                       padding: const EdgeInsets.only(left: 90),
                                       child: RichText(
-                                        // ignore: prefer_const_constructors
                                         text: TextSpan(
                                           // ignore: prefer_const_literals_to_create_immutables
                                           children: [
@@ -330,7 +338,9 @@ class _CardInfoState extends State<CardInfo> {
                                                           onPressed: () {
                                                             deletePost(
                                                                 document.id,
-                                                                churchID);
+                                                                churchID,
+                                                                document[
+                                                                    "Picture"]);
                                                             Navigator.pop(
                                                                 context);
                                                           },

@@ -84,7 +84,7 @@ class _NavBarState extends State<NavBar> {
 
           // ignore: prefer_const_literals_to_create_immutables
           bottomNavigationBar: GNav(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 35),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             gap: 8,
             backgroundColor: Color(0x00000000),
             color: Colors.black,

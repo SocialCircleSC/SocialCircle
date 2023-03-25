@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:math';
+
 import 'package:community/screens/authscreens/login/login_screen.dart';
 import 'package:community/screens/navscreens/homescreen/home_screen.dart';
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
@@ -109,7 +111,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
       'First Name': fname,
       'Last Name': lname,
       'Status': status,
-    }).catchError((error) => print("Failed to add church: $error"));
+    }).catchError((error) => debugPrint(e.toString()));
   }
 
   Future getChurchList() async {

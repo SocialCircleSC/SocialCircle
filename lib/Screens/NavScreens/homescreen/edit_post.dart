@@ -57,8 +57,8 @@ class _EditPostState extends State<EditPost> {
 
           // ignore: prefer_const_literals_to_create_immutables
           actions: <Widget>[
-            FlatButton(
-              textColor: Colors.white,
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
               onPressed: () {
                 updatePost(
                     widget.circleID, postTextController.text, widget.docID);
@@ -69,10 +69,8 @@ class _EditPostState extends State<EditPost> {
               },
               child: const Text(
                 'Edit Post',
-                style: TextStyle(color: PrimaryColor),
+                style: TextStyle(color: Colors.white),
               ),
-              shape: const CircleBorder(
-                  side: BorderSide(color: Colors.transparent)),
             ),
           ],
         ),

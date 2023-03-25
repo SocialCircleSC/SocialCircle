@@ -2,19 +2,17 @@ import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/screens/navscreens/homescreen/bigger_picture.dart';
+
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/firestore/postDataChurch.dart';
 import 'package:community/sizes/size.dart';
-import 'package:community/storage/storage_services.dart';
+
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:uuid/uuid.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({Key? key}) : super(key: key);
@@ -75,6 +73,7 @@ class _PostScreenState extends State<PostScreen> {
 
   late String imageUrl;
   var imageList = [];
+  String type = "Text";
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -102,14 +101,14 @@ class _PostScreenState extends State<PostScreen> {
           ),
 
           actions: <Widget>[
-            FlatButton(
-              textColor: Colors.white,
+            ElevatedButton(
+              
               onPressed: () {
                 if (postTextController.text.isEmpty) {
                   Fluttertoast.showToast(msg: "Please type a message or text");
                 } else {
                   postDataChu(postTextController.text, status, firstN, lastN,
-                      churchID, userID, imageList);
+                      churchID, userID, imageList, type);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const NavBar()),
@@ -121,8 +120,9 @@ class _PostScreenState extends State<PostScreen> {
                 'Post',
                 style: TextStyle(color: PrimaryColor),
               ),
-              shape: const CircleBorder(
-                  side: BorderSide(color: Colors.transparent)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+              ),
             ),
           ],
         ),
@@ -136,26 +136,74 @@ class _PostScreenState extends State<PostScreen> {
             children: [
               Row(
                 children: [
-                  IconButton(
+                  //For Image
+
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      primary: SecondaryColor,
+                    ),
+                    label: const Text("Add Image"),
+                    icon: const Icon(
+                      Icons.camera,
+                      color: Colors.black,
+                    ),
                     onPressed: () async {
-                      ImagePicker imagePicker = ImagePicker();
-                      List<XFile>? file = await imagePicker.pickMultiImage();
-                      if (file!.length > 15) {
-                        Fluttertoast.showToast(
-                            msg: "The max number of photos is 15. You have " +
-                                file.length.toString(),
-                            toastLength: Toast.LENGTH_LONG);
+                      if (imageList.isEmpty) {
+                        ImagePicker imagePicker = ImagePicker();
+                        List<XFile>? file = await imagePicker.pickMultiImage();
+                        if (file!.length > 15) {
+                          Fluttertoast.showToast(
+                              msg: "The max number of photos is 15. You have " +
+                                  file.length.toString(),
+                              toastLength: Toast.LENGTH_LONG);
+                        } else {
+                          setState(() {
+                            type = "Image";
+                            for (int p = 0; p < file.length; p++) {
+                              imageList.add(file[p].path);
+                            }
+                          });
+                        }
                       } else {
-                        setState(() {
-                          for (int p = 0; p < file.length; p++) {
-                            imageList.add(file[p].path);
-                          }
-                        });
+                        Fluttertoast.showToast(
+                            msg:
+                                "Please remove the pictures or video you have below",
+                            toastLength: Toast.LENGTH_LONG);
                       }
                     },
-                    icon: const Icon(Icons.camera_alt),
                   ),
-                  const Text("Add Image")
+
+                  SizedBox(width: displayWidth(context) * 0.03),
+
+                  //For Video
+
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      primary: SecondaryColor,
+                    ),
+                    label: const Text("Add Video"),
+                    icon: const Icon(
+                      Icons.camera_alt,
+                      color: Colors.black,
+                    ),
+                    onPressed: () async {
+                      if (imageList.isEmpty) {
+                        ImagePicker imagePicker = ImagePicker();
+                        XFile? file = await imagePicker.pickVideo(
+                            source: ImageSource.gallery);
+
+                        setState(() async {
+                          type = "Video";
+                          imageList.add(file!.path);
+                        });
+                      } else {
+                        Fluttertoast.showToast(
+                            msg:
+                                "Please remove the pictures or video you have below",
+                            toastLength: Toast.LENGTH_LONG);
+                      }
+                    },
+                  ),
                 ],
               ),
               if (imageList.isNotEmpty)
@@ -168,8 +216,8 @@ class _PostScreenState extends State<PostScreen> {
                             viewportFraction: 0.8,
                             enlargeCenterPage: true,
                             height: displayHeight(context) * 0.35,
-                            enableInfiniteScroll: true,
-                            reverse: true,
+                            enableInfiniteScroll: false,
+                            reverse: false,
                           ),
                           items: imageList.map<Widget>(((e) {
                             return Builder(builder: (BuildContext context) {

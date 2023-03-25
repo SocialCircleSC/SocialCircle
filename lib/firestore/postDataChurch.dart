@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 Future<void> postDataChu(String postText, String status, String fName,
-    String lName, String churchID, String userID, List path) async {
+    String lName, String churchID, String userID, List path, String type) async {
   FirebaseAuth auth = FirebaseAuth.instance;
   final User? user = auth.currentUser;
   final uid = user?.uid;
@@ -41,6 +41,7 @@ Future<void> postDataChu(String postText, String status, String fName,
     'Status': status,
     'LikedBy': [],
     'Picture': picturePath,
+    'Type': type,
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 }

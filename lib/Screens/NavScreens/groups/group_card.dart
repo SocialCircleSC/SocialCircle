@@ -128,22 +128,15 @@ class _GroupCardState extends State<GroupCard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      FlatButton(
-                          child: Text("Circle"),
-                          // ignore: prefer_const_constructors
-                          shape: Border(
-                              bottom:
-                                  BorderSide(color: Colors.white, width: 3)),
-                          textColor: Colors.black,
+                     ElevatedButton(
+                          child: Text("Circle", style: TextStyle(color: PrimaryColor),),
+                          
                           //pressAttention is intially false
                           onPressed: () {}),
-                      FlatButton(
-                          child: Text("Groups"),
-                          shape: Border(
-                              bottom:
-                                  BorderSide(color: PrimaryColor, width: 3)),
-                          textColor: Colors.black,
-                          //Intiallly is true
+                      ElevatedButton(
+                          child: Text("Groups", style: TextStyle(color: Colors.black),),
+                          
+                          //pressAttention is intially false
                           onPressed: () {}),
                     ],
                   ),
@@ -164,7 +157,7 @@ class _GroupCardState extends State<GroupCard> {
                                   height: displayHeight(context) * 0.01,
                                 ),
                                 ListTile(
-                                  // ignore: prefer_const_constructors
+                                  
                                   leading: CircleAvatar(
                                     backgroundImage:
                                         AssetImage('lib/assets/fp_profile.jpg'),
@@ -209,7 +202,7 @@ class _GroupCardState extends State<GroupCard> {
                                         padding:
                                             const EdgeInsets.only(left: 90),
                                         child: RichText(
-                                          // ignore: prefer_const_constructors
+                                          
                                           text: TextSpan(
                                             // ignore: prefer_const_literals_to_create_immutables
                                             children: [

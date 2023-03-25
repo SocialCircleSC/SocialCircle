@@ -50,7 +50,6 @@ class _EditProfilePictureState extends State<EditProfilePicture> {
           ),
         ),
 
-        // ignore: prefer_const_constructors
         body: Column(
           children: [
             //Show Images
