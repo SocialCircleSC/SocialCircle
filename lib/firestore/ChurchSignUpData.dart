@@ -24,6 +24,7 @@ Future<void> churchSetup(
     'Phone Number': phoneN,
     'Email Address': email,
     'Status': 'Church',
+    'ProfilePicture': "",
     'Church ID': uid,
     'TimeStamp': FieldValue.serverTimestamp(),
   });
@@ -46,9 +47,9 @@ Future<void> churchSetup(
     "ID": uid,
     "Status": 'Church',
     "Text": "Welcome to " + churchName + "'s Circle",
-    "Likes": {
-      uid: 4288585374,
-    },
+    "LikedBy": [],
+    'Picture': [],
+    'Type': "Text",
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 

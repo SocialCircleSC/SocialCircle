@@ -4,7 +4,6 @@ import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
 import 'package:community/Screens/AuthScreens/signup/general_form.dart';
 import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:community/sizes/size.dart';
 
 class SignUpScreen extends StatelessWidget {

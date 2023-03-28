@@ -61,7 +61,7 @@ class _EditProfilePictureState extends State<EditProfilePicture> {
                       snapshot.hasData) {
                     return Padding(
                       padding: CenterPadding3,
-                      child: Container(
+                      child: SizedBox(
                         width: displayWidth(context) * 0.5,
                         height: displayHeight(context) * 0.3,
                         child: CircleAvatar(
@@ -80,8 +80,7 @@ class _EditProfilePictureState extends State<EditProfilePicture> {
 
             TextButton(
               style: TextButton.styleFrom(
-                primary: WhiteColor,
-                backgroundColor: PrimaryColor,
+                foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
                 //padding: SignUpButtonPadding,
               ),
               child: Text("Choose Picture"),
@@ -95,7 +94,7 @@ class _EditProfilePictureState extends State<EditProfilePicture> {
                 if (results == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('No File Selected')));
-                  return null;
+                  return;
                 }
 
                 final path = results.files.single.path!;
@@ -105,14 +104,13 @@ class _EditProfilePictureState extends State<EditProfilePicture> {
 
                 storage
                     .uploadFile(uid, path, fileName)
-                    .then((value) => print('Done Uploading File'));
+                    .then((value) => debugPrint('Done Uploading File'));
               },
             ),
 
             TextButton(
                 style: TextButton.styleFrom(
-                  primary: WhiteColor,
-                  backgroundColor: PrimaryColor,
+                  foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
                   //padding: SignUpButtonPadding,
                 ),
                 child: Text("Confirm"),

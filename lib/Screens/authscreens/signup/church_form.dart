@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:community/Screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/firestore/churchSignUpData.dart';
 import 'package:community/themes/theme.dart';
@@ -156,7 +158,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
               labelText: "Confirm Password",
               labelStyle: const TextStyle(color: TextFieldColor),
               focusedBorder: const UnderlineInputBorder(
-                borderSide: const BorderSide(color: PrimaryColor),
+                borderSide: BorderSide(color: PrimaryColor),
               ),
               suffixIcon: IconButton(
                 icon: Icon(
@@ -181,8 +183,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
 
         TextButton(
           style: TextButton.styleFrom(
-            primary: WhiteColor,
-            backgroundColor: PrimaryColor,
+            foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
             padding: SignUpButtonPadding,
           ),
           child: const Text("Sign Up"),
@@ -225,7 +226,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
           Fluttertoast.showToast(msg: "Email already exists");
         }
       } catch (e) {
-        print(e);
+        debugPrint(e.toString());
       }
     }
   }

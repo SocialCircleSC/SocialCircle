@@ -34,7 +34,7 @@ class _EditPostState extends State<EditPost> {
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: const Text('The System Back Button is Deactivated')));
+            content: Text('The System Back Button is Deactivated')));
         return false;
       },
       child: Scaffold(

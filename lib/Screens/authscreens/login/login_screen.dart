@@ -33,8 +33,36 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SizedBox(
-            height: displayHeight(context) * 0.2,
+            height: displayHeight(context) * 0.1,
           ),
+
+          Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+              height: displayHeight(context) * 0.15,
+              child: Image(image: AssetImage("lib/assets/logo.png")),
+            ),
+          ),
+
+          // SizedBox(
+          //   height: displayHeight(context) * 0.01,
+          // ),
+
+          // Align(
+          //   alignment: Alignment.center,
+          //   child: SizedBox(
+          //     height: displayHeight(context) * 0.03,
+          //     child: Text(
+          //       "SocialOrb",
+          //       style: TextStyle(fontSize: 23, fontWeight: FontWeight.w500),
+          //     ),
+          //   ),
+          // ),
+
+          SizedBox(
+            height: displayHeight(context) * 0.07,
+          ),
+
           Text(
             "Welcome!",
             style: titleText,

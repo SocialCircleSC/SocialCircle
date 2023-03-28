@@ -90,7 +90,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
     return users.doc(uid).update({
       'Church Name': removeParenthese(churchName),
       'Church ID': removeParenthese(church)
-    }).catchError((error) => print("Failed to add chruch: $error"));
+    }).catchError((error) => debugPrint("Failed to add chruch: $error"));
   }
 
   //Place user into church member list

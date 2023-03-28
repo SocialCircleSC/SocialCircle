@@ -7,7 +7,7 @@ class ResetForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: "Email",
         hintStyle: TextStyle(color: TextFieldColor),
         focusedBorder:

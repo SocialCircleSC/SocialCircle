@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
@@ -13,6 +16,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_player/video_player.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({Key? key}) : super(key: key);
@@ -34,6 +38,7 @@ class _PostScreenState extends State<PostScreen> {
   //Get the member's church ID
   Future getChurchID() async {
     String uID = "";
+    // ignore: non_constant_identifier_names
     String ID = "";
     String fN = "";
     String lN = "";
@@ -72,6 +77,7 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   late String imageUrl;
+  late File videoFile;
   var imageList = [];
   String type = "Text";
   @override
@@ -89,10 +95,7 @@ class _PostScreenState extends State<PostScreen> {
           //title: const Text('Post to Church', style: TextStyle(color: PrimaryColor),),
           leading: IconButton(
             onPressed: (() {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const NavBar()),
-              );
+              Navigator.pop(context);
             }),
             icon: const Icon(
               Icons.arrow_back_sharp,
@@ -102,7 +105,6 @@ class _PostScreenState extends State<PostScreen> {
 
           actions: <Widget>[
             ElevatedButton(
-              
               onPressed: () {
                 if (postTextController.text.isEmpty) {
                   Fluttertoast.showToast(msg: "Please type a message or text");
@@ -122,6 +124,7 @@ class _PostScreenState extends State<PostScreen> {
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
+                elevation: 0,
               ),
             ),
           ],
@@ -132,7 +135,8 @@ class _PostScreenState extends State<PostScreen> {
           // ignore: prefer_const_constructors
           padding: EdgeInsets.all(8.0),
           // ignore: prefer_const_constructors
-          child: Column(
+          child: SingleChildScrollView(
+              child: Wrap(
             children: [
               Row(
                 children: [
@@ -140,7 +144,7 @@ class _PostScreenState extends State<PostScreen> {
 
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      primary: SecondaryColor,
+                      backgroundColor: SecondaryColor,
                     ),
                     label: const Text("Add Image"),
                     icon: const Icon(
@@ -158,10 +162,10 @@ class _PostScreenState extends State<PostScreen> {
                               toastLength: Toast.LENGTH_LONG);
                         } else {
                           setState(() {
-                            type = "Image";
                             for (int p = 0; p < file.length; p++) {
                               imageList.add(file[p].path);
                             }
+                            type = "Image";
                           });
                         }
                       } else {
@@ -177,36 +181,46 @@ class _PostScreenState extends State<PostScreen> {
 
                   //For Video
 
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      primary: SecondaryColor,
-                    ),
-                    label: const Text("Add Video"),
-                    icon: const Icon(
-                      Icons.camera_alt,
-                      color: Colors.black,
-                    ),
-                    onPressed: () async {
-                      if (imageList.isEmpty) {
-                        ImagePicker imagePicker = ImagePicker();
-                        XFile? file = await imagePicker.pickVideo(
-                            source: ImageSource.gallery);
+                  // ElevatedButton.icon(
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: SecondaryColor,
+                  //   ),
+                  //   label: const Text("Add Video"),
+                  //   icon: const Icon(
+                  //     Icons.camera_alt,
+                  //     color: Colors.black,
+                  //   ),
+                  //   onPressed: () async {
+                  //     if (imageList.isEmpty) {
+                  //       final imagePicker = ImagePicker();
+                  //       final file = await imagePicker.pickVideo(
+                  //           source: ImageSource.gallery);
 
-                        setState(() async {
-                          type = "Video";
-                          imageList.add(file!.path);
-                        });
-                      } else {
-                        Fluttertoast.showToast(
-                            msg:
-                                "Please remove the pictures or video you have below",
-                            toastLength: Toast.LENGTH_LONG);
-                      }
-                    },
-                  ),
+                  //       const fileSizeLimit = 250000000; //In Bytes
+                  //       final fileSize = await file!.length();
+
+                  //       if (fileSize >= fileSizeLimit) {
+                  //         Fluttertoast.showToast(
+                  //             msg:
+                  //                 "The file is too big, please pick a smaller video",
+                  //             toastLength: Toast.LENGTH_LONG);
+                  //       } else {
+                  //         setState(() {
+                  //           imageList.add(File(file.path));
+                  //           type = "Video";
+                  //         });
+                  //       }
+                  //     } else {
+                  //       Fluttertoast.showToast(
+                  //           msg:
+                  //               "Please remove the pictures or video you have below",
+                  //           toastLength: Toast.LENGTH_LONG);
+                  //     }
+                  //   },
+                  // ),
                 ],
               ),
-              if (imageList.isNotEmpty)
+              if (type == "Image")
                 Padding(
                   padding: const EdgeInsets.all(1.0),
                   child: Column(
@@ -255,6 +269,21 @@ class _PostScreenState extends State<PostScreen> {
                     ],
                   ),
                 ),
+              if (type == "Video")
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    height: displayHeight(context) * 0.55,
+                    width: displayWidth(context),
+                    child: Chewie(
+                      controller: ChewieController(
+                        videoPlayerController:
+                            VideoPlayerController.file(imageList[0])
+                              ..initialize(),
+                      ),
+                    ),
+                  ),
+                ),
               TextField(
                 controller: postTextController,
                 keyboardType: TextInputType.multiline,
@@ -277,7 +306,7 @@ class _PostScreenState extends State<PostScreen> {
                 ),
               ),
             ],
-          ),
+          )),
         ),
       ),
     );

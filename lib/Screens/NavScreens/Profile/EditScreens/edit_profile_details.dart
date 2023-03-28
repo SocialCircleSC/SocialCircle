@@ -32,6 +32,7 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
     final User? user = auth.currentUser;
     final uid = user?.uid;
 
+    // ignore: unused_local_variable
     var data = await FirebaseFirestore.instance
         .collection('Users')
         .doc(uid)
@@ -143,8 +144,7 @@ class _EditProfileDetailsState extends State<EditProfileDetails> {
 
             TextButton(
               style: TextButton.styleFrom(
-                primary: WhiteColor,
-                backgroundColor: PrimaryColor,
+                foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
                 //padding: SignUpButtonPadding,
               ),
               child: Text("Update"),

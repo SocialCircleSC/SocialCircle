@@ -1,14 +1,12 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/screens/authScreens/login/login_screen.dart';
-import 'package:community/screens/gettingstarted/choose_church.dart';
-import 'package:community/screens/navscreens/profile/editscreens/edit_profile_details.dart';
-import 'package:community/screens/navscreens/profile/editscreens/edit_profile_picture.dart';
 import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:community/storage/storage_services.dart';
 import 'package:community/sizes/size.dart';
+
+import '../../../AuthScreens/Login/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -30,6 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final User? user = auth.currentUser;
     final uid = user?.uid;
 
+    // ignore: unused_local_variable
     var data = await FirebaseFirestore.instance
         .collection('Users')
         .doc(uid)
@@ -90,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               snapshot.hasData) {
                             return Padding(
                               padding: CenterPadding3,
-                              child: Container(
+                              child: SizedBox(
                                 width: displayWidth(context) * 0.1,
                                 height: displayHeight(context) * 0.1,
                                 child: CircleAvatar(
@@ -103,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           if (snapshot.connectionState ==
                                   ConnectionState.waiting ||
                               !snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
                           return Container();
                         }),
@@ -139,11 +138,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "Status: " +
-                              "" +
+                          "Status: " "" +
                               removeParenthese(userInfo[4].values.toString()),
-                          // ignore: prefer_const_constructors
-                          style: TextStyle(
+                          
+                          style: const TextStyle(
                             color: BlackColor,
                             fontSize: 15,
                             fontWeight: FontWeight.w400,

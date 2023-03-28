@@ -12,7 +12,7 @@ class BiggerPicture extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: const Text('The System Back Button is Deactivated')));
+            content: Text('The System Back Button is Deactivated')));
         return false;
       },
       child: Scaffold(
@@ -23,10 +23,7 @@ class BiggerPicture extends StatelessWidget {
           //title: const Text('Post to Church', style: TextStyle(color: PrimaryColor),),
           leading: IconButton(
             onPressed: (() {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const NavBar()),
-              );
+              Navigator.pop(context);
             }),
             icon: const Icon(
               Icons.arrow_back_sharp,

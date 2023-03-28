@@ -1,10 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:community/sizes/size.dart';
 
-const PrimaryColor = Color(0xFF8B008B);
-const SecondaryColor = Color(0xFFC54B8C);
+const PrimaryColor = Color(0xFF20BAB1);
+const SecondaryColor = Color(0xFF073D5F);
 const DarkGreyColor = Color(0xFFA8A8A8);
 const WhiteColor = Color(0xFFFFFFFF);
 const ZambeziColor = Color(0xFF5B5B5B);

@@ -12,7 +12,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:community/sizes/size.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -63,7 +62,7 @@ class _NavBarState extends State<NavBar> {
             ],
             //This should be the logo not text
             title: Text(
-              "Social-Circle",
+              "SocialOrb",
               style: TextStyle(color: BlackColor),
             ),
             backgroundColor: Colors.white,

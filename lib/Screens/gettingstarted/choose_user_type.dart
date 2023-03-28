@@ -77,8 +77,7 @@ class _ChooseUserState extends State<ChooseUser> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: PrimaryColor,
-                  onPrimary: WhiteColor,
+                  foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
                 ),
               ),
               SizedBox(
@@ -99,8 +98,7 @@ class _ChooseUserState extends State<ChooseUser> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: PrimaryColor,
-                  onPrimary: WhiteColor,
+                  foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
                 ),
               ),
             ]),

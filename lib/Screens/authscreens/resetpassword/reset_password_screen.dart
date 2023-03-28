@@ -26,7 +26,7 @@ class ResetPasswordScreen extends StatelessWidget {
             onPressed: (() {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
               );
             }),
             icon: const Icon(
@@ -48,16 +48,16 @@ class ResetPasswordScreen extends StatelessWidget {
             Text("Please enter your email address",
                 style: subTitle.copyWith(fontWeight: FontWeight.w600)),
             SizedBox(height: displayHeight(context) * 0.01),
-            ResetForm(),
+            const ResetForm(),
             SizedBox(
               height: displayHeight(context) * 0.04,
             ),
             GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                      MaterialPageRoute(builder: (context) => const LoginScreen()));
                 },
-                child: ResetButton()),
+                child: const ResetButton()),
           ]),
         ),
       ),

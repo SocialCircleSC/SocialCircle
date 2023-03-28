@@ -28,15 +28,15 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cloud_firestore: ^4.4.5
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.5
   firebase_core: ^2.8.0
   firebase_auth: ^4.3.0
-  get: ^4.3.8
+  get: ^4.6.5
   firebase_storage: ^11.0.16
-  file_picker: ^4.0.3
-  image_cropper: ^3.0.0
+  file_picker: ^5.2.6
   image_picker: ^0.8.5+3
-  uuid: ^3.0.6
+  image_cropper: ^3.0.2
+  uuid: ^3.0.7
   carousel_slider: ^4.2.1
   smooth_page_indicator: ^1.0.1
   video_player: ^2.6.0
@@ -76,10 +76,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/fp_profile.jpg
-    - lib/assets/facebook_icon.png
-    - lib/assets/google_icon.png
-    - lib/assets/holderimage.jpg
-    - lib/assets/churchImage.jpg
+    - lib/assets/profile_placeholder.png
+    - lib/assets/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
