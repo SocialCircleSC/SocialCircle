@@ -41,6 +41,7 @@ dependencies:
   smooth_page_indicator: ^1.0.1
   video_player: ^2.6.0
   chewie: ^1.4.0
+  stylish_bottom_bar: ^1.0.0
 
   flutter:
     sdk: flutter

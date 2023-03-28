@@ -12,6 +12,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:stylish_bottom_bar/model/bar_items.dart';
+import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -21,17 +23,14 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  int selectedPage = 0;
+  dynamic selected;
+  PageController controller = PageController();
 
-  final pageOptions = [
-    HomeScreen(),
-    GroupScreen(),
-    ChurchScreen(),
-    GiveScreen(),
-    ProfileScreen(),
-  ];
-
-  bool pressAttention = false;
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,16 @@ class _NavBarState extends State<NavBar> {
       },
       child: MaterialApp(
         home: Scaffold(
-          body: pageOptions[selectedPage],
+          extendBody: true, // To make floating action button notch transparent
+          body: PageView(
+            controller: controller,
+            children: const [
+              HomeScreen(),
+              ChurchScreen(),
+              GiveScreen(),
+              ProfileScreen(),
+            ],
+          ),
           backgroundColor: Colors.grey[50],
           appBar: AppBar(
             actions: <Widget>[
@@ -69,6 +77,50 @@ class _NavBarState extends State<NavBar> {
             elevation: 0,
           ),
 
+          bottomNavigationBar: StylishBottomBar(
+              items: [
+                BottomBarItem(
+                  icon: const Icon(Icons.house_outlined),
+                  title: const Text('Home'),
+                  selectedIcon: const Icon(Icons.house_rounded),
+                  selectedColor: SecondaryColor,
+                  backgroundColor: PrimaryColor,
+                ),
+                BottomBarItem(
+                  icon: const Icon(Icons.church_outlined),
+                  title: const Text('Church'),
+                  selectedIcon: const Icon(Icons.church_rounded),
+                  selectedColor: SecondaryColor,
+                  backgroundColor: PrimaryColor,
+                ),
+                BottomBarItem(
+                  icon: const Icon(Icons.monetization_on_outlined),
+                  title: const Text('Give'),
+                  selectedIcon: const Icon(Icons.monetization_on_rounded),
+                  selectedColor: SecondaryColor,
+                  backgroundColor: PrimaryColor,
+                ),
+                BottomBarItem(
+                  icon: const Icon(Icons.person_outlined),
+                  title: const Text('Profile'),
+                  selectedIcon: const Icon(Icons.person_rounded),
+                  selectedColor: SecondaryColor,
+                  backgroundColor: PrimaryColor,
+                ),
+              ],
+              hasNotch: true,
+              fabLocation: StylishBarFabLocation.center,
+              currentIndex: selected ?? 0,
+              onTap: (index) {
+                setState(() {
+                  selected = index;
+                  controller.jumpToPage(index);
+                });
+              },
+              option: AnimatedBarOptions(
+                  barAnimation: BarAnimation.liquid,
+                  iconStyle: IconStyle.animated)),
+
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(
@@ -80,43 +132,8 @@ class _NavBarState extends State<NavBar> {
             backgroundColor: PrimaryColor,
             foregroundColor: WhiteColor,
           ),
-
-          // ignore: prefer_const_literals_to_create_immutables
-          bottomNavigationBar: GNav(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            gap: 8,
-            backgroundColor: Color(0x00000000),
-            color: Colors.black,
-            activeColor: Colors.black,
-            onTabChange: (index) {
-              setState(() {
-                selectedPage = index;
-              });
-            },
-            // ignore: prefer_const_literals_to_create_immutables
-            tabs: [
-              GButton(
-                icon: Icons.home,
-                text: "Home",
-              ),
-              GButton(
-                icon: Icons.people,
-                text: "Groups",
-              ),
-              GButton(
-                icon: Icons.business,
-                text: "Circle",
-              ),
-              GButton(
-                icon: Icons.monetization_on_rounded,
-                text: "Give",
-              ),
-              GButton(
-                icon: Icons.person,
-                text: "Profile",
-              ),
-            ],
-          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.miniCenterDocked,
         ),
         debugShowCheckedModeBanner: false, //Removing Debug Banner
       ),
