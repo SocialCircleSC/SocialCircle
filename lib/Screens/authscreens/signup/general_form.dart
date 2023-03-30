@@ -146,8 +146,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
         TextButton(
           style: TextButton.styleFrom(
-            primary: WhiteColor,
-            backgroundColor: PrimaryColor,
+            foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
             padding: SignUpButtonPadding,
           ),
           child: Text("Sign Up"),

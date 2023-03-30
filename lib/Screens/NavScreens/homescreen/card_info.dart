@@ -133,38 +133,19 @@ class _CardInfoState extends State<CardInfo> {
                                   SizedBox(
                                     height: displayHeight(context) * 0.01,
                                   ),
-                                  if (profilePic == "")
-                                    ListTile(
-                                      leading: CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            'lib/assets/profile_placeholder.png'),
-                                      ),
-                                      title: Text(document['First Name'] +
-                                          " " +
-                                          document['Last Name']),
-                                      subtitle: Text(
-                                        document['Status'],
-                                        style: TextStyle(
-                                            color:
-                                                Colors.black.withOpacity(0.6)),
-                                      ),
+                                  ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundImage: NetworkImage(profilePic),
                                     ),
-                                  if (profilePic != "")
-                                    ListTile(
-                                      leading: CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            'lib/assets/fp_profile.jpg'),
-                                      ),
-                                      title: Text(document['First Name'] +
-                                          " " +
-                                          document['Last Name']),
-                                      subtitle: Text(
-                                        document['Status'],
-                                        style: TextStyle(
-                                            color:
-                                                Colors.black.withOpacity(0.6)),
-                                      ),
+                                    title: Text(document['First Name'] +
+                                        " " +
+                                        document['Last Name']),
+                                    subtitle: Text(
+                                      document['Status'],
+                                      style: TextStyle(
+                                          color: Colors.black.withOpacity(0.6)),
                                     ),
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.all(8),
                                     child: Align(

@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:community/screens/authscreens/login/login_screen.dart';
 import 'package:community/screens/navscreens/homescreen/home_screen.dart';
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
-import 'package:community/screens/navscreens/profile/editscreens/edit_profile_picture.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
@@ -69,7 +68,6 @@ class _ChooseChurchState extends State<ChooseChurch> {
       mID = memberID;
       mStatus = status;
     });
-
   }
 
   // This list holds the data for the list view
@@ -101,7 +99,6 @@ class _ChooseChurchState extends State<ChooseChurch> {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     final uid = user?.uid;
-
 
     debugPrint("HI HI HUDB FHFH HJFHFD HJFJSSH FHDFKJFD HFKFDUFHBFDH");
     debugPrint(churchIDENTITY);
@@ -229,8 +226,8 @@ class _ChooseChurchState extends State<ChooseChurch> {
                               addChurchData(
                                   allChurches[index].values.toString(),
                                   churchID[index].values.toString());
-                              addChurchMemberList(
-                                  churchID[0].values.toString(), mEmail, mFName, mLName, mID, mStatus);
+                              addChurchMemberList(churchID[0].values.toString(),
+                                  mEmail, mFName, mLName, mID, mStatus);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

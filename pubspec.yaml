@@ -78,6 +78,7 @@ flutter:
   assets:
     - lib/assets/fp_profile.jpg
     - lib/assets/profile_placeholder.png
+    - lib/assets/background_placeholder.jpg
     - lib/assets/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

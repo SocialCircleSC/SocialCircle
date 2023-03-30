@@ -24,7 +24,8 @@ Future<void> churchSetup(
     'Phone Number': phoneN,
     'Email Address': email,
     'Status': 'Church',
-    'ProfilePicture': "",
+    'ProfilePicture':
+        "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
     'Church ID': uid,
     'TimeStamp': FieldValue.serverTimestamp(),
   });
@@ -63,6 +64,8 @@ Future<void> churchSetup(
     'Phone Number': phoneN,
     'Email Address': email,
     'Status': 'Church',
+    'About': "",
+    "ID": uid,
     'Church ID': uid,
     'TimeStamp': FieldValue.serverTimestamp(),
   });
