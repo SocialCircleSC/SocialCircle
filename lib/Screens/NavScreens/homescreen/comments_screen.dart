@@ -14,6 +14,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../sizes/size.dart';
 import '../../../themes/theme.dart';
+import '../profile/profile_screen/check_profile.dart';
 
 class Comments extends StatefulWidget {
   final String profilePic;
@@ -106,7 +107,8 @@ class _CommentsState extends State<Comments> {
                                 widget.lastName,
                                 widget.churchID,
                                 widget.userID,
-                                widget.postID);
+                                widget.postID,
+                                widget.profilePic);
                             postTextController.text = "";
                             Navigator.pop(context);
                           },
@@ -182,21 +184,42 @@ class _CommentsState extends State<Comments> {
                               //Selected Post
 
                               //The Comments from Streambuilder
-                              Card(
-                                clipBehavior: Clip.antiAlias,
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                      minHeight: displayHeight(context) * 0.1),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: displayHeight(context) * 0.01,
-                                      ),
-                                      if (widget.profilePic == "")
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CheckProfile(
+                                              firstName: document['First Name'],
+                                              lastName: document['Last Name'],
+                                              status: document['Status'],
+                                              profilePic:
+                                                  document['ProfilePicture'])));
+                                },
+                                child: Card(
+                                  clipBehavior: Clip.antiAlias,
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                        minHeight:
+                                            displayHeight(context) * 0.1),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: displayHeight(context) * 0.01,
+                                        ),
                                         ListTile(
-                                          leading: const CircleAvatar(
-                                            backgroundImage: AssetImage(
-                                                'lib/assets/profile_placeholder.png'),
+                                          leading: Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    width: 4,
+                                                    color: BlackColor),
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    fit: BoxFit.fitWidth,
+                                                    image: NetworkImage(document[
+                                                        "ProfilePicture"]))),
                                           ),
                                           title: Text(document['First Name'] +
                                               " " +
@@ -208,250 +231,237 @@ class _CommentsState extends State<Comments> {
                                                     .withOpacity(0.6)),
                                           ),
                                         ),
-                                      if (widget.profilePic != "")
-                                        ListTile(
-                                          leading: const CircleAvatar(
-                                            backgroundImage: AssetImage(
-                                                'lib/assets/fp_profile.jpg'),
-                                          ),
-                                          title: Text(document['First Name'] +
-                                              " " +
-                                              document['Last Name']),
-                                          subtitle: Text(
-                                            document['Status'],
-                                            style: TextStyle(
-                                                color: Colors.black
-                                                    .withOpacity(0.6)),
-                                          ),
-                                        ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            document['Text'],
-                                            style: TextStyle(
-                                                color: Colors.black
-                                                    .withOpacity(0.8)),
-                                          ),
-                                        ),
-                                      ),
-                                      if (document["Type"] == "Image")
-                                        //Only show image if it exists
                                         Padding(
-                                          padding: const EdgeInsets.all(1.0),
+                                          padding: const EdgeInsets.all(8),
                                           child: Align(
                                             alignment: Alignment.centerLeft,
-                                            child: Stack(
-                                              children: [
-                                                CarouselSlider(
-                                                    options: CarouselOptions(
-                                                      viewportFraction: 1,
-                                                      enlargeCenterPage: true,
-                                                      enableInfiniteScroll:
-                                                          false,
-                                                      height: displayHeight(
-                                                              context) *
-                                                          0.55,
-                                                    ),
-                                                    items: document['Picture']
-                                                        .map<Widget>(((e) {
-                                                      return Builder(builder:
-                                                          (BuildContext
-                                                              context) {
-                                                        return GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        BiggerPicture(
-                                                                            picture:
-                                                                                e)));
-                                                          },
-                                                          child: Stack(
-                                                            alignment: Alignment
-                                                                .bottomCenter,
-                                                            children: [
-                                                              ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            7),
-                                                                child: Image
-                                                                    .network(
-                                                                  e,
-                                                                  width: displayWidth(
-                                                                      context),
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                ),
-                                                              ),
-                                                              if (document[
-                                                                          'Picture']
-                                                                      .length !=
-                                                                  1)
-                                                                AnimatedSmoothIndicator(
-                                                                  activeIndex: document[
-                                                                          "Picture"]
-                                                                      .indexWhere(
-                                                                          (f) =>
-                                                                              f ==
-                                                                              e),
-                                                                  count: document[
-                                                                          'Picture']
-                                                                      .length,
-                                                                ),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      });
-                                                    })).toList()),
-                                              ],
+                                            child: Text(
+                                              document['Text'],
+                                              style: TextStyle(
+                                                  color: Colors.black
+                                                      .withOpacity(0.8)),
                                             ),
                                           ),
                                         ),
-                                      if (document["Type"] == "Video")
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: SizedBox(
-                                            height:
-                                                displayHeight(context) * 0.6,
-                                            width: displayWidth(context),
-                                            child: Chewie(
-                                              controller: ChewieController(
-                                                  videoPlayerController:
-                                                      VideoPlayerController
-                                                          .network(document[
-                                                              "Picture"][0])
-                                                        ..initialize()),
+                                        if (document["Type"] == "Image")
+                                          //Only show image if it exists
+                                          Padding(
+                                            padding: const EdgeInsets.all(1.0),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Stack(
+                                                children: [
+                                                  CarouselSlider(
+                                                      options: CarouselOptions(
+                                                        viewportFraction: 1,
+                                                        enlargeCenterPage: true,
+                                                        enableInfiniteScroll:
+                                                            false,
+                                                        height: displayHeight(
+                                                                context) *
+                                                            0.55,
+                                                      ),
+                                                      items: document['Picture']
+                                                          .map<Widget>(((e) {
+                                                        return Builder(builder:
+                                                            (BuildContext
+                                                                context) {
+                                                          return GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          BiggerPicture(
+                                                                              picture: e)));
+                                                            },
+                                                            child: Stack(
+                                                              alignment: Alignment
+                                                                  .bottomCenter,
+                                                              children: [
+                                                                ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              7),
+                                                                  child: Image
+                                                                      .network(
+                                                                    e,
+                                                                    width: displayWidth(
+                                                                        context),
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                ),
+                                                                if (document[
+                                                                            'Picture']
+                                                                        .length !=
+                                                                    1)
+                                                                  AnimatedSmoothIndicator(
+                                                                    activeIndex: document[
+                                                                            "Picture"]
+                                                                        .indexWhere((f) =>
+                                                                            f ==
+                                                                            e),
+                                                                    count: document[
+                                                                            'Picture']
+                                                                        .length,
+                                                                  ),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        });
+                                                      })).toList()),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 150.0),
-                                              child: Center(
-                                                child: IconButton(
-                                                    onPressed: () async {
-                                                      DocumentReference
-                                                          postDoc =
-                                                          FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  "circles")
-                                                              .doc(widget
-                                                                  .churchID)
-                                                              .collection(
-                                                                  "posts")
-                                                              .doc(
-                                                                  widget.postID)
-                                                              .collection(
-                                                                  "comments")
-                                                              .doc(document.id);
-                                                      DocumentSnapshot post =
-                                                          await postDoc.get();
-
-                                                      List likedusers =
-                                                          post["LikedBy"];
-                                                      if (likedusers.contains(
-                                                              widget.userID
-                                                                  .toString()) ==
-                                                          true) {
-                                                        postDoc.update({
-                                                          "LikedBy": FieldValue
-                                                              .arrayRemove([
-                                                            widget.userID
-                                                          ])
-                                                        });
-                                                      } else {
-                                                        postDoc.update({
-                                                          "LikedBy": FieldValue
-                                                              .arrayUnion([
-                                                            widget.userID
-                                                          ])
-                                                        });
-                                                      }
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.favorite,
-                                                      color: document["LikedBy"]
-                                                                  .contains(widget
-                                                                      .userID) ==
-                                                              true
-                                                          ? Colors.red
-                                                          : Colors.grey,
-                                                    )),
+                                        if (document["Type"] == "Video")
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: SizedBox(
+                                              height:
+                                                  displayHeight(context) * 0.6,
+                                              width: displayWidth(context),
+                                              child: Chewie(
+                                                controller: ChewieController(
+                                                    videoPlayerController:
+                                                        VideoPlayerController
+                                                            .network(document[
+                                                                "Picture"][0])
+                                                          ..initialize()),
                                               ),
                                             ),
-                                            RichText(
-                                              text: TextSpan(
-                                                text: getLikeCount(
-                                                    document['LikedBy']),
-                                                style: const TextStyle(
-                                                  color: BlackColor,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ),
-                                            if (widget.userID == document['ID'])
+                                          ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5),
+                                          child: Row(
+                                            children: <Widget>[
                                               Padding(
                                                 padding: const EdgeInsets.only(
-                                                    left: 120.0),
-                                                child: IconButton(
-                                                    onPressed: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return AlertDialog(
-                                                              title: const Text(
-                                                                  "Confirm"),
-                                                              content: const Text(
-                                                                  "Are you sure you want to delete this post?"),
-                                                              actions: [
-                                                                TextButton(
-                                                                  child:
-                                                                      const Text(
-                                                                          "Yes"),
-                                                                  onPressed:
-                                                                      () {
-                                                                    deleteComment(
-                                                                        widget
-                                                                            .postID,
-                                                                        widget
-                                                                            .churchID,
-                                                                        document
-                                                                            .id);
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                ),
-                                                                TextButton(
-                                                                  child:
-                                                                      const Text(
-                                                                          "No"),
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            );
+                                                    left: 150.0),
+                                                child: Center(
+                                                  child: IconButton(
+                                                      onPressed: () async {
+                                                        DocumentReference
+                                                            postDoc =
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    "circles")
+                                                                .doc(widget
+                                                                    .churchID)
+                                                                .collection(
+                                                                    "posts")
+                                                                .doc(widget
+                                                                    .postID)
+                                                                .collection(
+                                                                    "comments")
+                                                                .doc(document
+                                                                    .id);
+                                                        DocumentSnapshot post =
+                                                            await postDoc.get();
+
+                                                        List likedusers =
+                                                            post["LikedBy"];
+                                                        if (likedusers.contains(
+                                                                widget.userID
+                                                                    .toString()) ==
+                                                            true) {
+                                                          postDoc.update({
+                                                            "LikedBy": FieldValue
+                                                                .arrayRemove([
+                                                              widget.userID
+                                                            ])
                                                           });
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.delete)),
-                                              )
-                                          ],
+                                                        } else {
+                                                          postDoc.update({
+                                                            "LikedBy": FieldValue
+                                                                .arrayUnion([
+                                                              widget.userID
+                                                            ])
+                                                          });
+                                                        }
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.favorite,
+                                                        color: document["LikedBy"]
+                                                                    .contains(widget
+                                                                        .userID) ==
+                                                                true
+                                                            ? Colors.red
+                                                            : Colors.grey,
+                                                      )),
+                                                ),
+                                              ),
+                                              RichText(
+                                                text: TextSpan(
+                                                  text: getLikeCount(
+                                                      document['LikedBy']),
+                                                  style: const TextStyle(
+                                                    color: BlackColor,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                              if (widget.userID ==
+                                                  document['ID'])
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 120.0),
+                                                  child: IconButton(
+                                                      onPressed: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: const Text(
+                                                                    "Confirm"),
+                                                                content: const Text(
+                                                                    "Are you sure you want to delete this post?"),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    child: const Text(
+                                                                        "Yes"),
+                                                                    onPressed:
+                                                                        () {
+                                                                      deleteComment(
+                                                                          widget
+                                                                              .postID,
+                                                                          widget
+                                                                              .churchID,
+                                                                          document
+                                                                              .id);
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                  TextButton(
+                                                                    child:
+                                                                        const Text(
+                                                                            "No"),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            });
+                                                      },
+                                                      icon: const Icon(
+                                                          Icons.delete)),
+                                                )
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

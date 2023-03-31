@@ -24,9 +24,11 @@ Future<void> churchSetup(
     'Phone Number': phoneN,
     'Email Address': email,
     'Status': 'Church',
+    'Hours': ["N/A", "N/A", "N/A", "N/A","N/A","N/A","N/A",],
     'ProfilePicture':
         "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
     'Church ID': uid,
+    'Pictures': ["https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a", "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a", "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a"],
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 
@@ -49,6 +51,8 @@ Future<void> churchSetup(
     "Status": 'Church',
     "Text": "Welcome to " + churchName + "'s Circle",
     "LikedBy": [],
+    'ProfilePicture':
+        "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
     'Picture': [],
     'Type': "Text",
     'TimeStamp': FieldValue.serverTimestamp(),

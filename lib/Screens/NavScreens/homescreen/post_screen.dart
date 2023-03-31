@@ -34,6 +34,7 @@ class _PostScreenState extends State<PostScreen> {
   var lastN;
   var status;
   var docID;
+  var profilePic;
 
   //Get the member's church ID
   Future getChurchID() async {
@@ -43,7 +44,7 @@ class _PostScreenState extends State<PostScreen> {
     String fN = "";
     String lN = "";
     String stat = "";
-    //String doc = "";
+    String pPic = "";
 
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
@@ -59,6 +60,7 @@ class _PostScreenState extends State<PostScreen> {
       lN = value.get('Last Name');
       stat = value.get('Status');
       uID = value.id;
+      pPic = value.get("ProfilePicture");
     });
 
     setState(() {
@@ -67,6 +69,7 @@ class _PostScreenState extends State<PostScreen> {
       lastN = lN;
       status = stat;
       userID = uID;
+      profilePic = pPic;
     });
   }
 
@@ -109,8 +112,8 @@ class _PostScreenState extends State<PostScreen> {
                 if (postTextController.text.isEmpty) {
                   Fluttertoast.showToast(msg: "Please type a message or text");
                 } else {
-                  postDataChu(postTextController.text, status, firstN, lastN,
-                      churchID, userID, imageList, type);
+                  postDataChu(postTextController.text, status, profilePic,
+                      firstN, lastN, churchID, userID, imageList, type);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const NavBar()),
@@ -244,7 +247,7 @@ class _PostScreenState extends State<PostScreen> {
                                         File(e), // File(e!.path),
                                         width: displayWidth(context) * 0.9,
                                         height: displayHeight(context) * 0.3,
-                                        fit: BoxFit.fill,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                     GestureDetector(

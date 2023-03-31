@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 Future<void> postDataChu(
     String postText,
     String status,
+    String profilePic,
     String fName,
     String lName,
     String churchID,
@@ -65,6 +66,7 @@ Future<void> postDataChu(
     'Text': postText,
     'Status': status,
     'LikedBy': [],
+    'ProfilePicture': profilePic,
     'Picture': picturePath,
     'Type': type,
     'TimeStamp': FieldValue.serverTimestamp(),
@@ -86,7 +88,7 @@ Future<void> postDataChu(
     'Text': "Write your own comment to engage with this post",
     'Status': status,
     'LikedBy': [],
-    'Picture': [],
+    'ProfilePicture': profilePic,
     'Type': type,
     'TimeStamp': FieldValue.serverTimestamp(),
   });

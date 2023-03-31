@@ -7,6 +7,7 @@ import 'package:community/firestore/delete_post.dart';
 import 'package:community/screens/navscreens/homescreen/bigger_picture.dart';
 import 'package:community/screens/navscreens/homescreen/comments_screen.dart';
 import 'package:community/screens/navscreens/homescreen/edit_post.dart';
+import 'package:community/screens/navscreens/profile/profile_screen/check_profile.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class _CardInfoState extends State<CardInfo> {
         .get()
         .then((value) {
       cID = value.get('Church ID');
-      //pPic = value.get('ProfilePicture');
+      pPic = value.get('ProfilePicture');
       //uName = value.get("First Name");
     });
 
@@ -134,8 +135,17 @@ class _CardInfoState extends State<CardInfo> {
                                     height: displayHeight(context) * 0.01,
                                   ),
                                   ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundImage: NetworkImage(profilePic),
+                                    leading: Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 4, color: BlackColor),
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              fit: BoxFit.fitWidth,
+                                              image: NetworkImage(
+                                                  document["ProfilePicture"]))),
                                     ),
                                     title: Text(document['First Name'] +
                                         " " +
@@ -299,97 +309,145 @@ class _CardInfoState extends State<CardInfo> {
                                             ),
                                           ),
                                         ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 90),
-                                          child: RichText(
-                                            text: TextSpan(
-                                              // ignore: prefer_const_literals_to_create_immutables
-                                              children: [
-                                                WidgetSpan(
-                                                  child: Icon(
-                                                    Icons.comment_sharp,
-                                                    size: 20,
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Comments(
+                                                          churchID: churchID,
+                                                          firstName: document[
+                                                              'First Name'],
+                                                          lastName: document[
+                                                              'Last Name'],
+                                                          likeStatus:
+                                                              getLikeStatus(
+                                                                  document[
+                                                                      'LikedBy'],
+                                                                  userID),
+                                                          likes: document[
+                                                                  'LikedBy']
+                                                              .length
+                                                              .toString(),
+                                                          pictureLength:
+                                                              document[
+                                                                      'Picture']
+                                                                  .length,
+                                                          postID: document.id,
+                                                          postPicture: document[
+                                                              'Picture'],
+                                                          postVideo: document[
+                                                              'Picture'],
+                                                          profilePic:
+                                                              document['ProfilePicture'],
+                                                          status: document[
+                                                              'Status'],
+                                                          text:
+                                                              document['Text'],
+                                                          type:
+                                                              document['Type'],
+                                                          userID: userID,
+                                                          likesArr: document[
+                                                              'LikedBy'],
+                                                        )));
+                                          },
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 90),
+                                            child: RichText(
+                                              text: TextSpan(
+                                                // ignore: prefer_const_literals_to_create_immutables
+                                                children: [
+                                                  WidgetSpan(
+                                                    child: Icon(
+                                                      Icons.comment_outlined,
+                                                      size: 20,
+                                                    ),
                                                   ),
-                                                ),
-                                                TextSpan(
-                                                  text: "0",
-                                                  style: TextStyle(
-                                                    color: BlackColor,
-                                                    fontSize: 12,
+                                                  TextSpan(
+                                                    text: "     " "0",
+                                                    style: TextStyle(
+                                                      color: BlackColor,
+                                                      fontSize: 12,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 90),
-                                          child: DropdownButton(
-                                              style: TextStyle(
-                                                  color: BlackColor,
-                                                  fontSize: 12),
-                                              value: dropdownvalue,
-                                              hint: Text("More"),
-                                              iconSize: 20,
-                                              items: items.map((String items) {
-                                                //This is where you can check for status and stuff like that to drop down or not
-                                                return DropdownMenuItem(
-                                                  value: items,
-                                                  child: Text(items),
-                                                );
-                                              }).toList(),
-                                              icon: Icon(
-                                                  Icons.keyboard_arrow_down),
-                                              onChanged: (String? newValue) {
-                                                if (newValue == items[0]) {
-                                                  _goToEditScreen(
-                                                      context,
-                                                      churchID,
-                                                      document['First Name'],
-                                                      document['Last Name'],
-                                                      document['Status'],
-                                                      document['Text'],
-                                                      document.id);
-                                                } else if (newValue ==
-                                                    items[1]) {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          title:
-                                                              Text("Confirm"),
-                                                          content: Text(
-                                                              "Are you sure you want to delete this post?"),
-                                                          actions: [
-                                                            TextButton(
-                                                              child:
-                                                                  Text("Yes"),
-                                                              onPressed: () {
-                                                                deletePost(
-                                                                    document.id,
-                                                                    churchID,
-                                                                    document[
-                                                                        "Picture"]);
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                            ),
-                                                            TextButton(
-                                                              child: Text("No"),
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                            ),
-                                                          ],
-                                                        );
-                                                      });
-                                                }
-                                              }),
-                                        ),
+                                        if (document["ID"] == userID)
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 90),
+                                            child: DropdownButton(
+                                                style: TextStyle(
+                                                    color: BlackColor,
+                                                    fontSize: 12),
+                                                value: dropdownvalue,
+                                                hint: Text("More"),
+                                                iconSize: 20,
+                                                items:
+                                                    items.map((String items) {
+                                                  //This is where you can check for status and stuff like that to drop down or not
+                                                  return DropdownMenuItem(
+                                                    value: items,
+                                                    child: Text(items),
+                                                  );
+                                                }).toList(),
+                                                icon: Icon(
+                                                    Icons.keyboard_arrow_down),
+                                                onChanged: (String? newValue) {
+                                                  if (newValue == items[0]) {
+                                                    _goToEditScreen(
+                                                        context,
+                                                        churchID,
+                                                        document['First Name'],
+                                                        document['Last Name'],
+                                                        document['Status'],
+                                                        document['Text'],
+                                                        document.id);
+                                                  } else if (newValue ==
+                                                      items[1]) {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            title:
+                                                                Text("Confirm"),
+                                                            content: Text(
+                                                                "Are you sure you want to delete this post?"),
+                                                            actions: [
+                                                              TextButton(
+                                                                child:
+                                                                    Text("Yes"),
+                                                                onPressed: () {
+                                                                  deletePost(
+                                                                      document
+                                                                          .id,
+                                                                      churchID,
+                                                                      document[
+                                                                          "Picture"]);
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              ),
+                                                              TextButton(
+                                                                child:
+                                                                    Text("No"),
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              ),
+                                                            ],
+                                                          );
+                                                        });
+                                                  }
+                                                }),
+                                          ),
                                       ],
                                     ),
                                   ),
@@ -401,27 +459,12 @@ class _CardInfoState extends State<CardInfo> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Comments(
-                                          churchID: churchID,
-                                          firstName: document['First Name'],
-                                          lastName: document['Last Name'],
-                                          likeStatus: getLikeStatus(
-                                              document['LikedBy'], userID),
-                                          likes: document['LikedBy']
-                                              .length
-                                              .toString(),
-                                          pictureLength:
-                                              document['Picture'].length,
-                                          postID: document.id,
-                                          postPicture: document['Picture'],
-                                          postVideo: document['Picture'],
-                                          profilePic: profilePic,
-                                          status: document['Status'],
-                                          text: document['Text'],
-                                          type: document['Type'],
-                                          userID: userID,
-                                          likesArr: document['LikedBy'],
-                                        )));
+                                    builder: (context) => CheckProfile(
+                                        firstName: document['First Name'],
+                                        lastName: document['Last Name'],
+                                        status: document['Status'],
+                                        profilePic:
+                                            document['ProfilePicture'])));
                           },
                         );
                       }).toList(),

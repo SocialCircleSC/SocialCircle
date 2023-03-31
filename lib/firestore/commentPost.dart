@@ -1,8 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> postComment(String postText, String status, String fName,
-    String lName, String churchID, String userID, String postID) async {
+Future<void> postComment(
+    String postText,
+    String status,
+    String fName,
+    String lName,
+    String churchID,
+    String userID,
+    String postID,
+    String profilePic) async {
   FirebaseAuth auth = FirebaseAuth.instance;
   final User? user = auth.currentUser;
   final uid = user?.uid;
@@ -20,7 +27,7 @@ Future<void> postComment(String postText, String status, String fName,
     'Status': status,
     'LikedBy': [],
     'Type': "Text",
-    'Picuture': [],
+    'ProfilePicture': profilePic,
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 }

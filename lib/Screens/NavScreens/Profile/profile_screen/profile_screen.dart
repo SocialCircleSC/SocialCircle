@@ -109,90 +109,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               );
             }
-            return Stack(
-              // clipBehavior: Clip.none,
-              // alignment: Alignment.topLeft,
+            return ListView(
               children: [
-                SizedBox(
-                    width: displayWidth(context),
-                    height: displayHeight(context) * 0.2,
-                    child: Image.asset(
-                      'lib/assets/background_placeholder.jpg',
-                      fit: BoxFit.cover,
-                    )),
-                Positioned(
-                    top: displayHeight(context) * 0.16,
-                    left: displayHeight(context) * 0.01,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(7),
-                      child: Image.network(
-                        snapshot1.data["ProfilePicture"],
-                        width: displayWidth(context),
-                        fit: BoxFit.cover,
+                const SizedBox(
+                  height: 45,
+                ),
+                Center(
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: 130,
+                        height: 130,
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 4, color: WhiteColor),
+                            boxShadow: [
+                              BoxShadow(
+                                  spreadRadius: 2,
+                                  blurRadius: 10,
+                                  color: Colors.black.withOpacity(0.1),
+                                  offset: Offset(0, 10))
+                            ],
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(
+                                    snapshot1.data["ProfilePicture"]))),
                       ),
-                    )),
-                Positioned(
-                    top: displayHeight(context) * 0.21,
-                    left: displayHeight(context) * 0.12,
-                    child: Text(
-                      snapshot1.data['First Name'] +
-                          " " +
-                          snapshot1.data['Last Name'],
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
-                    )),
-                Positioned(
-                    top: displayHeight(context) * 0.23,
-                    left: displayHeight(context) * 0.12,
-                    child: Text(
-                      snapshot1.data['Status'],
-                    )),
-                Positioned(
-                    top: displayHeight(context) * 0.27,
-                    left: displayHeight(context) * 0.01,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text("Message"),
-                      style: ElevatedButton.styleFrom(
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Text(
+                    snapshot1.data["First Name"] +
+                        " " +
+                        snapshot1.data["Last Name"],
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w400),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    "Status: " + snapshot1.data["Status"],
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w300),
+                  ),
+                ),
+                
+                const SizedBox(
+                  height: 20,
+                ),
+                
+                  Center(
+                      child: SizedBox(
+                    width: 100,
+                    height: 50,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor: WhiteColor,
                         backgroundColor: SecondaryColor,
                       ),
-                    )),
-                if (currentID == snapshot1.data['ID'])
-                  Positioned(
-                      top: displayHeight(context) * 0.27,
-                      left: displayHeight(context) * 0.15,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfile(firstName: snapshot1.data['First Name'], lastName: snapshot1.data['Last Name'], aboutMe: snapshot1.data['About'], userID: snapshot1.data['ID'], email: snapshot1.data['Email Address'], profilePic: snapshot1.data['ProfilePicture'],)));
-                        },
-                        child: const Text("Edit Profile"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: SecondaryColor,
-                        ),
-                      )),
-                Positioned(
-                    top: displayHeight(context) * 0.35,
-                    left: displayHeight(context) * 0.01,
-                    child: const Text(
-                      "About Me",
-                      style: TextStyle(fontSize: 20),
-                    )),
-                if (snapshot1.data['About'] == "")
-                  Positioned(
-                      top: displayHeight(context) * 0.4,
-                      left: displayHeight(context) * 0.01,
-                      child: const Text(
-                        "Empty right now. Write something about yourself!",
-                      )),
-                Positioned(
-                    top: displayHeight(context) * 0.4,
-                    left: displayHeight(context) * 0.01,
-                    child: Text(
-                      snapshot1.data['About'],
-                    )),
+                      child: const Text("Settings"),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfile(
+                                      firstName: snapshot1.data['First Name'],
+                                      lastName: snapshot1.data['Last Name'],
+                                      aboutMe: snapshot1.data['About'],
+                                      userID: snapshot1.data['ID'],
+                                      email: snapshot1.data['Email Address'],
+                                      profilePic:
+                                          snapshot1.data['ProfilePicture'],
+                                    )));
+                      },
+                    ),
+                  )),
               ],
             );
           }),

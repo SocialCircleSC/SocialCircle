@@ -1,8 +1,12 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:community/sizes/size.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../homescreen/bigger_picture.dart';
 
 class ChurchScreen extends StatefulWidget {
   const ChurchScreen({Key? key}) : super(key: key);
@@ -12,62 +16,42 @@ class ChurchScreen extends StatefulWidget {
 }
 
 class _ChurchScreenState extends State<ChurchScreen> {
-  var userChurchID;
-  var finalString = "Empty";
-  List<Map<String, dynamic>> currentChurch = [];
+  //getChurchInfo
+  String churchID = "";
+  String userID = "";
 
-  Future getUserInfo() async {
-    String userID = "";
-
+  Future getCurrentChurch() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     final uid = user?.uid;
 
-    var data = await FirebaseFirestore.instance
-        .collection('Users')
+    var cID;
+
+    await FirebaseFirestore.instance
+        .collection('users')
         .doc(uid)
         .get()
         .then((value) {
-      userID = value.get("Church ID");
+      cID = value.get('Church ID');
     });
 
-    setState(() {
-      userChurchID = userID;
-    });
-  }
-
-  String removeParenthese(String data) {
-    return data.substring(1, data.length - 1);
-  }
-
-  Future getCurrentChurch() async {
-    List<Map<String, dynamic>> churchData = [];
-    var simpleString = "Empty";
-
-    var datas = await FirebaseFirestore.instance
-        .collection('Churches')
+    await FirebaseFirestore.instance
+        .collection('circles')
+        .doc(cID)
         .get()
-        .then((QuerySnapshot querySnapshot) {
-      for (var doc in querySnapshot.docs) {
-        if (doc.id.toString() == userChurchID) {
-          //simpleString = doc['Church Name'].toString();
-          churchData.add({'Current Church': doc['Church Name']});
-          churchData.add({'Street Address': doc['Street Address']});
-          churchData.add({'Bible Verse': doc['Bible Verse']});
-          break;
-        }
-      }
+        .then((value) {
+      cID = value.get('Church ID');
     });
 
     setState(() {
-      currentChurch = churchData;
+      churchID = cID;
+      userID = uid.toString();
     });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    getUserInfo();
     getCurrentChurch();
   }
 
@@ -80,137 +64,208 @@ class _ChurchScreenState extends State<ChurchScreen> {
             content: Text('The System Back Button is Deactivated')));
         return false;
       },
-      child: MaterialApp(
-        home: Scaffold(
-          backgroundColor: Colors.white,
-          body: FutureBuilder(
-            future: Future.wait([
-              getUserInfo(),
-              getCurrentChurch(),
-            ]),
-            builder:
-                (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-              if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
-              }
-
-              return SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Image(
-                      image: AssetImage('lib/assets/churchImage.jpg'),
-                      height: displayHeight(context) * 0.25,
-                      width: double.infinity,
-                      fit: BoxFit.fill,
-                    ),
-                    SizedBox(
-                      height: displayHeight(context) * 0.01,
-                    ),
-                    Padding(
-                      padding: semiLeftPadding,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          removeParenthese(currentChurch[0].values.toString()),
-                          style: const TextStyle(
-                            color: BlackColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: displayHeight(context) * 0.01,
-                    ),
-                    Padding(
-                      padding: semiLeftPadding,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          removeParenthese(currentChurch[1].values.toString()),
-                          style: const TextStyle(
-                            color: Colors.blueGrey,
-                            fontSize: 15,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: displayHeight(context) * 0.01,
-                    ),
-                    Padding(
-                      padding: semiLeftPadding,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          removeParenthese(currentChurch[2].values.toString()),
-                          style: const TextStyle(
-                            color: BlackColor,
-                            fontSize: 15,
-                            fontFamily: '',
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: displayHeight(context) * 0.01,
-                    ),
-                    Padding(
-                      padding: semiLeftPadding,
-                      child: RichText(
-                        text: const TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'See Hours                   ',
-                              style: TextStyle(
-                                color: PrimaryColor,
-                                fontSize: 15,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'See Members',
-                              style: TextStyle(
-                                color: PrimaryColor,
-                                fontSize: 15,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: displayHeight(context) * 0.01,
-                    ),
-                    const Divider(
-                      color: BlackColor,
-                    ),
-                    SizedBox(
-                      height: displayHeight(context) * 0.01,
-                    ),
-                    const Text(
-                      "Posts and Replies",
-                      style: TextStyle(
-                        color: BlackColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
+      child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("circles")
+              .doc(churchID)
+              .snapshots(),
+          builder: (BuildContext context, AsyncSnapshot snapshot1) {
+            if (snapshot1.connectionState == ConnectionState.waiting ||
+                snapshot1.connectionState == ConnectionState.none) {
+              return const Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                // ignore: prefer_const_literals_to_create_immutables
+                children: [
+                  CircularProgressIndicator(),
+                ],
               );
-            },
-          ),
-        ),
-        debugShowCheckedModeBanner: false, //Removing Debug Banner
-      ),
+            }
+            return ListView(
+              children: [
+                CarouselSlider(
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: false,
+                      height: 300,
+                    ),
+                    items: snapshot1.data['Pictures'].map<Widget>(((e) {
+                      return Builder(builder: (BuildContext context) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        BiggerPicture(picture: e)));
+                          },
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(7),
+                                child: Image.network(
+                                  e,
+                                  width: displayWidth(context),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              AnimatedSmoothIndicator(
+                                activeIndex: snapshot1.data["Pictures"]
+                                    .indexWhere((f) => f == e),
+                                count: snapshot1.data['Pictures'].length,
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                    })).toList()),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Text(
+                    snapshot1.data["First Name"] +
+                        " " +
+                        snapshot1.data["Last Name"],
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w400),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    "Status: " + snapshot1.data["Status"],
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w300),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor: WhiteColor,
+                        backgroundColor: SecondaryColor,
+                      ),
+                      child: const Text("Hours"),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Column(
+                                  children: [
+                                    const Text("Weekly Events",
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.w500)),
+                                    const SizedBox(
+                                      height: 25,
+                                    ),
+                                    Text(
+                                        "Sunday: " + snapshot1.data["Hours"][0],
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400)),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text("Monday: " +
+                                        snapshot1.data["Hours"][1]),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text("Tuesday: " +
+                                        snapshot1.data["Hours"][2]),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text("Wednesday: " +
+                                        snapshot1.data["Hours"][3]),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text("Thrusday: " +
+                                        snapshot1.data["Hours"][4]),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text("Friday: " +
+                                        snapshot1.data["Hours"][5]),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text("Saturday: " +
+                                        snapshot1.data["Hours"][6]),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: const Text("Close"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      },
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor: WhiteColor,
+                        backgroundColor: SecondaryColor,
+                      ),
+                      child: const Text("Members"),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Column(
+                                  children: [
+                                    // ListView(
+                                    //   children: ,
+                                    // )
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: const Text("Close"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      },
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    if (userID == churchID)
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: WhiteColor,
+                          backgroundColor: SecondaryColor,
+                        ),
+                        child: const Text("Edit"),
+                        onPressed: () {},
+                      ),
+                  ],
+                )
+              ],
+            );
+          }),
     );
   }
 }
