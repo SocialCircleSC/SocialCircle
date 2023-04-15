@@ -1,12 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:community/sizes/size.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:video_player/video_player.dart';
 
+import '../../../firestore/delete_post.dart';
 import '../homescreen/bigger_picture.dart';
+import '../homescreen/comments_screen.dart';
+import '../homescreen/edit_post.dart';
 
 class ChurchScreen extends StatefulWidget {
   const ChurchScreen({Key? key}) : super(key: key);
@@ -19,6 +24,10 @@ class _ChurchScreenState extends State<ChurchScreen> {
   //getChurchInfo
   String churchID = "";
   String userID = "";
+  String firstName = "";
+  String lastName = "";
+  String status = "";
+  var list;
 
   Future getCurrentChurch() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -26,6 +35,10 @@ class _ChurchScreenState extends State<ChurchScreen> {
     final uid = user?.uid;
 
     var cID;
+    var fireList;
+    var fName;
+    var lName;
+    var stat;
 
     await FirebaseFirestore.instance
         .collection('users')
@@ -40,12 +53,19 @@ class _ChurchScreenState extends State<ChurchScreen> {
         .doc(cID)
         .get()
         .then((value) {
-      cID = value.get('Church ID');
+      fireList = value.get('Pictures');
+      fName = value.get("First Name");
+      lName = value.get("Last Name");
+      stat = value.get("Status");
     });
 
     setState(() {
       churchID = cID;
       userID = uid.toString();
+      list = fireList;
+      firstName = fName;
+      lastName = lName;
+      status = stat;
     });
   }
 
@@ -54,6 +74,18 @@ class _ChurchScreenState extends State<ChurchScreen> {
     super.didChangeDependencies();
     getCurrentChurch();
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  String? dropdownvalue;
+  // List of items in our dropdown menu
+  var items = [
+    'Edit',
+    'Delete',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +100,9 @@ class _ChurchScreenState extends State<ChurchScreen> {
           stream: FirebaseFirestore.instance
               .collection("circles")
               .doc(churchID)
+              .collection("posts")
+              .limit(25)
+              .orderBy('TimeStamp', descending: true)
               .snapshots(),
           builder: (BuildContext context, AsyncSnapshot snapshot1) {
             if (snapshot1.connectionState == ConnectionState.waiting ||
@@ -81,8 +116,9 @@ class _ChurchScreenState extends State<ChurchScreen> {
                 ],
               );
             }
-            return ListView(
-              children: [
+            return SingleChildScrollView(
+                child: Wrap(
+              children: <Widget>[
                 CarouselSlider(
                     options: CarouselOptions(
                       viewportFraction: 1,
@@ -90,7 +126,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                       enableInfiniteScroll: false,
                       height: 300,
                     ),
-                    items: snapshot1.data['Pictures'].map<Widget>(((e) {
+                    items: list.map<Widget>(((e) {
                       return Builder(builder: (BuildContext context) {
                         return GestureDetector(
                           onTap: () {
@@ -112,9 +148,8 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                 ),
                               ),
                               AnimatedSmoothIndicator(
-                                activeIndex: snapshot1.data["Pictures"]
-                                    .indexWhere((f) => f == e),
-                                count: snapshot1.data['Pictures'].length,
+                                activeIndex: list.indexWhere((f) => f == e),
+                                count: list.length,
                               ),
                             ],
                           ),
@@ -126,16 +161,14 @@ class _ChurchScreenState extends State<ChurchScreen> {
                 ),
                 Center(
                   child: Text(
-                    snapshot1.data["First Name"] +
-                        " " +
-                        snapshot1.data["Last Name"],
+                    firstName + " " + lastName,
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.w400),
                   ),
                 ),
                 Center(
                   child: Text(
-                    "Status: " + snapshot1.data["Status"],
+                    "Status: " + status,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w300),
                   ),
@@ -147,75 +180,6 @@ class _ChurchScreenState extends State<ChurchScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        foregroundColor: WhiteColor,
-                        backgroundColor: SecondaryColor,
-                      ),
-                      child: const Text("Hours"),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Column(
-                                  children: [
-                                    const Text("Weekly Events",
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w500)),
-                                    const SizedBox(
-                                      height: 25,
-                                    ),
-                                    Text(
-                                        "Sunday: " + snapshot1.data["Hours"][0],
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w400)),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text("Monday: " +
-                                        snapshot1.data["Hours"][1]),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text("Tuesday: " +
-                                        snapshot1.data["Hours"][2]),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text("Wednesday: " +
-                                        snapshot1.data["Hours"][3]),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text("Thrusday: " +
-                                        snapshot1.data["Hours"][4]),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text("Friday: " +
-                                        snapshot1.data["Hours"][5]),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text("Saturday: " +
-                                        snapshot1.data["Hours"][6]),
-                                  ],
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text("Close"),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
-                      },
-                    ),
                     const SizedBox(
                       width: 10,
                     ),
@@ -262,10 +226,68 @@ class _ChurchScreenState extends State<ChurchScreen> {
                         onPressed: () {},
                       ),
                   ],
-                )
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                const Divider(
+                  height: 30,
+                  thickness: 1,
+                  color: BlackColor,
+                  indent: 10,
+                  endIndent: 10,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    "Weekly Activities",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                  ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                // ListView.builder(
+                //     itemCount: document["EventsCount"],
+                //     itemBuilder: (context, index) {
+                //       return ListTile(
+                //         title: document["Hours"][index],
+                //       );
+                //     }),
               ],
-            );
+            ));
           }),
     );
   }
+}
+
+getLikeCount(document) {
+  int likeCount = 0;
+  var exMap;
+  exMap = document;
+  likeCount = exMap.length;
+  return likeCount.toString();
+}
+
+getLikeStatus(document, id) {
+  List variable = document;
+  if (document.contains(id)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void _goToEditScreen(BuildContext context, String cID, String fName,
+    String lName, String status, String textPost, String docID) async {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => EditPost(
+              circleID: cID,
+              fName: fName,
+              lName: lName,
+              status: status,
+              docID: docID,
+              textField: textPost)));
 }

@@ -88,7 +88,6 @@ class _CardInfoState extends State<CardInfo> {
   late VideoPlayerController vController;
   @override
   Widget build(BuildContext context) {
-    late List temp;
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -106,6 +105,7 @@ class _CardInfoState extends State<CardInfo> {
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
