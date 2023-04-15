@@ -100,9 +100,6 @@ class _ChurchScreenState extends State<ChurchScreen> {
           stream: FirebaseFirestore.instance
               .collection("circles")
               .doc(churchID)
-              .collection("posts")
-              .limit(25)
-              .orderBy('TimeStamp', descending: true)
               .snapshots(),
           builder: (BuildContext context, AsyncSnapshot snapshot1) {
             if (snapshot1.connectionState == ConnectionState.waiting ||
@@ -240,20 +237,42 @@ class _ChurchScreenState extends State<ChurchScreen> {
                 const Padding(
                   padding: EdgeInsets.only(left: 10.0),
                   child: Text(
-                    "Weekly Activities",
+                    "Events",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                   ),
                 ),
                 const SizedBox(
                   height: 40,
                 ),
-                // ListView.builder(
-                //     itemCount: document["EventsCount"],
-                //     itemBuilder: (context, index) {
-                //       return ListTile(
-                //         title: document["Hours"][index],
-                //       );
-                //     }),
+                SizedBox(
+                  height: 285,
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: displayHeight(context) * 0.07,
+                            ),
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                      snapshot1.data["Events"][0].toString()),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return const Divider(
+                          height: 10,
+                          thickness: 0.5,
+                        );
+                      },
+                      itemCount: getLikeCount(snapshot1.data["Events"])),
+                )
               ],
             ));
           }),
@@ -266,7 +285,7 @@ getLikeCount(document) {
   var exMap;
   exMap = document;
   likeCount = exMap.length;
-  return likeCount.toString();
+  return likeCount;
 }
 
 getLikeStatus(document, id) {
@@ -291,3 +310,5 @@ void _goToEditScreen(BuildContext context, String cID, String fName,
               docID: docID,
               textField: textPost)));
 }
+
+// snapshot1.data.docs["Events"][0].toString()
