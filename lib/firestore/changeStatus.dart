@@ -9,7 +9,6 @@ Future<void> changeStat(String memberID, String churchID, String status) async {
       .doc(memberID)
       .update({
         "Status": status,
-      }
-       
+      }   
       );
 }

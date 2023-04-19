@@ -70,15 +70,6 @@ class _ChurchScreenState extends State<ChurchScreen> {
 
     members = query.docs.map((doc) => doc.data()).toList();
 
-    //Get List of Status
-    // await FirebaseFirestore.instance
-    //     .collection('circles')
-    //     .doc(cID)
-    //     .get()
-    //     .then((value) {
-    //   listStat = List.from(value["ListStatus"]);
-    // });
-
     setState(() {
       churchID = cID;
       userID = uid.toString();
@@ -233,60 +224,103 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                             child: Column(
                                               children: [
                                                 ListTile(
-                                                    title: Text(
-                                                        memberList[index]
-                                                                ['First Name']
-                                                            .toString()),
-                                                    subtitle: Text(
-                                                        memberList[index]
-                                                                ['Status']
-                                                            .toString()),
-                                                    trailing:
-                                                        DropdownButtonHideUnderline(
-                                                      child: DropdownButton2(
-                                                        hint: const Text(
-                                                            "Status"),
-                                                        items: snapshot1
-                                                            .data!["ListStatus"]
-                                                            .map<
-                                                                DropdownMenuItem<
-                                                                    String>>((item) =>
-                                                                DropdownMenuItem<
-                                                                    String>(
-                                                                  value: item,
-                                                                  child: Text(
-                                                                    item,
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      fontSize:
-                                                                          14,
+                                                  title: Text(memberList[index]
+                                                              ['First Name']
+                                                          .toString() +
+                                                      " " +
+                                                      memberList[index]
+                                                              ['Last Name']
+                                                          .toString()),
+                                                  subtitle: Text(
+                                                      memberList[index]
+                                                              ['Status']
+                                                          .toString()),
+                                                  trailing: userID == churchID
+                                                      ? TextButton(
+                                                          onPressed: () {
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return AlertDialog(
+                                                                    title:
+                                                                        const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        "Change Status",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                18,
+                                                                            fontWeight:
+                                                                                FontWeight.w500),
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                ))
-                                                            .toList(),
-                                                        value: selectedValue,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            changeStat(
-                                                                memberList[index]
-                                                                        ['ID']
-                                                                    .toString(),
-                                                                churchID,
-                                                                selectedValue
-                                                                    .toString());
-                                                          });
-                                                        },
-                                                        buttonStyleData:
-                                                            const ButtonStyleData(
-                                                          height: 40,
-                                                          width: 140,
-                                                        ),
-                                                        menuItemStyleData:
-                                                            const MenuItemStyleData(
-                                                          height: 40,
-                                                        ),
-                                                      ),
-                                                    )),
+                                                                    content:
+                                                                        SizedBox(
+                                                                      height:
+                                                                          200,
+                                                                      width:
+                                                                          400,
+                                                                      child: ListView.separated(
+                                                                          shrinkWrap: true,
+                                                                          itemBuilder: (context, index1) {
+                                                                            return Card(
+                                                                              clipBehavior: Clip.antiAlias,
+                                                                              child: ConstrainedBox(
+                                                                                constraints: BoxConstraints(
+                                                                                  minHeight: displayHeight(context) * 0.07,
+                                                                                ),
+                                                                                child: Column(
+                                                                                  children: [
+                                                                                    ListTile(
+                                                                                      title: Text(snapshot1.data!["ListStatus"][index1].toString()),
+                                                                                      onTap: () async {
+                                                                                        changeStat(memberList[index]['ID'].toString(), churchID, snapshot1.data!["ListStatus"][index1].toString());
+                                                                                        //Reload List
+                                                                                        QuerySnapshot query = await FirebaseFirestore.instance.collection('circles').doc(churchID).collection('members').orderBy("First Name").get();
+                                                                                        setState(() {
+                                                                                          memberList = query.docs.map((doc) => doc.data()).toList();
+                                                                                        });
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                          separatorBuilder: (context, index) {
+                                                                            return const Divider(
+                                                                              height: 10,
+                                                                              thickness: 0.5,
+                                                                            );
+                                                                          },
+                                                                          itemCount: snapshot1.data!["ListStatus"].length),
+                                                                    ),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        child: const Text(
+                                                                            "Done"),
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                });
+                                                          },
+                                                          child: const Text(
+                                                            "Edit",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    PrimaryColor),
+                                                          ))
+                                                      : Text(" "),
+                                                ),
                                               ],
                                             ),
                                           ),

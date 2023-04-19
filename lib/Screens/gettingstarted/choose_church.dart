@@ -100,15 +100,17 @@ class _ChooseChurchState extends State<ChooseChurch> {
     final User? user = auth.currentUser;
     final uid = user?.uid;
 
-    debugPrint("HI HI HUDB FHFH HJFHFD HJFJSSH FHDFKJFD HFKFDUFHBFDH");
-    debugPrint(churchIDENTITY);
-    circle.doc(removeParenthese(churchIDENTITY)).collection('members').add({
+    circle
+        .doc(removeParenthese(churchIDENTITY))
+        .collection('members')
+        .doc(memID)
+        .set({
       'Email Address': email,
-      'User ID': memID,
+      'ID': memID,
       'First Name': fname,
       'Last Name': lname,
       'Status': status,
-    }).catchError((error) => debugPrint(e.toString()));
+    });
   }
 
   Future getChurchList() async {
