@@ -34,13 +34,10 @@ Future<void> churchSetup(
 
   circle.doc(uid).collection('members').doc().set({
     "Email Address": email,
-    "ID": "N/A",
+    "ID": uid,
     "First Name": churchName,
     "Last Name": ' ',
     "Status": 'Church',
-    "BirthdayD": 00,
-    "BirthdayM": 00,
-    "BirthdayY": 0000,
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 

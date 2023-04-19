@@ -27,8 +27,8 @@ class CardInfo extends StatefulWidget {
 class _CardInfoState extends State<CardInfo> {
   // Initial Selected Value
   String? dropdownvalue;
-  String collect = "";
-  String collectID = "";
+  String collect = " ";
+  String collectID = " ";
 
   bool likeStatus = false;
 
@@ -105,7 +105,6 @@ class _CardInfoState extends State<CardInfo> {
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,11 +149,6 @@ class _CardInfoState extends State<CardInfo> {
                                     title: Text(document['First Name'] +
                                         " " +
                                         document['Last Name']),
-                                    subtitle: Text(
-                                      document['Status'],
-                                      style: TextStyle(
-                                          color: Colors.black.withOpacity(0.6)),
-                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8),
@@ -339,8 +333,8 @@ class _CardInfoState extends State<CardInfo> {
                                                               'Picture'],
                                                           postVideo: document[
                                                               'Picture'],
-                                                          profilePic:
-                                                              document['ProfilePicture'],
+                                                          profilePic: document[
+                                                              'ProfilePicture'],
                                                           status: document[
                                                               'Status'],
                                                           text:

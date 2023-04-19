@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     'Delete',
   ];
   String currentID = "";
-  String userID = "";
+  String userID = "  ";
   String churchID = "";
   String firstName = "";
   String lastName = "";
@@ -59,8 +59,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
       cID = value.get('Church ID');
       fName = value.get('First Name');
       lName = value.get('Last Name');
-      stat = value.get('Status');
       pPic = value.get('ProfilePicture');
+    });
+    debugPrint(cID.toString());
+
+    //Get Status
+    await FirebaseFirestore.instance
+        .collection('circles')
+        .doc(cID)
+        .collection('members')
+        .get()
+        .then((QuerySnapshot value) {
+      for (var element in value.docs) {
+        if (element["ID"] == uid) {
+          stat = element["Status"];
+        }
+      }
     });
 
     setState(() {
@@ -68,8 +82,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       churchID = cID;
       firstName = fName;
       lastName = lName;
-      status = stat;
       profilePic = pPic;
+      status = stat;
       currentID = currID;
     });
   }
@@ -152,42 +166,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Center(
                   child: Text(
-                    "Status: " + snapshot1.data["Status"],
+                    "Status: " + status,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w300),
                   ),
                 ),
-                
                 const SizedBox(
                   height: 20,
                 ),
-                
-                  Center(
-                      child: SizedBox(
-                    width: 100,
-                    height: 50,
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        foregroundColor: WhiteColor,
-                        backgroundColor: SecondaryColor,
-                      ),
-                      child: const Text("Settings"),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfile(
-                                      firstName: snapshot1.data['First Name'],
-                                      lastName: snapshot1.data['Last Name'],
-                                      aboutMe: snapshot1.data['About'],
-                                      userID: snapshot1.data['ID'],
-                                      email: snapshot1.data['Email Address'],
-                                      profilePic:
-                                          snapshot1.data['ProfilePicture'],
-                                    )));
-                      },
+                Center(
+                    child: SizedBox(
+                  width: 100,
+                  height: 50,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: WhiteColor,
+                      backgroundColor: SecondaryColor,
                     ),
-                  )),
+                    child: const Text("Settings"),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfile(
+                                    firstName: snapshot1.data['First Name'],
+                                    lastName: snapshot1.data['Last Name'],
+                                    aboutMe: snapshot1.data['About'],
+                                    userID: snapshot1.data['ID'],
+                                    email: snapshot1.data['Email Address'],
+                                    profilePic:
+                                        snapshot1.data['ProfilePicture'],
+                                  )));
+                    },
+                  ),
+                )),
               ],
             );
           }),

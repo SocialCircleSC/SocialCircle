@@ -8,7 +8,7 @@ Future<void> userSetup(String fname, String lname, String email) async {
   final uid = user?.uid;
 
   
-  String status = "Member";
+  String status = "Visitor";
 
   users.doc(uid).set({
     'ID': uid,
