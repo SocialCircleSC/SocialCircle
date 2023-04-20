@@ -1,10 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community/firestore/addNewEvent.dart';
+import 'package:community/firestore/addNewStatus.dart';
+import 'package:community/firestore/deleteEvent.dart';
 import 'package:community/firestore/changeStatus.dart';
+import 'package:community/firestore/deleteStatus.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:community/sizes/size.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -101,6 +106,8 @@ class _ChurchScreenState extends State<ChurchScreen> {
     'Item4',
   ];
   String? selectedValue;
+  TextEditingController statusController = TextEditingController();
+  TextEditingController eventController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -118,8 +125,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
               .snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<DocumentSnapshot> snapshot1) {
-            if (snapshot1.connectionState == ConnectionState.waiting ||
-                !snapshot1.hasData) {
+            if (snapshot1.connectionState == ConnectionState.waiting) {
               return const Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -200,12 +206,164 @@ class _ChurchScreenState extends State<ChurchScreen> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: const Center(
-                                  child: Text(
-                                    "Members",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
+                                title: Center(
+                                  child: Row(
+                                    children: [
+                                      const Text(
+                                        "Members",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const SizedBox(
+                                        width: 103,
+                                      ),
+                                      if (userID == churchID)
+                                        ElevatedButton(
+                                            child: const Text("Status"),
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor: PrimaryColor,
+                                                foregroundColor: WhiteColor),
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Column(
+                                                      children: [
+                                                        TextField(
+                                                          controller:
+                                                              statusController,
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .multiline,
+                                                          maxLines: 1,
+                                                          // ignore: prefer_const_constructors
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            hintText:
+                                                                "Type Your New Status",
+                                                            // ignore: prefer_const_constructors
+                                                            focusedBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color:
+                                                                          PrimaryColor),
+                                                            ),
+                                                            // ignore: prefer_const_constructors
+                                                            enabledBorder:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color:
+                                                                          PrimaryColor),
+                                                            ),
+                                                            // ignore: prefer_const_constructors
+                                                            border:
+                                                                UnderlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color:
+                                                                          PrimaryColor),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            Fluttertoast.showToast(
+                                                                msg: statusController
+                                                                        .text +
+                                                                    " has been added",
+                                                                toastLength: Toast
+                                                                    .LENGTH_SHORT);
+                                                            setState(() {
+                                                              statusController
+                                                                  .text = "";
+                                                            });
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text("Add"),
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                                  backgroundColor:
+                                                                      PrimaryColor,
+                                                                  foregroundColor:
+                                                                      WhiteColor),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    content: SizedBox(
+                                                      height: 200,
+                                                      width: 400,
+                                                      child: ListView.separated(
+                                                          shrinkWrap: true,
+                                                          itemBuilder: (context,
+                                                              index2) {
+                                                            return Card(
+                                                              clipBehavior: Clip
+                                                                  .antiAlias,
+                                                              child:
+                                                                  ConstrainedBox(
+                                                                constraints:
+                                                                    BoxConstraints(
+                                                                  minHeight:
+                                                                      displayHeight(
+                                                                              context) *
+                                                                          0.07,
+                                                                ),
+                                                                child: Column(
+                                                                  children: [
+                                                                    ListTile(
+                                                                      title: Text(snapshot1
+                                                                          .data![
+                                                                              "ListStatus"]
+                                                                              [
+                                                                              index2]
+                                                                          .toString()),
+                                                                      // trailing: IconButton(
+                                                                      //     onPressed: () {
+                                                                      //       deleteStat(churchID,
+                                                                      //           snapshot1.data!["ListStatus"][index2]);
+                                                                      //     },
+                                                                      //     icon: const Icon(Icons.delete_forever_outlined)),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                          separatorBuilder:
+                                                              (context, index) {
+                                                            return const Divider(
+                                                              height: 10,
+                                                              thickness: 0.5,
+                                                            );
+                                                          },
+                                                          itemCount: snapshot1
+                                                              .data![
+                                                                  "ListStatus"]
+                                                              .length),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        child:
+                                                            const Text("Done"),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            })
+                                    ],
                                   ),
                                 ),
                                 content: SizedBox(
@@ -370,11 +528,167 @@ class _ChurchScreenState extends State<ChurchScreen> {
                   indent: 10,
                   endIndent: 10,
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: 10.0),
-                  child: Text(
-                    "Events",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                  child: Row(
+                    children: [
+                      const Text(
+                        "Events",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w400),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Column(
+                                    children: [
+                                      TextField(
+                                        controller: eventController,
+                                        keyboardType: TextInputType.multiline,
+                                        maxLines: 1,
+                                        // ignore: prefer_const_constructors
+                                        decoration: const InputDecoration(
+                                          hintText: "Type New Event",
+                                          // ignore: prefer_const_constructors
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: PrimaryColor),
+                                          ),
+                                          // ignore: prefer_const_constructors
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: PrimaryColor),
+                                          ),
+                                          // ignore: prefer_const_constructors
+                                          border: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: PrimaryColor),
+                                          ),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          addNewEven(
+                                              churchID, eventController.text);
+                                          Fluttertoast.showToast(
+                                              msg: eventController.text +
+                                                  " has been added",
+                                              toastLength: Toast.LENGTH_SHORT);
+                                          setState(() {
+                                            eventController.text = "";
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Add"),
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: PrimaryColor,
+                                            foregroundColor: WhiteColor),
+                                      ),
+                                    ],
+                                  ),
+                                  content: SizedBox(
+                                    height: 200,
+                                    width: 400,
+                                    child: ListView.separated(
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index3) {
+                                          return Card(
+                                            clipBehavior: Clip.antiAlias,
+                                            child: ConstrainedBox(
+                                              constraints: BoxConstraints(
+                                                minHeight:
+                                                    displayHeight(context) *
+                                                        0.07,
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  ListTile(
+                                                    title: Text(snapshot1
+                                                        .data!["Events"][index3]
+                                                        .toString()),
+                                                    trailing: IconButton(
+                                                        onPressed: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: Text(
+                                                                    "Confirm"),
+                                                                content: Text("Are you sure you want to delete " +
+                                                                    snapshot1
+                                                                        .data![
+                                                                            "Events"]
+                                                                            [
+                                                                            index3]
+                                                                        .toString()),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    child: const Text(
+                                                                        "Yes"),
+                                                                    onPressed:
+                                                                        () {
+                                                                      deleteEvent(
+                                                                          churchID,
+                                                                          snapshot1.data!["Events"]
+                                                                              [
+                                                                              index3]);
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                  TextButton(
+                                                                    child:
+                                                                        const Text(
+                                                                            "No"),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        icon: const Icon(Icons
+                                                            .delete_forever_outlined)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) {
+                                          return const Divider(
+                                            height: 10,
+                                            thickness: 0.5,
+                                          );
+                                        },
+                                        itemCount:
+                                            snapshot1.data!["Events"].length),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text("Done"),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          icon: Icon(Icons.add)),
+                    ],
                   ),
                 ),
                 const SizedBox(
@@ -393,8 +707,8 @@ class _ChurchScreenState extends State<ChurchScreen> {
                             child: Column(
                               children: [
                                 ListTile(
-                                  title: Text(
-                                      snapshot1.data!["Events"][0].toString()),
+                                  title: Text(snapshot1.data!["Events"][index]
+                                      .toString()),
                                 )
                               ],
                             ),
@@ -407,7 +721,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                           thickness: 0.5,
                         );
                       },
-                      itemCount: getEvents(snapshot1.data!["Events"])),
+                      itemCount: snapshot1.data!["Events"].length),
                 ),
               ],
             ));
