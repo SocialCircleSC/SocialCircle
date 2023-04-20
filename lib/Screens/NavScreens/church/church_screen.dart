@@ -280,6 +280,10 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                                         ),
                                                         ElevatedButton(
                                                           onPressed: () {
+                                                            addNewStat(
+                                                                churchID,
+                                                                statusController
+                                                                    .text);
                                                             Fluttertoast.showToast(
                                                                 msg: statusController
                                                                         .text +

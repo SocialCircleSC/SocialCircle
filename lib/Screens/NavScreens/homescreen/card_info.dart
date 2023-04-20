@@ -122,357 +122,383 @@ class _CardInfoState extends State<CardInfo> {
                     height: displayHeight(context) * 0.84,
                     child: ListView(
                       children: snapshot.data!.docs.map((document) {
-                        return GestureDetector(
-                          child: Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minHeight: displayHeight(context) * 0.1),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: displayHeight(context) * 0.01,
-                                  ),
-                                  ListTile(
-                                    leading: Container(
-                                      width: 50,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 4, color: BlackColor),
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.fitWidth,
-                                              image: NetworkImage(
-                                                  document["ProfilePicture"]))),
-                                    ),
-                                    title: Text(document['First Name'] +
-                                        " " +
-                                        document['Last Name']),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        document['Text'],
-                                        style: TextStyle(
-                                            color:
-                                                Colors.black.withOpacity(0.8)),
+                        return Column(
+                          children: [
+                            GestureDetector(
+                              child: Card(
+                                clipBehavior: Clip.antiAlias,
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                      minHeight: displayHeight(context) * 0.1),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: displayHeight(context) * 0.01,
                                       ),
-                                    ),
-                                  ),
-                                  if (document["Type"] == "Image")
-                                    //Only show image if it exists
-                                    Padding(
-                                      padding: const EdgeInsets.all(1.0),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Stack(
-                                          children: [
-                                            CarouselSlider(
-                                                options: CarouselOptions(
-                                                  viewportFraction: 1,
-                                                  enlargeCenterPage: true,
-                                                  enableInfiniteScroll: false,
-                                                  height:
-                                                      displayHeight(context) *
+                                      ListTile(
+                                        leading: Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  width: 4, color: BlackColor),
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  fit: BoxFit.fitWidth,
+                                                  image: NetworkImage(document[
+                                                      "ProfilePicture"]))),
+                                        ),
+                                        title: Text(document['First Name'] +
+                                            " " +
+                                            document['Last Name']),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            document['Text'],
+                                            style: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(0.8)),
+                                          ),
+                                        ),
+                                      ),
+                                      if (document["Type"] == "Image")
+                                        //Only show image if it exists
+                                        Padding(
+                                          padding: const EdgeInsets.all(1.0),
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Stack(
+                                              children: [
+                                                CarouselSlider(
+                                                    options: CarouselOptions(
+                                                      viewportFraction: 1,
+                                                      enlargeCenterPage: true,
+                                                      enableInfiniteScroll:
+                                                          false,
+                                                      height: displayHeight(
+                                                              context) *
                                                           0.55,
-                                                ),
-                                                items: document['Picture']
-                                                    .map<Widget>(((e) {
-                                                  return Builder(builder:
-                                                      (BuildContext context) {
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    BiggerPicture(
-                                                                        picture:
-                                                                            e)));
-                                                      },
-                                                      child: Stack(
-                                                        alignment: Alignment
-                                                            .bottomCenter,
-                                                        children: [
-                                                          ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        7),
-                                                            child:
-                                                                Image.network(
-                                                              e,
-                                                              width:
-                                                                  displayWidth(
+                                                    ),
+                                                    items: document['Picture']
+                                                        .map<Widget>(((e) {
+                                                      return Builder(builder:
+                                                          (BuildContext
+                                                              context) {
+                                                        return GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        BiggerPicture(
+                                                                            picture:
+                                                                                e)));
+                                                          },
+                                                          child: Stack(
+                                                            alignment: Alignment
+                                                                .bottomCenter,
+                                                            children: [
+                                                              ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            7),
+                                                                child: Image
+                                                                    .network(
+                                                                  e,
+                                                                  width: displayWidth(
                                                                       context),
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
-                                                          if (document[
-                                                                      'Picture']
-                                                                  .length !=
-                                                              1)
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(5.0),
-                                                              child:
-                                                                  AnimatedSmoothIndicator(
-                                                                activeIndex: document[
-                                                                        "Picture"]
-                                                                    .indexWhere(
-                                                                        (f) =>
-                                                                            f ==
-                                                                            e),
-                                                                count: document[
-                                                                        'Picture']
-                                                                    .length,
-                                                                effect:
-                                                                    const ScrollingDotsEffect(
-                                                                  dotHeight: 7,
-                                                                  dotWidth: 7,
-                                                                  activeDotScale:
-                                                                      1.5,
+                                                                  fit: BoxFit
+                                                                      .cover,
                                                                 ),
                                                               ),
-                                                            ),
-                                                        ],
+                                                              if (document[
+                                                                          'Picture']
+                                                                      .length !=
+                                                                  1)
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          5.0),
+                                                                  child:
+                                                                      AnimatedSmoothIndicator(
+                                                                    activeIndex: document[
+                                                                            "Picture"]
+                                                                        .indexWhere((f) =>
+                                                                            f ==
+                                                                            e),
+                                                                    count: document[
+                                                                            'Picture']
+                                                                        .length,
+                                                                    effect:
+                                                                        const ScrollingDotsEffect(
+                                                                      dotHeight:
+                                                                          7,
+                                                                      dotWidth:
+                                                                          7,
+                                                                      activeDotScale:
+                                                                          1.5,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      });
+                                                    })).toList()),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      if (document["Type"] == "Video")
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: SizedBox(
+                                            height:
+                                                displayHeight(context) * 0.6,
+                                            width: displayWidth(context),
+                                            child: Chewie(
+                                              controller: ChewieController(
+                                                  videoPlayerController:
+                                                      VideoPlayerController
+                                                          .network(document[
+                                                              "Picture"][0])
+                                                        ..initialize()),
+                                            ),
+                                          ),
+                                        ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Center(
+                                              child: IconButton(
+                                                  onPressed: () async {
+                                                    DocumentReference postDoc =
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                "circles")
+                                                            .doc(churchID)
+                                                            .collection("posts")
+                                                            .doc(document.id);
+                                                    DocumentSnapshot post =
+                                                        await postDoc.get();
+
+                                                    List likedusers =
+                                                        post["LikedBy"];
+                                                    if (likedusers.contains(
+                                                            userID
+                                                                .toString()) ==
+                                                        true) {
+                                                      postDoc.update({
+                                                        "LikedBy": FieldValue
+                                                            .arrayRemove(
+                                                                [userID])
+                                                      });
+                                                    } else {
+                                                      postDoc.update({
+                                                        "LikedBy": FieldValue
+                                                            .arrayUnion(
+                                                                [userID])
+                                                      });
+                                                    }
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.favorite,
+                                                    color: document["LikedBy"]
+                                                                .contains(
+                                                                    userID) ==
+                                                            true
+                                                        ? Colors.red
+                                                        : Colors.grey,
+                                                  )),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: getLikeCount(
+                                                    document['LikedBy']),
+                                                style: TextStyle(
+                                                  color: BlackColor,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Comments(
+                                                              churchID:
+                                                                  churchID,
+                                                              firstName: document[
+                                                                  'First Name'],
+                                                              lastName: document[
+                                                                  'Last Name'],
+                                                              likeStatus:
+                                                                  getLikeStatus(
+                                                                      document[
+                                                                          'LikedBy'],
+                                                                      userID),
+                                                              likes: document[
+                                                                      'LikedBy']
+                                                                  .length
+                                                                  .toString(),
+                                                              pictureLength:
+                                                                  document[
+                                                                          'Picture']
+                                                                      .length,
+                                                              postID:
+                                                                  document.id,
+                                                              postPicture:
+                                                                  document[
+                                                                      'Picture'],
+                                                              postVideo:
+                                                                  document[
+                                                                      'Picture'],
+                                                              profilePic: document[
+                                                                  'ProfilePicture'],
+                                                              status: document[
+                                                                  'Status'],
+                                                              text: document[
+                                                                  'Text'],
+                                                              type: document[
+                                                                  'Type'],
+                                                              userID: userID,
+                                                              likesArr: document[
+                                                                  'LikedBy'],
+                                                            )));
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 90),
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    // ignore: prefer_const_literals_to_create_immutables
+                                                    children: [
+                                                      WidgetSpan(
+                                                        child: Icon(
+                                                          Icons
+                                                              .comment_outlined,
+                                                          size: 20,
+                                                        ),
                                                       ),
-                                                    );
-                                                  });
-                                                })).toList()),
+                                                      TextSpan(
+                                                        text: "     " "0",
+                                                        style: TextStyle(
+                                                          color: BlackColor,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            if (document["ID"] == userID)
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 90),
+                                                child: DropdownButton(
+                                                    style: TextStyle(
+                                                        color: BlackColor,
+                                                        fontSize: 12),
+                                                    value: dropdownvalue,
+                                                    hint: Text("More"),
+                                                    iconSize: 20,
+                                                    items: items
+                                                        .map((String items) {
+                                                      //This is where you can check for status and stuff like that to drop down or not
+                                                      return DropdownMenuItem(
+                                                        value: items,
+                                                        child: Text(items),
+                                                      );
+                                                    }).toList(),
+                                                    icon: Icon(Icons
+                                                        .keyboard_arrow_down),
+                                                    onChanged:
+                                                        (String? newValue) {
+                                                      if (newValue ==
+                                                          items[0]) {
+                                                        _goToEditScreen(
+                                                            context,
+                                                            churchID,
+                                                            document[
+                                                                'First Name'],
+                                                            document[
+                                                                'Last Name'],
+                                                            document['Status'],
+                                                            document['Text'],
+                                                            document.id);
+                                                      } else if (newValue ==
+                                                          items[1]) {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: Text(
+                                                                    "Confirm"),
+                                                                content: Text(
+                                                                    "Are you sure you want to delete this post?"),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    child: Text(
+                                                                        "Yes"),
+                                                                    onPressed:
+                                                                        () {
+                                                                      deletePost(
+                                                                          document
+                                                                              .id,
+                                                                          churchID,
+                                                                          document[
+                                                                              "Picture"]);
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                  TextButton(
+                                                                    child: Text(
+                                                                        "No"),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            });
+                                                      }
+                                                    }),
+                                              ),
                                           ],
                                         ),
                                       ),
-                                    ),
-                                  if (document["Type"] == "Video")
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: SizedBox(
-                                        height: displayHeight(context) * 0.6,
-                                        width: displayWidth(context),
-                                        child: Chewie(
-                                          controller: ChewieController(
-                                              videoPlayerController:
-                                                  VideoPlayerController.network(
-                                                      document["Picture"][0])
-                                                    ..initialize()),
-                                        ),
-                                      ),
-                                    ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Center(
-                                          child: IconButton(
-                                              onPressed: () async {
-                                                DocumentReference postDoc =
-                                                    FirebaseFirestore.instance
-                                                        .collection("circles")
-                                                        .doc(churchID)
-                                                        .collection("posts")
-                                                        .doc(document.id);
-                                                DocumentSnapshot post =
-                                                    await postDoc.get();
-
-                                                List likedusers =
-                                                    post["LikedBy"];
-                                                if (likedusers.contains(
-                                                        userID.toString()) ==
-                                                    true) {
-                                                  postDoc.update({
-                                                    "LikedBy":
-                                                        FieldValue.arrayRemove(
-                                                            [userID])
-                                                  });
-                                                } else {
-                                                  postDoc.update({
-                                                    "LikedBy":
-                                                        FieldValue.arrayUnion(
-                                                            [userID])
-                                                  });
-                                                }
-                                              },
-                                              icon: Icon(
-                                                Icons.favorite,
-                                                color: document["LikedBy"]
-                                                            .contains(userID) ==
-                                                        true
-                                                    ? Colors.red
-                                                    : Colors.grey,
-                                              )),
-                                        ),
-                                        RichText(
-                                          text: TextSpan(
-                                            text: getLikeCount(
-                                                document['LikedBy']),
-                                            style: TextStyle(
-                                              color: BlackColor,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Comments(
-                                                          churchID: churchID,
-                                                          firstName: document[
-                                                              'First Name'],
-                                                          lastName: document[
-                                                              'Last Name'],
-                                                          likeStatus:
-                                                              getLikeStatus(
-                                                                  document[
-                                                                      'LikedBy'],
-                                                                  userID),
-                                                          likes: document[
-                                                                  'LikedBy']
-                                                              .length
-                                                              .toString(),
-                                                          pictureLength:
-                                                              document[
-                                                                      'Picture']
-                                                                  .length,
-                                                          postID: document.id,
-                                                          postPicture: document[
-                                                              'Picture'],
-                                                          postVideo: document[
-                                                              'Picture'],
-                                                          profilePic: document[
-                                                              'ProfilePicture'],
-                                                          status: document[
-                                                              'Status'],
-                                                          text:
-                                                              document['Text'],
-                                                          type:
-                                                              document['Type'],
-                                                          userID: userID,
-                                                          likesArr: document[
-                                                              'LikedBy'],
-                                                        )));
-                                          },
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 90),
-                                            child: RichText(
-                                              text: TextSpan(
-                                                // ignore: prefer_const_literals_to_create_immutables
-                                                children: [
-                                                  WidgetSpan(
-                                                    child: Icon(
-                                                      Icons.comment_outlined,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-                                                  TextSpan(
-                                                    text: "     " "0",
-                                                    style: TextStyle(
-                                                      color: BlackColor,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        if (document["ID"] == userID)
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 90),
-                                            child: DropdownButton(
-                                                style: TextStyle(
-                                                    color: BlackColor,
-                                                    fontSize: 12),
-                                                value: dropdownvalue,
-                                                hint: Text("More"),
-                                                iconSize: 20,
-                                                items:
-                                                    items.map((String items) {
-                                                  //This is where you can check for status and stuff like that to drop down or not
-                                                  return DropdownMenuItem(
-                                                    value: items,
-                                                    child: Text(items),
-                                                  );
-                                                }).toList(),
-                                                icon: Icon(
-                                                    Icons.keyboard_arrow_down),
-                                                onChanged: (String? newValue) {
-                                                  if (newValue == items[0]) {
-                                                    _goToEditScreen(
-                                                        context,
-                                                        churchID,
-                                                        document['First Name'],
-                                                        document['Last Name'],
-                                                        document['Status'],
-                                                        document['Text'],
-                                                        document.id);
-                                                  } else if (newValue ==
-                                                      items[1]) {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            title:
-                                                                Text("Confirm"),
-                                                            content: Text(
-                                                                "Are you sure you want to delete this post?"),
-                                                            actions: [
-                                                              TextButton(
-                                                                child:
-                                                                    Text("Yes"),
-                                                                onPressed: () {
-                                                                  deletePost(
-                                                                      document
-                                                                          .id,
-                                                                      churchID,
-                                                                      document[
-                                                                          "Picture"]);
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                              ),
-                                                              TextButton(
-                                                                child:
-                                                                    Text("No"),
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                              ),
-                                                            ],
-                                                          );
-                                                        });
-                                                  }
-                                                }),
-                                          ),
-                                      ],
-                                    ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CheckProfile(
+                                            firstName: document['First Name'],
+                                            lastName: document['Last Name'],
+                                            status: document['Status'],
+                                            profilePic:
+                                                document['ProfilePicture'])));
+                              },
                             ),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CheckProfile(
-                                        firstName: document['First Name'],
-                                        lastName: document['Last Name'],
-                                        status: document['Status'],
-                                        profilePic:
-                                            document['ProfilePicture'])));
-                          },
+                          ],
                         );
                       }).toList(),
                     ),

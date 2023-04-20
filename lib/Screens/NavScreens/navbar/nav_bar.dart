@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/screens/navscreens/church/church_screen.dart';
 import 'package:community/screens/navscreens/give/give_screen.dart';
 import 'package:community/screens/navscreens/groups/group_screen.dart';
@@ -15,6 +16,8 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
+import '../../../sizes/size.dart';
+
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
 
@@ -25,6 +28,37 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   dynamic selected;
   PageController controller = PageController();
+  TextEditingController groupController = TextEditingController();
+  String churchID = "";
+  String userID = "";
+
+  Future getUserAndChurchInfo() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
+
+    var cID;
+
+    //Get ChurchID
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((value) {
+      cID = value.get('Church ID');
+    });
+
+    setState(() {
+      churchID = cID;
+      userID = uid.toString();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getUserAndChurchInfo();
+  }
 
   @override
   void dispose() {
@@ -55,6 +89,117 @@ class _NavBarState extends State<NavBar> {
           backgroundColor: Colors.grey[50],
           appBar: AppBar(
             actions: <Widget>[
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.message_rounded,
+                    color: BlackColor,
+                  )),
+              IconButton(
+                  onPressed: () {
+                    //Show Groups
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Column(
+                            children: [
+                              Text(
+                                "Change Page",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w400),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              if (userID == churchID)
+                                TextField(
+                                  controller: groupController,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: 1,
+                                  decoration: const InputDecoration(
+                                    hintText: "Add New Group",
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: PrimaryColor),
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: PrimaryColor),
+                                    ),
+                                    border: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: PrimaryColor),
+                                    ),
+                                  ),
+                                ),
+                              if (userID == churchID)
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Fluttertoast.showToast(
+                                        msg: groupController.text +
+                                            " has been added",
+                                        toastLength: Toast.LENGTH_SHORT);
+                                    setState(() {
+                                      groupController.text = "";
+                                    });
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Add"),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: PrimaryColor,
+                                      foregroundColor: WhiteColor),
+                                ),
+                            ],
+                          ),
+                          content: SizedBox(
+                            height: 200,
+                            width: 400,
+                            child: ListView.separated(
+                                shrinkWrap: true,
+                                itemBuilder: (context, index2) {
+                                  return Card(
+                                    clipBehavior: Clip.antiAlias,
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        minHeight:
+                                            displayHeight(context) * 0.07,
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          ListTile(
+                                            title: Text("Choir"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return const Divider(
+                                    height: 10,
+                                    thickness: 0.5,
+                                  );
+                                },
+                                itemCount: 1),
+                          ),
+                          actions: [
+                            TextButton(
+                              child: const Text("Done"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.group,
+                    color: BlackColor,
+                  )),
               PopupMenuButton<String>(
                 icon: const Icon(Icons.more_vert, color: BlackColor),
                 onSelected: handleClick,
