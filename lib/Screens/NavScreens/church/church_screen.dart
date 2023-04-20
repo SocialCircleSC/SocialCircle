@@ -159,9 +159,17 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              AnimatedSmoothIndicator(
-                                activeIndex: list.indexWhere((f) => f == e),
-                                count: list.length,
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: AnimatedSmoothIndicator(
+                                  activeIndex: list.indexWhere((f) => f == e),
+                                  count: list.length,
+                                  effect: const ScrollingDotsEffect(
+                                    dotHeight: 7,
+                                    dotWidth: 7,
+                                    activeDotScale: 1.5,
+                                  ),
+                                ),
                               ),
                             ],
                           ),

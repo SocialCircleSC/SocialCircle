@@ -215,16 +215,29 @@ class _CardInfoState extends State<CardInfo> {
                                                                       'Picture']
                                                                   .length !=
                                                               1)
-                                                            AnimatedSmoothIndicator(
-                                                              activeIndex: document[
-                                                                      "Picture"]
-                                                                  .indexWhere(
-                                                                      (f) =>
-                                                                          f ==
-                                                                          e),
-                                                              count: document[
-                                                                      'Picture']
-                                                                  .length,
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5.0),
+                                                              child:
+                                                                  AnimatedSmoothIndicator(
+                                                                activeIndex: document[
+                                                                        "Picture"]
+                                                                    .indexWhere(
+                                                                        (f) =>
+                                                                            f ==
+                                                                            e),
+                                                                count: document[
+                                                                        'Picture']
+                                                                    .length,
+                                                                effect:
+                                                                    const ScrollingDotsEffect(
+                                                                  dotHeight: 7,
+                                                                  dotWidth: 7,
+                                                                  activeDotScale:
+                                                                      1.5,
+                                                                ),
+                                                              ),
                                                             ),
                                                         ],
                                                       ),
