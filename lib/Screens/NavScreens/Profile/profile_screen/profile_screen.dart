@@ -1,20 +1,9 @@
 import 'dart:async';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/screens/navscreens/profile/editscreens/edit_profile.dart';
+import 'package:community/screens/navscreens/profile/editscreens/edit_user_profile.dart';
 import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:community/sizes/size.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:video_player/video_player.dart';
-
-import '../../../../firestore/delete_post.dart';
-import '../../../AuthScreens/Login/login_screen.dart';
-import '../../homescreen/bigger_picture.dart';
-import '../../homescreen/comments_screen.dart';
-import '../../homescreen/edit_post.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -30,12 +19,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     'Delete',
   ];
   String currentID = "";
-  String userID = "  ";
+  String userID = "";
   String churchID = "";
   String firstName = "";
   String lastName = "";
   String status = "";
   String profilePic = "";
+  String email = "";
 
   Future getUserInfo() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -49,6 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String lName = "";
     String stat = "";
     String pPic = "";
+    String em = "";
 
     await FirebaseFirestore.instance
         .collection('users')
@@ -60,8 +51,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       fName = value.get('First Name');
       lName = value.get('Last Name');
       pPic = value.get('ProfilePicture');
+      //em = value.get('Email Address');
     });
-    debugPrint(cID.toString());
 
     //Get Status
     await FirebaseFirestore.instance
@@ -101,6 +92,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (userID.isEmpty) {
+      return const Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        // ignore: prefer_const_literals_to_create_immutables
+        children: [
+          CircularProgressIndicator(),
+        ],
+      );
+    }
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -112,7 +113,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .collection("users")
               .doc(userID)
               .snapshots(),
-          builder: (BuildContext context, AsyncSnapshot snapshot1) {
+          builder: (BuildContext context,
+              AsyncSnapshot<DocumentSnapshot> snapshot1) {
             if (snapshot1.connectionState == ConnectionState.waiting) {
               return const Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: NetworkImage(
-                                    snapshot1.data["ProfilePicture"]))),
+                                    snapshot1.data!["ProfilePicture"]))),
                       ),
                     ],
                   ),
@@ -157,9 +159,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Center(
                   child: Text(
-                    snapshot1.data["First Name"] +
+                    snapshot1.data!["First Name"] +
                         " " +
-                        snapshot1.data["Last Name"],
+                        snapshot1.data!["Last Name"],
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.w400),
                   ),
@@ -189,14 +191,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => EditProfile(
-                                    firstName: snapshot1.data['First Name'],
-                                    lastName: snapshot1.data['Last Name'],
-                                    aboutMe: snapshot1.data['About'],
-                                    userID: snapshot1.data['ID'],
-                                    email: snapshot1.data['Email Address'],
+                                    firstName: snapshot1.data!['First Name'],
+                                    lastName: snapshot1.data!['Last Name'],
+                                    userID: snapshot1.data!['ID'],
+                                    email: snapshot1.data!['Email Address'],
                                     profilePic:
-                                        snapshot1.data['ProfilePicture'],
+                                        snapshot1.data!['ProfilePicture'],
                                   )));
+                      // if (userID == churchID) {
+                      //   // Navigator.push(context,
+                      //   // MaterialPageRoute(builder: (context) => EditChurchProfile(firstName: firstName, userID: userID, email: email, profilePic: profilePic))
+                      //   // );
+                      // } else {
+                      //   Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => EditProfile(
+                      //                 firstName: snapshot1.data['First Name'],
+                      //                 lastName: snapshot1.data['Last Name'],
+                      //                 userID: snapshot1.data['ID'],
+                      //                 email: snapshot1.data['Email Address'],
+                      //                 profilePic:
+                      //                     snapshot1.data['ProfilePicture'],
+                      //               )));
+                      // }
                     },
                   ),
                 )),
@@ -222,29 +240,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return false;
     }
   }
-}
-
-//logout button
-Future<void> logout(BuildContext context) async {
-  await FirebaseAuth.instance.signOut();
-  Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const LoginScreen()));
-}
-
-String removeParenthese(String data) {
-  return data.substring(1, data.length - 1);
-}
-
-void _goToEditScreen(BuildContext context, String cID, String fName,
-    String lName, String status, String textPost, String docID) async {
-  Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => EditPost(
-              circleID: cID,
-              fName: fName,
-              lName: lName,
-              status: status,
-              docID: docID,
-              textField: textPost)));
 }

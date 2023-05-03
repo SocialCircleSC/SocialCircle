@@ -213,7 +213,6 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
           churchNameController.text,
           addressController.text,
           phoneNumberController.text,
-          bibleVerseController.text,
           emailController.text,
         );
 

@@ -1,18 +1,30 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:math';
-
 import 'package:community/screens/authscreens/login/login_screen.dart';
-import 'package:community/screens/navscreens/homescreen/home_screen.dart';
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/sizes/size.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../../firestore/addChurchMemList.dart';
+import '../../firestore/memberSignUpData.dart';
 
 class ChooseChurch extends StatefulWidget {
-  const ChooseChurch({Key? key}) : super(key: key);
+  final String email;
+  final String password;
+  final String firstName;
+  final String lastName;
+
+  const ChooseChurch(
+      {Key? key,
+      required this.email,
+      required this.password,
+      required this.firstName,
+      required this.lastName})
+      : super(key: key);
 
   @override
   State<ChooseChurch> createState() => _ChooseChurchState();
@@ -27,48 +39,9 @@ class _ChooseChurchState extends State<ChooseChurch> {
   List<Map<String, dynamic>> churchID = [];
 
   //Global variables for the user's info.
-  var cID = " ";
-  var mEmail = " ";
-  var mFName = " ";
-  var mLName = " ";
-  var mID = " ";
-  var mStatus = " ";
 
-  Future getMemberInfo() async {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final uid = user?.uid;
-
-    var churchIDEN = " ";
-    var email = " ";
-    var fName = " ";
-    var lName = " ";
-    var memberID = " ";
-    var status = " ";
-
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((value) {
-      churchIDEN = value.data()!['Church ID'];
-      email = value.data()!["Email Address"];
-      fName = value.data()!["First Name"];
-      lName = value.data()!["Last Name"];
-      memberID = value.data()!["ID"];
-      status = value.data()!["Status"];
-    });
-
-    setState(() {
-      cID = churchIDEN;
-      mEmail = email;
-      mFName = fName;
-      mLName = lName;
-      mID = memberID;
-      mStatus = status;
-    });
-  }
+  var mID = "";
+  var mStatus = "Visitor";
 
   // This list holds the data for the list view
   List<Map<String, dynamic>> foundChurches = [];
@@ -91,29 +64,11 @@ class _ChooseChurchState extends State<ChooseChurch> {
     }).catchError((error) => debugPrint("Failed to add chruch: $error"));
   }
 
-  //Place user into church member list
-  Future addChurchMemberList(String churchIDENTITY, String email, String fname,
-      String lname, String memID, String status) async {
-    CollectionReference circle =
-        FirebaseFirestore.instance.collection('circles');
+  Future getChurchList() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     final uid = user?.uid;
-
-    circle
-        .doc(removeParenthese(churchIDENTITY))
-        .collection('members')
-        .doc(memID)
-        .set({
-      'Email Address': email,
-      'ID': memID,
-      'First Name': fname,
-      'Last Name': lname,
-      'Status': status,
-    });
-  }
-
-  Future getChurchList() async {
+    var memberID;
     List<Map<String, dynamic>> answer = [];
     List<Map<String, dynamic>> answerId = [];
     List<Map<String, dynamic>> answerAddress = [];
@@ -135,6 +90,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
       allChurches2 = answer;
       churchAddress = answerAddress;
       churchID = answerId;
+      mID = uid.toString();
     });
   }
 
@@ -142,7 +98,6 @@ class _ChooseChurchState extends State<ChooseChurch> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     getChurchList();
-    getMemberInfo();
   }
 
   @override
@@ -224,16 +179,86 @@ class _ChooseChurchState extends State<ChooseChurch> {
                             title: Text(allChurches[index].values.toString()),
                             subtitle: Text(
                                 '${churchAddress[index].values.toString()} '),
-                            onTap: () {
-                              addChurchData(
-                                  allChurches[index].values.toString(),
-                                  churchID[index].values.toString());
-                              addChurchMemberList(churchID[0].values.toString(),
-                                  mEmail, mFName, mLName, mID, mStatus);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NavBar()));
+                            onTap: () async {
+                              //This is where the signup is
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Confirm"),
+                                      content: Text(
+                                          "Are you sure you want to pick " +
+                                              allChurches[index]
+                                                  .values
+                                                  .toString() +
+                                              " as your church?"),
+                                      actions: [
+                                        TextButton(
+                                          child: Text("Yes"),
+                                          onPressed: () async {
+                                            try {
+                                              UserCredential userCredential =
+                                                  await FirebaseAuth.instance
+                                                      .createUserWithEmailAndPassword(
+                                                          email: widget.email,
+                                                          password:
+                                                              widget.password);
+                                              userSetup(
+                                                  widget.firstName,
+                                                  widget.lastName,
+                                                  widget.email,
+                                                  allChurches[index]
+                                                      .values
+                                                      .toString(),
+                                                  churchID[index]
+                                                      .values
+                                                      .toString());
+                                              addChurchData(
+                                                  allChurches[index]
+                                                      .values
+                                                      .toString(),
+                                                  churchID[index]
+                                                      .values
+                                                      .toString());
+                                              addChurchMemberList(
+                                                  churchID[index]
+                                                      .values
+                                                      .toString(),
+                                                  widget.email,
+                                                  widget.firstName,
+                                                  widget.lastName);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          NavBar()));
+                                            } on FirebaseAuthException catch (e) {
+                                              if (e.code == 'weak-password') {
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        "The Password is too weak, please go back and change the password",
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG);
+                                              } else if (e.code ==
+                                                  'email-already-in-use') {
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        "Email already exists, please go back and change the email",
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG);
+                                              }
+                                            }
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: Text("No"),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  });
                             },
                           ),
                         ),

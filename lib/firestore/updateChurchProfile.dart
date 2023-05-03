@@ -7,8 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-Future<void> updateProfile(String userID, String fName, String lName,
-    String email, String password, String image) async {
+Future<void> updateChuProfile(String userID, String fName,
+    String email, String password, String image1) async {
   FirebaseAuth auth = FirebaseAuth.instance;
   final User? user = auth.currentUser;
   String pic = "";
@@ -22,16 +22,10 @@ Future<void> updateProfile(String userID, String fName, String lName,
     });
   }
 
-  //Last Name
-  if (lName.isNotEmpty) {
-    postToCircle.update({
-      'Last Name': lName,
-    });
-  }
 
 
   //ProfilePicture
-  if (image.isNotEmpty) {
+  if (image1.isNotEmpty) {
     String uniqueFileName = DateTime.now().microsecondsSinceEpoch.toString();
 
       Reference ref = FirebaseStorage.instance
@@ -42,7 +36,7 @@ Future<void> updateProfile(String userID, String fName, String lName,
           .child(uniqueFileName);
 
       try {
-        await ref.putFile(File(image));
+        await ref.putFile(File(image1));
         pic = await ref.getDownloadURL();
       } catch (e) {
         debugPrint("THIS ISNT WORKING WHY!");

@@ -1,40 +1,38 @@
 import 'dart:io';
 
-import 'package:community/firestore/update_profile.dart';
-import 'package:community/themes/theme.dart';
+import 'package:community/firestore/updateChurchProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class EditProfile extends StatefulWidget {
+import '../../../../themes/theme.dart';
+
+class EditChurchProfile extends StatefulWidget {
   final String firstName;
-  final String lastName;
-  final String aboutMe;
   final String userID;
   final String email;
   final String profilePic;
 
-  const EditProfile(
-      {super.key,
-      required this.firstName,
-      required this.lastName,
-      required this.aboutMe,
-      required this.userID,
-      required this.email,
-      required this.profilePic});
+  const EditChurchProfile({
+    super.key,
+    required this.firstName,
+    required this.userID,
+    required this.email,
+    required this.profilePic,
+  });
 
   @override
-  State<EditProfile> createState() => _EditProfileState();
+  State<EditChurchProfile> createState() => _EditChurchProfileState();
 }
 
-class _EditProfileState extends State<EditProfile> {
-  bool _isObscure = true;
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController aboutController = TextEditingController();
+var imagePath = [];
+bool _isObscure = true;
+TextEditingController firstNameController = TextEditingController();
+TextEditingController streetAddressController = TextEditingController();
+TextEditingController emailController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
+TextEditingController phoneController = TextEditingController();
 
-  var imagePath = [];
+class _EditChurchProfileState extends State<EditChurchProfile> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -160,31 +158,6 @@ class _EditProfileState extends State<EditProfile> {
                 const SizedBox(
                   height: 10,
                 ),
-                TextField(
-                  controller: lastNameController,
-                  decoration: InputDecoration(
-                      labelText: "Last Name",
-                      hintText: widget.lastName,
-                      hintStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: BlackColor,
-                      )),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextField(
-                  controller: aboutController,
-                  decoration: InputDecoration(
-                      labelText: "About Me",
-                      hintText: widget.aboutMe,
-                      hintStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: BlackColor,
-                      )),
-                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -238,14 +211,13 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   child: const Text("Update"),
                   onPressed: () {
-                    updateProfile(
-                        widget.userID,
-                        firstNameController.text,
-                        lastNameController.text,
-                        emailController.text,
-                        passwordController.text,
-                        aboutController.text,
-                        imagePath[0]);
+                    updateChuProfile(
+                      widget.userID,
+                      widget.firstName,
+                      widget.email,
+                      passwordController.text,
+                      imagePath[0],
+                    );
                     Navigator.pop(context);
                   },
                 ),

@@ -90,28 +90,12 @@ class SignUpScreen extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              // Padding(
-              //   padding: DefaultPadding,
-              //   child: Text("Or Sign Up with"),
-              // ),
+             
               SizedBox(
                 height: displayHeight(context) * 0.01,
               ),
 
-              // Center(
-              //   child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: <Widget>[
-              //         TextButton.icon(
-              //           onPressed: signInWithGoogle,
-              //           icon: Icon(Icons.facebook),
-              //           label: Text("Google"),
-              //           style: TextButton.styleFrom(onSurface: PrimaryColor),
-              //         ),
-              //       ]),
-              // ),
-
-              //AltLogin(),
+              
             ],
           ),
         ),

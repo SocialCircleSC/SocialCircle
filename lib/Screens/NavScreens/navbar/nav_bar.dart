@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community/screens/messaging/message_home.dart';
 import 'package:community/screens/navscreens/church/church_screen.dart';
 import 'package:community/screens/navscreens/give/give_screen.dart';
 import 'package:community/screens/navscreens/groups/group_screen.dart';
@@ -90,7 +91,10 @@ class _NavBarState extends State<NavBar> {
           appBar: AppBar(
             actions: <Widget>[
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => messageHome()));
+                  },
                   icon: Icon(
                     Icons.message_rounded,
                     color: BlackColor,
@@ -232,9 +236,9 @@ class _NavBarState extends State<NavBar> {
                   backgroundColor: PrimaryColor,
                 ),
                 BottomBarItem(
-                  icon: const Icon(Icons.church_outlined),
-                  title: const Text('Church'),
-                  selectedIcon: const Icon(Icons.church_rounded),
+                  icon: const Icon(Icons.circle_outlined),
+                  title: const Text('Orb'),
+                  selectedIcon: const Icon(Icons.circle_rounded),
                   selectedColor: SecondaryColor,
                   backgroundColor: PrimaryColor,
                 ),

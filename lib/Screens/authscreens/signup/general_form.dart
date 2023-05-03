@@ -39,7 +39,6 @@ class _SignUpFormState extends State<SignUpForm> {
           padding: EdgeInsets.symmetric(vertical: 5),
           child: TextField(
             controller: firstNameController,
-            // ignore: prefer_const_constructors
             decoration: InputDecoration(
               labelText: "First Name",
               labelStyle: TextStyle(color: TextFieldColor),
@@ -55,7 +54,6 @@ class _SignUpFormState extends State<SignUpForm> {
           padding: EdgeInsets.symmetric(vertical: 5),
           child: TextField(
             controller: lastNameController,
-            // ignore: prefer_const_constructors
             decoration: InputDecoration(
               labelText: "Last Name",
               labelStyle: TextStyle(color: TextFieldColor),
@@ -71,7 +69,6 @@ class _SignUpFormState extends State<SignUpForm> {
           padding: EdgeInsets.symmetric(vertical: 5),
           child: TextField(
             controller: emailController,
-            // ignore: prefer_const_constructors
             decoration: InputDecoration(
               labelText: "Email",
               labelStyle: TextStyle(color: TextFieldColor),
@@ -146,42 +143,37 @@ class _SignUpFormState extends State<SignUpForm> {
 
         TextButton(
           style: TextButton.styleFrom(
-            foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
+            foregroundColor: WhiteColor,
+            backgroundColor: PrimaryColor,
             padding: SignUpButtonPadding,
           ),
           child: Text("Sign Up"),
           onPressed: () {
-            signUp(emailController.text, passwordController.text);
+            if (passwordController.text != confirmPasswordController.text) {
+              Fluttertoast.showToast(
+                  msg:
+                      "Please make sure your password is the same as your confirm passowrd");
+            } else {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChooseChurch(
+                          email: emailController.text,
+                          password: passwordController.text,
+                          firstName: firstNameController.text,
+                          lastName: lastNameController.text)));
+            }
           },
         ),
       ],
     );
   }
 
-  void signUp(String email, String password) async {
+  void signUp(String email, String password) {
     if (passwordController.text != confirmPasswordController.text) {
       Fluttertoast.showToast(
           msg:
               "Please make sure your password is the same as your confirm passowrd");
-    } else {
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: emailController.text, password: passwordController.text);
-        userSetup(firstNameController.text, lastNameController.text,
-            emailController.text);
-
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => ChooseChurch()));
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          Fluttertoast.showToast(msg: "The Password is too weak");
-        } else if (e.code == 'email-already-in-use') {
-          Fluttertoast.showToast(msg: "Email already exists");
-        }
-      } catch (e) {
-        print(e);
-      }
     }
   }
 }

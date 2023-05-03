@@ -88,6 +88,17 @@ class _CardInfoState extends State<CardInfo> {
   late VideoPlayerController vController;
   @override
   Widget build(BuildContext context) {
+    if (churchID == null) {
+      return const Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        // ignore: prefer_const_literals_to_create_immutables
+        children: [
+          CircularProgressIndicator(),
+        ],
+      );
+    }
+
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
