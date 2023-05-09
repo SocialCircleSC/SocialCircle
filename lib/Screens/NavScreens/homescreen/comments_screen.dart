@@ -316,23 +316,23 @@ class _CommentsState extends State<Comments> {
                                               ),
                                             ),
                                           ),
-                                        if (document["Type"] == "Video")
-                                          Align(
-                                            alignment: Alignment.center,
-                                            child: SizedBox(
-                                              height:
-                                                  displayHeight(context) * 0.6,
-                                              width: displayWidth(context),
-                                              child: Chewie(
-                                                controller: ChewieController(
-                                                    videoPlayerController:
-                                                        VideoPlayerController
-                                                            .network(document[
-                                                                "Picture"][0])
-                                                          ..initialize()),
-                                              ),
-                                            ),
-                                          ),
+                                        // if (document["Type"] == "Video")
+                                        //   Align(
+                                        //     alignment: Alignment.center,
+                                        //     child: SizedBox(
+                                        //       height:
+                                        //           displayHeight(context) * 0.6,
+                                        //       width: displayWidth(context),
+                                        //       child: Chewie(
+                                        //         controller: ChewieController(
+                                        //             videoPlayerController:
+                                        //                 VideoPlayerController
+                                        //                     .network(document[
+                                        //                         "Picture"][0])
+                                        //                   ..initialize()),
+                                        //       ),
+                                        //     ),
+                                        //   ),
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(left: 5),

@@ -6,13 +6,13 @@ Future<void> churchSetup(
   String address,
   String phoneN,
   String email,
+  String event1,
 ) async {
   CollectionReference circle = FirebaseFirestore.instance.collection('circles');
   CollectionReference typeUser = FirebaseFirestore.instance.collection('users');
   FirebaseAuth auth = FirebaseAuth.instance;
   final User? user = auth.currentUser;
   final uid = user?.uid;
-
 
   circle.doc(uid).set({
     "First Name": churchName,
@@ -22,7 +22,20 @@ Future<void> churchSetup(
     'Email Address': email,
     'Status': 'Church',
     'Church ID': uid,
-    'Pictures': ["https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a", "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a", "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a"],
+    'Events': [event1],
+    'ListStatus': [
+      "Visitor",
+      "Member",
+      "Pastor",
+      "Assistant Pastor",
+      "Choir",
+      "Usher"
+    ],
+    'Pictures': [
+      "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
+      "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
+      "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a"
+    ],
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 
@@ -37,8 +50,34 @@ Future<void> churchSetup(
   });
 
   //For messages
-  circle.doc(uid).collection('members').doc(uid).collection("messages").doc(uid).set({
+  circle
+      .doc(uid)
+      .collection('members')
+      .doc(uid)
+      .collection("messages")
+      .doc("Welcome")
+      .set({
     "Name": "Welcome!",
+    'Image':
+        "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
+    'TimeStamp': FieldValue.serverTimestamp(),
+  });
+
+  //For interactions
+  circle
+      .doc(uid)
+      .collection('members')
+      .doc(uid)
+      .collection("messages")
+      .doc("Welcome")
+      .collection("interactions")
+      .doc()
+      .set({
+    'Name': "SocialOrb",
+    'Text':
+        "Welcome to SocialOrb Messaging Center! This is just a Welcome message. Any messages sent will not be replied to",
+    'isSentByMe': false,
+    'TimeStamp': FieldValue.serverTimestamp(),
   });
 
   //For posts
@@ -50,15 +89,21 @@ Future<void> churchSetup(
     "Status": 'Church',
     "Text": "Welcome to " + churchName + "'s Orb!",
     "LikedBy": [],
+    'Picture': [],
     'ProfilePicture':
         "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
     'Type': "Text",
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 
-
   //For comments
-  circle.doc(uid).collection('posts').doc('welcomePost').collection("comments").doc().set({
+  circle
+      .doc(uid)
+      .collection('posts')
+      .doc('welcomePost')
+      .collection("comments")
+      .doc()
+      .set({
     "First Name": churchName,
     "Last Name": ' ',
     "ID": uid,

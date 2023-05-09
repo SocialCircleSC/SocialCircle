@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community/screens/messaging/specific_message.dart';
 import 'package:community/sizes/size.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:search_page/search_page.dart';
 
 import '../../themes/theme.dart';
 
@@ -15,6 +17,7 @@ class messageHome extends StatefulWidget {
 class _messageHomeState extends State<messageHome> {
   String churchID = "";
   String userID = "";
+  String name = "";
   Future getCurrentChurch() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
@@ -75,20 +78,19 @@ class _messageHomeState extends State<messageHome> {
               color: BlackColor,
             ),
           ),
-          title: const Text(
-            "Messages",
-            style: TextStyle(color: BlackColor),
-          ),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.only(top: 12, right: 15),
-              child: Icon(
-                Icons.search,
-                size: 28,
-                color: BlackColor,
+          title: Card(
+            child: TextField(
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                hintText: "Search Members",
               ),
-            )
-          ],
+              onChanged: (val) {
+                setState(() {
+                  name = val;
+                });
+              },
+            ),
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
@@ -116,50 +118,79 @@ class _messageHomeState extends State<messageHome> {
                 ],
               );
             } else {
-              return SingleChildScrollView(
-                child: Wrap(
-                  children: [
-                    SizedBox(
-                        height: displayHeight(context),
-                        width: displayWidth(context),
-                        child: ListView(
-                          children: snapshot.data!.docs.map((document) {
-                            return Column(
-                              children: [
-                                Card(
-                                  clipBehavior: Clip.antiAlias,
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                        minHeight:
-                                            displayHeight(context) * 0.1),
-                                    child: Column(children: [
-                                      SizedBox(
-                                        height: displayHeight(context) * 0.01,
-                                      ),
-                                      ListTile(
-                                        leading: Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 4, color: BlackColor),
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                  fit: BoxFit.fitWidth,
-                                                  image: NetworkImage(
-                                                      document["Image"]))),
-                                        ),
-                                        title: Text(document["Name"]),
-                                      )
-                                    ]),
-                                  ),
-                                ),
-                              ],
-                            );
-                          }).toList(),
-                        ))
-                  ],
-                ),
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  var data =
+                      snapshot.data!.docs[index].data() as Map<String, dynamic>;
+
+                  if (name.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SpecificMessage(
+                                      churchID: churchID,
+                                      userID: userID,
+                                      documentID:
+                                          snapshot.data!.docs[index].id)));
+                        },
+                        child: ListTile(
+                          leading: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(width: 4, color: BlackColor),
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fitWidth,
+                                    image: NetworkImage(data["Image"]))),
+                          ),
+                          title: Text(data["Name"]),
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (data['Name']
+                      .toString()
+                      .toLowerCase()
+                      .contains(name.toLowerCase())) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SpecificMessage(
+                                      churchID: churchID,
+                                      userID: userID,
+                                      documentID:
+                                          snapshot.data!.docs[index].id)));
+                        },
+                        child: ListTile(
+                          leading: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(width: 4, color: BlackColor),
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fitWidth,
+                                    image: NetworkImage(data["Image"]))),
+                          ),
+                          title: Text(data["Name"]),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Container();
+                },
               );
             }
           },
@@ -168,3 +199,52 @@ class _messageHomeState extends State<messageHome> {
     );
   }
 }
+
+
+
+
+// SingleChildScrollView(
+//                 child: Wrap(
+//                   children: [
+//                     SizedBox(
+//                         height: displayHeight(context),
+//                         width: displayWidth(context),
+//                         child: ListView(
+//                           children: snapshot.data!.docs.map((document) {
+//                             return Column(
+//                               children: [
+//                                 Card(
+//                                   clipBehavior: Clip.antiAlias,
+//                                   child: ConstrainedBox(
+//                                     constraints: BoxConstraints(
+//                                         minHeight:
+//                                             displayHeight(context) * 0.1),
+//                                     child: Column(children: [
+//                                       SizedBox(
+//                                         height: displayHeight(context) * 0.01,
+//                                       ),
+//                                       ListTile(
+//                                         leading: Container(
+//                                           width: 50,
+//                                           height: 50,
+//                                           decoration: BoxDecoration(
+//                                               border: Border.all(
+//                                                   width: 4, color: BlackColor),
+//                                               shape: BoxShape.circle,
+//                                               image: DecorationImage(
+//                                                   fit: BoxFit.fitWidth,
+//                                                   image: NetworkImage(
+//                                                       document["Image"]))),
+//                                         ),
+//                                         title: Text(document["Name"]),
+//                                       )
+//                                     ]),
+//                                   ),
+//                                 ),
+//                               ],
+//                             );
+//                           }).toList(),
+//                         ))
+//                   ],
+//                 ),
+//               );

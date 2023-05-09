@@ -37,12 +37,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
-  TextEditingController bibleVerseController = TextEditingController();
-  TextEditingController weeklyService1Controller = TextEditingController();
-  TextEditingController weeklyService2Controller = TextEditingController();
-  TextEditingController weeklyService3Controller = TextEditingController();
-  TextEditingController weeklyService4Controller = TextEditingController();
-  TextEditingController weeklyService5Controller = TextEditingController();
+  TextEditingController weeklyEventController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +111,28 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
           ),
         ),
 
+        //Event1 Controller
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: TextField(
+            inputFormatters: [LengthLimitingTextInputFormatter(45)],
+            controller: weeklyEventController,
+            // ignore: prefer_const_constructors
+            decoration: InputDecoration(
+              labelText: "Add one weekly event",
+              labelStyle: const TextStyle(color: TextFieldColor),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: PrimaryColor),
+              ),
+            ),
+          ),
+        ),
+
+        //Text about adding more events
+        const Padding(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            child:
+                Text("Don't worry you will be able to add more events later")),
 
         //Password Controller
         Padding(
@@ -183,7 +200,8 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
 
         TextButton(
           style: TextButton.styleFrom(
-            foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
+            foregroundColor: WhiteColor,
+            backgroundColor: PrimaryColor,
             padding: SignUpButtonPadding,
           ),
           child: const Text("Sign Up"),
@@ -214,6 +232,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
           addressController.text,
           phoneNumberController.text,
           emailController.text,
+          weeklyEventController.text,
         );
 
         Navigator.of(context).pushReplacement(

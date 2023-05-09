@@ -34,8 +34,6 @@ class _ChurchScreenState extends State<ChurchScreen> {
   var list;
   List<DropdownMenuItem<String>> statusList = [];
 
-
-
   Future getCurrentChurch() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
@@ -92,7 +90,6 @@ class _ChurchScreenState extends State<ChurchScreen> {
       //statusList = listStat;
     });
   }
-
 
   @override
   void didChangeDependencies() {
@@ -598,156 +595,158 @@ class _ChurchScreenState extends State<ChurchScreen> {
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w400),
                         ),
-                        IconButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Column(
-                                      children: [
-                                        TextField(
-                                          controller: eventController,
-                                          keyboardType: TextInputType.multiline,
-                                          maxLines: 1,
-                                          // ignore: prefer_const_constructors
-                                          decoration: const InputDecoration(
-                                            hintText: "Type New Event",
+                        if (userID == churchID)
+                          IconButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Column(
+                                        children: [
+                                          TextField(
+                                            controller: eventController,
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            maxLines: 1,
                                             // ignore: prefer_const_constructors
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: PrimaryColor),
-                                            ),
-                                            // ignore: prefer_const_constructors
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: PrimaryColor),
-                                            ),
-                                            // ignore: prefer_const_constructors
-                                            border: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: PrimaryColor),
+                                            decoration: const InputDecoration(
+                                              hintText: "Type New Event",
+                                              // ignore: prefer_const_constructors
+                                              focusedBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: PrimaryColor),
+                                              ),
+                                              // ignore: prefer_const_constructors
+                                              enabledBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: PrimaryColor),
+                                              ),
+                                              // ignore: prefer_const_constructors
+                                              border: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: PrimaryColor),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        ElevatedButton(
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              addNewEven(churchID,
+                                                  eventController.text);
+                                              Fluttertoast.showToast(
+                                                  msg: eventController.text +
+                                                      " has been added",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT);
+                                              setState(() {
+                                                eventController.text = "";
+                                              });
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("Add"),
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor: PrimaryColor,
+                                                foregroundColor: WhiteColor),
+                                          ),
+                                        ],
+                                      ),
+                                      content: SizedBox(
+                                        height: 200,
+                                        width: 400,
+                                        child: ListView.separated(
+                                            shrinkWrap: true,
+                                            itemBuilder: (context, index3) {
+                                              return Card(
+                                                clipBehavior: Clip.antiAlias,
+                                                child: ConstrainedBox(
+                                                  constraints: BoxConstraints(
+                                                    minHeight:
+                                                        displayHeight(context) *
+                                                            0.07,
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      ListTile(
+                                                        title: Text(snapshot1
+                                                            .data!["Events"]
+                                                                [index3]
+                                                            .toString()),
+                                                        trailing: IconButton(
+                                                            onPressed: () {
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return AlertDialog(
+                                                                    title: Text(
+                                                                        "Confirm"),
+                                                                    content: Text("Are you sure you want to delete " +
+                                                                        snapshot1
+                                                                            .data!["Events"][index3]
+                                                                            .toString()),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        child: const Text(
+                                                                            "Yes"),
+                                                                        onPressed:
+                                                                            () {
+                                                                          deleteEvent(
+                                                                              churchID,
+                                                                              snapshot1.data!["Events"][index3]);
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                      ),
+                                                                      TextButton(
+                                                                        child: const Text(
+                                                                            "No"),
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            icon: const Icon(Icons
+                                                                .delete_forever_outlined)),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            separatorBuilder: (context, index) {
+                                              return const Divider(
+                                                height: 10,
+                                                thickness: 0.5,
+                                              );
+                                            },
+                                            itemCount: snapshot1
+                                                .data!["Events"].length),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text("Done"),
                                           onPressed: () {
-                                            addNewEven(
-                                                churchID, eventController.text);
-                                            Fluttertoast.showToast(
-                                                msg: eventController.text +
-                                                    " has been added",
-                                                toastLength:
-                                                    Toast.LENGTH_SHORT);
-                                            setState(() {
-                                              eventController.text = "";
-                                            });
                                             Navigator.pop(context);
                                           },
-                                          child: const Text("Add"),
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: PrimaryColor,
-                                              foregroundColor: WhiteColor),
                                         ),
                                       ],
-                                    ),
-                                    content: SizedBox(
-                                      height: 200,
-                                      width: 400,
-                                      child: ListView.separated(
-                                          shrinkWrap: true,
-                                          itemBuilder: (context, index3) {
-                                            return Card(
-                                              clipBehavior: Clip.antiAlias,
-                                              child: ConstrainedBox(
-                                                constraints: BoxConstraints(
-                                                  minHeight:
-                                                      displayHeight(context) *
-                                                          0.07,
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    ListTile(
-                                                      title: Text(snapshot1
-                                                          .data!["Events"]
-                                                              [index3]
-                                                          .toString()),
-                                                      trailing: IconButton(
-                                                          onPressed: () {
-                                                            showDialog(
-                                                              context: context,
-                                                              builder:
-                                                                  (BuildContext
-                                                                      context) {
-                                                                return AlertDialog(
-                                                                  title: Text(
-                                                                      "Confirm"),
-                                                                  content: Text("Are you sure you want to delete " +
-                                                                      snapshot1
-                                                                          .data![
-                                                                              "Events"]
-                                                                              [
-                                                                              index3]
-                                                                          .toString()),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                      child: const Text(
-                                                                          "Yes"),
-                                                                      onPressed:
-                                                                          () {
-                                                                        deleteEvent(
-                                                                            churchID,
-                                                                            snapshot1.data!["Events"][index3]);
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                    ),
-                                                                    TextButton(
-                                                                      child: const Text(
-                                                                          "No"),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              },
-                                                            );
-                                                          },
-                                                          icon: const Icon(Icons
-                                                              .delete_forever_outlined)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          separatorBuilder: (context, index) {
-                                            return const Divider(
-                                              height: 10,
-                                              thickness: 0.5,
-                                            );
-                                          },
-                                          itemCount:
-                                              snapshot1.data!["Events"].length),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        child: const Text("Done"),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            icon: Icon(Icons.add)),
+                                    );
+                                  },
+                                );
+                              },
+                              icon: Icon(Icons.add)),
                       ],
                     ),
                   ),
