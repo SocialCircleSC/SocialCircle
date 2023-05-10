@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community/firestore/sendMessage.dart';
 import 'package:community/screens/messaging/message_model.dart';
 import 'package:community/sizes/size.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,17 @@ class SpecificMessage extends StatefulWidget {
   final String churchID;
   final String userID;
   final String documentID;
+  final String name;
+  final bool isSent;
 
-  const SpecificMessage(
-      {super.key,
-      required this.churchID,
-      required this.userID,
-      required this.documentID});
+  const SpecificMessage({
+    super.key,
+    required this.churchID,
+    required this.userID,
+    required this.documentID,
+    required this.name,
+    required this.isSent,
+  });
 
   @override
   State<SpecificMessage> createState() => _SpecificMessageState();
@@ -58,6 +64,7 @@ class _SpecificMessageState extends State<SpecificMessage> {
               .collection("messages")
               .doc(widget.documentID)
               .collection('interactions')
+              .orderBy('TimeStamp', descending: false)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -143,10 +150,10 @@ class _SpecificMessageState extends State<SpecificMessage> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: TextFormField(
-                              controller: newMessage,
+                            child: TextField(
+                              style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
-                                  fillColor: PrimaryColor,
+                                  fillColor: Colors.grey[700],
                                   filled: true,
                                   contentPadding: const EdgeInsets.all(12),
                                   hintText: "Start typing here...",
@@ -156,7 +163,21 @@ class _SpecificMessageState extends State<SpecificMessage> {
                             ),
                           ),
                           IconButton(
-                              onPressed: () {}, icon: const Icon(Icons.send))
+                              onPressed: () {
+                                if (newMessage.text.isEmpty) {
+                                } else {
+                                  sendMessage(
+                                      widget.churchID,
+                                      widget.userID,
+                                      widget.documentID,
+                                      "text",
+                                      newMessage.text,
+                                      widget.isSent,
+                                      widget.name);
+                                  newMessage.text = "";
+                                }
+                              },
+                              icon: const Icon(Icons.send))
                         ],
                       ),
                     ),

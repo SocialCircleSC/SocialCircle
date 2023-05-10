@@ -61,6 +61,8 @@ Future<void> churchSetup(
     'Image':
         "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
     'TimeStamp': FieldValue.serverTimestamp(),
+    'Creator': uid,
+    'Text': "Welcome to SocialOrb Messaging Center! This is just a Welcome message. Any messages sent will not be replied to",
   });
 
   //For interactions

@@ -4,6 +4,7 @@ import 'package:community/sizes/size.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:search_page/search_page.dart';
+import 'package:intl/intl.dart';
 
 import '../../themes/theme.dart';
 
@@ -18,6 +19,7 @@ class _messageHomeState extends State<messageHome> {
   String churchID = "";
   String userID = "";
   String name = "";
+  String combName = "";
   Future getCurrentChurch() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
@@ -25,6 +27,8 @@ class _messageHomeState extends State<messageHome> {
 
     var cID;
     var uID;
+    var fName;
+    var lName;
     //Get ChurchID
     await FirebaseFirestore.instance
         .collection('users')
@@ -33,11 +37,14 @@ class _messageHomeState extends State<messageHome> {
         .then((value) {
       cID = value.get('Church ID');
       uID = value.get("ID");
+      fName = value.get("First Name");
+      lName = value.get("Last Name");
     });
 
     setState(() {
       churchID = cID;
       userID = uID;
+      combName = fName + " " + lName;
     });
   }
 
@@ -129,14 +136,21 @@ class _messageHomeState extends State<messageHome> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
+                          bool sender = false;
+                          if (userID == data["Creator"]) {
+                            sender = true;
+                          }
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SpecificMessage(
-                                      churchID: churchID,
-                                      userID: userID,
-                                      documentID:
-                                          snapshot.data!.docs[index].id)));
+                                        churchID: churchID,
+                                        userID: userID,
+                                        documentID:
+                                            snapshot.data!.docs[index].id,
+                                        name: combName,
+                                        isSent: sender,
+                                      )));
                         },
                         child: ListTile(
                           leading: Container(
@@ -150,6 +164,15 @@ class _messageHomeState extends State<messageHome> {
                                     image: NetworkImage(data["Image"]))),
                           ),
                           title: Text(data["Name"]),
+                          subtitle: Text(
+                            data["Text"],
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: Text(
+                            DateFormat("h:mma").format(
+                                (data["TimeStamp"] as Timestamp).toDate()),
+                          ),
                         ),
                       ),
                     );
@@ -163,28 +186,44 @@ class _messageHomeState extends State<messageHome> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
+                          bool sender = false;
+                          if (userID == data["Creator"]) {
+                            sender = true;
+                          }
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SpecificMessage(
-                                      churchID: churchID,
-                                      userID: userID,
-                                      documentID:
-                                          snapshot.data!.docs[index].id)));
+                                        churchID: churchID,
+                                        userID: userID,
+                                        documentID:
+                                            snapshot.data!.docs[index].id,
+                                        name: combName,
+                                        isSent: sender,
+                                      )));
                         },
                         child: ListTile(
-                          leading: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                border: Border.all(width: 4, color: BlackColor),
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    fit: BoxFit.fitWidth,
-                                    image: NetworkImage(data["Image"]))),
-                          ),
-                          title: Text(data["Name"]),
-                        ),
+                            leading: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(width: 4, color: BlackColor),
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.fitWidth,
+                                      image: NetworkImage(data["Image"]))),
+                            ),
+                            title: Text(data["Name"]),
+                            subtitle: Text(
+                              data["Text"],
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: Text(
+                              DateFormat("h:mma").format(
+                                  (data["TimeStamp"] as Timestamp).toDate()),
+                            )),
                       ),
                     );
                   }
