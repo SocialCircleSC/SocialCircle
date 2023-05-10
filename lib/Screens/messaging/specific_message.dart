@@ -24,6 +24,7 @@ class SpecificMessage extends StatefulWidget {
 
 class _SpecificMessageState extends State<SpecificMessage> {
   List<MessageModel> messages = [];
+  TextEditingController newMessage = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,7 @@ class _SpecificMessageState extends State<SpecificMessage> {
         return false;
       },
       child: Scaffold(
+        backgroundColor: Colors.grey.shade300,
         appBar: AppBar(
             backgroundColor: PrimaryColor,
             elevation: 0,
@@ -68,105 +70,99 @@ class _SpecificMessageState extends State<SpecificMessage> {
                 ],
               );
             } else {
-              return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var data = snapshot.data!.docs[index].data()
-                        as Map<String, dynamic>;
-
-                    messages.add(MessageModel(
-                        text: data['Text'],
-                        date: (data['TimeStamp'] as Timestamp).toDate(),
-                        isSentByMe: data['isSentByMe']));
-
-                    return SizedBox(
-                      height:
-                          displayWidth(context) - AppBar().preferredSize.height,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: GroupedListView<MessageModel, DateTime>(
-                              reverse: true,
-                              order: GroupedListOrder.DESC,
-                              padding: const EdgeInsets.all(8),
-                              elements: messages,
-                              groupBy: (message) => DateTime(
-                                message.date.year,
-                                message.date.month,
-                                message.date.day,
-                              ),
-                              groupHeaderBuilder: (MessageModel message) =>
-                                  SizedBox(
-                                height: 40,
-                                child: Center(
-                                  child: Card(
-                                    color: SecondaryColor,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Text(
-                                        DateFormat.yMMMd().format(message.date),
-                                        style:
-                                            const TextStyle(color: WhiteColor),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              itemBuilder: (context, MessageModel element) {
-                                return Align(
-                                  alignment: data['isSentByMe']
-                                      ? Alignment.centerRight
-                                      : Alignment.centerLeft,
-                                  child: data['isSentByMe']
-                                      ? Card(
-                                          color: PrimaryColor,
-                                          elevation: 8,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8),
-                                            child: Text(data['Text']),
-                                          ),
-                                        )
-                                      : Card(
-                                          color: WhiteColor,
-                                          elevation: 8,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8),
-                                            child: Text(data['Text']),
-                                          ),
-                                        ),
-                                );
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+              return Stack(
+                children: <Widget>[
+                  ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: EdgeInsets.only(
+                              top: 4,
+                              bottom: 4,
+                              left: snapshot.data!.docs[index]['isSentByMe']
+                                  ? 0
+                                  : 24,
+                              right: snapshot.data!.docs[index]['isSentByMe']
+                                  ? 24
+                                  : 0),
+                          alignment: snapshot.data!.docs[index]['isSentByMe']
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+                          child: Container(
+                            margin: snapshot.data!.docs[index]['isSentByMe']
+                                ? const EdgeInsets.only(left: 25)
+                                : const EdgeInsets.only(right: 25),
+                            padding: const EdgeInsets.only(
+                                top: 17, bottom: 17, left: 20, right: 20),
+                            decoration: BoxDecoration(
+                                color: snapshot.data!.docs[index]['isSentByMe']
+                                    ? PrimaryColor
+                                    : WhiteColor,
+                                borderRadius: snapshot.data!.docs[index]
+                                        ['isSentByMe']
+                                    ? const BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
+                                        bottomLeft: Radius.circular(20))
+                                    : const BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
+                                        bottomRight: Radius.circular(20))),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                        fillColor: PrimaryColor,
-                                        filled: true,
-                                        contentPadding:
-                                            const EdgeInsets.all(12),
-                                        hintText: "Start typing here...",
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide.none,
-                                            borderRadius:
-                                                BorderRadius.circular(24))),
+                                if (snapshot.data!.docs[index]['isSentByMe'] ==
+                                    false)
+                                  Text(
+                                    snapshot.data!.docs[index]['Name'],
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: SecondaryColor,
+                                        letterSpacing: -0.5),
                                   ),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.send))
+                                Text(
+                                  snapshot.data!.docs[index]['Text'],
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(fontSize: 13.5),
+                                )
                               ],
                             ),
-                          )
+                          ),
+                        );
+                      }),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: newMessage,
+                              decoration: InputDecoration(
+                                  fillColor: PrimaryColor,
+                                  filled: true,
+                                  contentPadding: const EdgeInsets.all(12),
+                                  hintText: "Start typing here...",
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(24))),
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () {}, icon: const Icon(Icons.send))
                         ],
                       ),
-                    );
-                  });
+                    ),
+                  )
+                ],
+              );
             }
           },
         ),
@@ -174,7 +170,6 @@ class _SpecificMessageState extends State<SpecificMessage> {
     );
   }
 }
-
 
 // itemCount: snapshot.data!.docs.length,
 //                   itemBuilder: (context, index) {
