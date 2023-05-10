@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/screens/messaging/message_model.dart';
+import 'package:community/sizes/size.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
@@ -23,24 +24,6 @@ class SpecificMessage extends StatefulWidget {
 
 class _SpecificMessageState extends State<SpecificMessage> {
   List<MessageModel> messages = [];
-  // List<MessageModel> messages = [
-  //   MessageModel(
-  //       text: "Hi",
-  //       date: DateTime.now().subtract(Duration(minutes: 1)),
-  //       isSentByMe: false),
-  //   MessageModel(
-  //       text: "Hello! How are you",
-  //       date: DateTime.now().subtract(Duration(minutes: 2)),
-  //       isSentByMe: true),
-  //   MessageModel(
-  //       text: "Dude I have been CHiiling",
-  //       date: DateTime.now().subtract(Duration(minutes: 3)),
-  //       isSentByMe: false),
-  //   MessageModel(
-  //       text: "That's Great to hear!",
-  //       date: DateTime.now().subtract(Duration(minutes: 4)),
-  //       isSentByMe: true),
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -90,69 +73,96 @@ class _SpecificMessageState extends State<SpecificMessage> {
                   itemBuilder: (context, index) {
                     var data = snapshot.data!.docs[index].data()
                         as Map<String, dynamic>;
-                    for (int i = 0; i < data.length; i++) {
-                      messages.add(MessageModel(
-                          text: data['Text'],
-                          date: (data['TimeStamp'] as Timestamp).toDate(),
-                          isSentByMe: data['isSentByMe']));
-                    }
+
+                    messages.add(MessageModel(
+                        text: data['Text'],
+                        date: (data['TimeStamp'] as Timestamp).toDate(),
+                        isSentByMe: data['isSentByMe']));
 
                     return SizedBox(
-                      height: 200,
+                      height:
+                          displayWidth(context) - AppBar().preferredSize.height,
                       child: Column(
                         children: [
                           Expanded(
-                              child: GroupedListView<MessageModel, DateTime>(
-                            reverse: true,
-                            order: GroupedListOrder.DESC,
-                            padding: const EdgeInsets.all(8),
-                            elements: messages,
-                            groupBy: (message) => DateTime(
-                              message.date.year,
-                              message.date.month,
-                              message.date.day,
-                            ),
-                            groupHeaderBuilder: (MessageModel message) =>
-                                SizedBox(
-                              height: 40,
-                              child: Center(
-                                child: Card(
-                                  color: SecondaryColor,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Text(
-                                      DateFormat.yMMMd().format(message.date),
-                                      style: const TextStyle(color: WhiteColor),
+                            child: GroupedListView<MessageModel, DateTime>(
+                              reverse: true,
+                              order: GroupedListOrder.DESC,
+                              padding: const EdgeInsets.all(8),
+                              elements: messages,
+                              groupBy: (message) => DateTime(
+                                message.date.year,
+                                message.date.month,
+                                message.date.day,
+                              ),
+                              groupHeaderBuilder: (MessageModel message) =>
+                                  SizedBox(
+                                height: 40,
+                                child: Center(
+                                  child: Card(
+                                    color: SecondaryColor,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        DateFormat.yMMMd().format(message.date),
+                                        style:
+                                            const TextStyle(color: WhiteColor),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
+                              itemBuilder: (context, MessageModel element) {
+                                return Align(
+                                  alignment: data['isSentByMe']
+                                      ? Alignment.centerRight
+                                      : Alignment.centerLeft,
+                                  child: data['isSentByMe']
+                                      ? Card(
+                                          color: PrimaryColor,
+                                          elevation: 8,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(data['Text']),
+                                          ),
+                                        )
+                                      : Card(
+                                          color: WhiteColor,
+                                          elevation: 8,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(data['Text']),
+                                          ),
+                                        ),
+                                );
+                              },
                             ),
-                            itemBuilder: (context, MessageModel element) {
-                              return Align(
-                                alignment: data['isSentByMe']
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                child: data['isSentByMe']
-                                    ? Card(
-                                        color: PrimaryColor,
-                                        elevation: 8,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8),
-                                          child: Text(data['Text']),
-                                        ),
-                                      )
-                                    : Card(
-                                        color: PrimaryColor,
-                                        elevation: 8,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8),
-                                          child: Text(data['Text']),
-                                        ),
-                                      ),
-                              );
-                            },
-                          ))
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                        fillColor: PrimaryColor,
+                                        filled: true,
+                                        contentPadding:
+                                            const EdgeInsets.all(12),
+                                        hintText: "Start typing here...",
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(24))),
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.send))
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     );
@@ -166,84 +176,12 @@ class _SpecificMessageState extends State<SpecificMessage> {
 }
 
 
-// Column(
-//                 children: [
-//                   Expanded(
-//                     child: GroupedListView<MessageModel, DateTime>(
-//                       reverse: true,
-//                       order: GroupedListOrder.DESC,
-//                       padding: const EdgeInsets.all(8),
-//                       elements: messages,
-//                       groupBy: (message) => DateTime(
-//                         message.date.year,
-//                         message.date.month,
-//                         message.date.day,
-//                       ),
-//                       groupHeaderBuilder: (MessageModel message) => SizedBox(
-//                         height: 40,
-//                         child: Center(
-//                           child: Card(
-//                             color: SecondaryColor,
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(8),
-//                               child: Text(
-//                                 DateFormat.yMMMd().format(message.date),
-//                                 style: const TextStyle(color: WhiteColor),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                       itemBuilder: (context, MessageModel element) {
-//                         return Align(
-//                           alignment: element.isSentByMe
-//                               ? Alignment.centerRight
-//                               : Alignment.centerLeft,
-//                           child: element.isSentByMe
-//                               ? Card(
-//                                   color: PrimaryColor,
-//                                   elevation: 8,
-//                                   child: Padding(
-//                                     padding: const EdgeInsets.all(12),
-//                                     child: Text(
-//                                       element.text,
-//                                     ),
-//                                   ),
-//                                 )
-//                               : Card(
-//                                   //color: ,
-//                                   elevation: 8,
-//                                   child: Padding(
-//                                     padding: const EdgeInsets.all(12),
-//                                     child: Text(
-//                                       element.text,
-//                                     ),
-//                                   ),
-//                                 ),
-//                         );
-//                       },
-//                     ),
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: Row(
-//                       crossAxisAlignment: CrossAxisAlignment.end,
-//                       children: [
-//                         Expanded(
-//                           child: TextField(
-//                             decoration: InputDecoration(
-//                                 fillColor: PrimaryColor,
-//                                 filled: true,
-//                                 contentPadding: const EdgeInsets.all(12),
-//                                 hintText: 'Start typing here...',
-//                                 border: OutlineInputBorder(
-//                                     borderSide: BorderSide.none,
-//                                     borderRadius: BorderRadius.circular(24))),
-//                           ),
-//                         ),
-//                         IconButton(onPressed: () {}, icon: Icon(Icons.send))
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               );
+// itemCount: snapshot.data!.docs.length,
+//                   itemBuilder: (context, index) {
+//                     var data = snapshot.data!.docs[index].data()
+//                         as Map<String, dynamic>;
+
+//                     messages.add(MessageModel(
+//                         text: data['Text'],
+//                         date: (data['TimeStamp'] as Timestamp).toDate(),
+//                         isSentByMe: data['isSentByMe']));
