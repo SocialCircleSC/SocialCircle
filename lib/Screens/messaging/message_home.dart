@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community/screens/messaging/new_message.dart';
 import 'package:community/screens/messaging/specific_message.dart';
 import 'package:community/sizes/size.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -87,7 +88,7 @@ class _messageHomeState extends State<messageHome> {
           ),
           title: Card(
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.search),
                 hintText: "Search Members",
               ),
@@ -100,7 +101,16 @@ class _messageHomeState extends State<messageHome> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NewMessage(
+                          churchID: churchID,
+                          userID: userID,
+                          combName: combName,
+                        )));
+          },
           child: const Icon(Icons.message),
           backgroundColor: PrimaryColor,
           foregroundColor: WhiteColor,
@@ -110,8 +120,6 @@ class _messageHomeState extends State<messageHome> {
           stream: FirebaseFirestore.instance
               .collection("circles")
               .doc(churchID)
-              .collection("members")
-              .doc(userID)
               .collection("messages")
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -149,7 +157,8 @@ class _messageHomeState extends State<messageHome> {
                                         documentID:
                                             snapshot.data!.docs[index].id,
                                         name: combName,
-                                        isSent: sender,
+                                        sender: userID,
+                                        title: data['Title'],
                                       )));
                         },
                         child: ListTile(
@@ -163,7 +172,7 @@ class _messageHomeState extends State<messageHome> {
                                     fit: BoxFit.fitWidth,
                                     image: NetworkImage(data["Image"]))),
                           ),
-                          title: Text(data["Name"]),
+                          title: Text(data["Title"]),
                           subtitle: Text(
                             data["Text"],
                             maxLines: 1,
@@ -178,7 +187,7 @@ class _messageHomeState extends State<messageHome> {
                     );
                   }
 
-                  if (data['Name']
+                  if (data['Title']
                       .toString()
                       .toLowerCase()
                       .contains(name.toLowerCase())) {
@@ -199,7 +208,8 @@ class _messageHomeState extends State<messageHome> {
                                         documentID:
                                             snapshot.data!.docs[index].id,
                                         name: combName,
-                                        isSent: sender,
+                                        sender: userID,
+                                        title: data['Title'],
                                       )));
                         },
                         child: ListTile(
@@ -214,7 +224,7 @@ class _messageHomeState extends State<messageHome> {
                                       fit: BoxFit.fitWidth,
                                       image: NetworkImage(data["Image"]))),
                             ),
-                            title: Text(data["Name"]),
+                            title: Text(data["Title"]),
                             subtitle: Text(
                               data["Text"],
                               maxLines: 1,
