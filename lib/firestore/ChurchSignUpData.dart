@@ -55,14 +55,17 @@ Future<void> churchSetup(
       .collection('members')
       .doc(uid)
       .collection("messages")
-      .doc("Welcome")
+      .doc()
       .set({
-    "Name": "Welcome!",
+    "Title": "Welcome!",
     'Image':
         "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
     'TimeStamp': FieldValue.serverTimestamp(),
     'Creator': uid,
     'Text': "Welcome to SocialOrb Messaging Center! This is just a Welcome message. Any messages sent will not be replied to",
+    'Members': FieldValue.arrayUnion(uid as List),
+
+    
   });
 
   //For interactions
@@ -76,9 +79,10 @@ Future<void> churchSetup(
       .doc()
       .set({
     'Name': "SocialOrb",
+    'Sender': "SocialOrb",
     'Text':
         "Welcome to SocialOrb Messaging Center! This is just a Welcome message. Any messages sent will not be replied to",
-    'isSentByMe': false,
+    'Type': 'text',
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 

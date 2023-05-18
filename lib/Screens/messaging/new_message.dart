@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community/firestore/createGroup.dart';
 import 'package:community/screens/messaging/specific_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _NewMessageState extends State<NewMessage> {
   String name = "";
   bool tempBool = false;
   List addList = [];
+  TextEditingController nameController = TextEditingController();
 
   Future getListOfMembers(String churchID, String userID, String name) async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -92,10 +94,20 @@ class _NewMessageState extends State<NewMessage> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text("Name this new Chat"),
-                            content: TextFormField(),
+                            content: TextFormField(
+                              controller: nameController,
+                            ), //Cant be empty
                             actions: [
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    setState(() {
+                                      addList.add(widget.userID);
+                                    });
+                                    createGroup(widget.churchID, widget.userID,
+                                        addList, nameController.text);
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
                                   child: const Text("Finish")),
                               TextButton(
                                   onPressed: () {

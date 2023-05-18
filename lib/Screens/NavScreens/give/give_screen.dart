@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class GiveScreen extends StatefulWidget {
   const GiveScreen({ Key? key }) : super(key: key);
@@ -14,7 +15,7 @@ class _GiveScreenState extends State<GiveScreen> {
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('The System Back Button is Deactivated')));
+            const SnackBar(content: Text('The System Back Button is Deactivated')));
         return false;
       },
       

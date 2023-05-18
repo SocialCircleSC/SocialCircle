@@ -11,10 +11,11 @@ Future<void> createGroup(
     "Creator": userID,
     "Image":
         "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
-    "Text": "Another temp",
+    "Text": "Start the conversation",
     "Title": groupName,
     "Members": FieldValue.arrayUnion(groupMembers),
     "TimeStamp": FieldValue.serverTimestamp(),
+    "Type": "text"
   });
 
   docRef;
@@ -31,6 +32,5 @@ Future<void> createGroup(
     "Text": "Start the conversation",
     "Type": "text",
     "TimeStamp": FieldValue.serverTimestamp(),
-
   });
 }

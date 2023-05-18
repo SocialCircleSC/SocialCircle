@@ -121,6 +121,7 @@ class _messageHomeState extends State<messageHome> {
               .collection("circles")
               .doc(churchID)
               .collection("messages")
+              .where("Members", arrayContains: userID)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -174,7 +175,7 @@ class _messageHomeState extends State<messageHome> {
                           ),
                           title: Text(data["Title"]),
                           subtitle: Text(
-                            data["Text"],
+                            data['Text'],
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -226,7 +227,7 @@ class _messageHomeState extends State<messageHome> {
                             ),
                             title: Text(data["Title"]),
                             subtitle: Text(
-                              data["Text"],
+                              data['Text'],
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -246,6 +247,26 @@ class _messageHomeState extends State<messageHome> {
         ),
       ),
     );
+  }
+
+  Future<String> getText(String docID) async {
+    String retString = "Hi";
+    QuerySnapshot info = await FirebaseFirestore.instance
+        .collection('circles')
+        .doc(churchID)
+        .collection('messages')
+        .doc(docID)
+        .collection('interactions')
+        .orderBy("TimeStamp", descending: true)
+        .limit(1)
+        .get();
+
+    info.docs.forEach((element) {
+      setState(() {
+        retString = element["Text"];
+      });
+    });
+    return retString;
   }
 }
 

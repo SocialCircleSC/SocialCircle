@@ -17,4 +17,13 @@ Future<void> sendMessage(String churchID, String userID, String documentID,
     "Text": messageText,
     "TimeStamp": FieldValue.serverTimestamp(),
   });
+
+  await FirebaseFirestore.instance
+      .collection("circles")
+      .doc(churchID)
+      .collection("messages")
+      .doc(documentID)
+      .update({
+    'Text': messageText,
+  });
 }
