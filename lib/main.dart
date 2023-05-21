@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
@@ -7,7 +6,9 @@ import 'package:flutter/services.dart';
 //Things to work on
 // The show/hide password icon not working responsively.
 Future<void> main() async {
+  //Initialize Flutter Binding
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   WidgetsFlutterBinding.ensureInitialized();
 

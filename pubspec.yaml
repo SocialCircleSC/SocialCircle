@@ -45,8 +45,10 @@ dependencies:
   dropdown_button2: ^2.1.0
   search_page: ^2.3.0
   grouped_list: ^5.1.2
-  flutter_stripe: ^9.2.0
   http: ^0.13.6
+  intl: ^0.18.1
+  # flutter_credit_card: ^3.0.6
+  # flutter_stripe_payment: ^0.0.17
 
   flutter:
     sdk: flutter
