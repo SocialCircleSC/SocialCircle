@@ -3,12 +3,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
 import 'package:flutter/services.dart';
 
+
 //Things to work on
 // The show/hide password icon not working responsively.
 Future<void> main() async {
   //Initialize Flutter Binding
   WidgetsFlutterBinding.ensureInitialized();
-
+  // Stripe.publishableKey =
+  //     "pk_test_51N8yrxEdOD179lXVPatM50pacKj371QQZgulC2rGoMUqYjRRlLwwPtw4tgsDyFUq37nlS1YP6WqYyFAcVSNDU5Xl007TgETRGA";
+  // await Stripe.instance.applySettings();
   await Firebase.initializeApp();
   WidgetsFlutterBinding.ensureInitialized();
 
