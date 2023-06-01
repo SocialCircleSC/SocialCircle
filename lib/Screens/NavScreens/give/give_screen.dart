@@ -1,9 +1,8 @@
 import 'package:community/screens/navscreens/give/keyboard_key.dart';
+import 'package:community/screens/navscreens/give/pay_with_card.dart';
 import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart';
 
 class GiveScreen extends StatefulWidget {
   const GiveScreen({Key? key}) : super(key: key);
@@ -13,10 +12,6 @@ class GiveScreen extends StatefulWidget {
 }
 
 class _GiveScreenState extends State<GiveScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   String amount = "";
   List<List<dynamic>> keys = [
@@ -94,7 +89,13 @@ class _GiveScreenState extends State<GiveScreen> {
                 style: ElevatedButton.styleFrom(
                     backgroundColor: SecondaryColor,
                     disabledBackgroundColor: Colors.grey[200]),
-                onPressed: amount.isNotEmpty ? () {} : null,
+                onPressed: amount.isNotEmpty
+                    ? () async {
+                        //payment();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CardPayment()));
+                      }
+                    : null,
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Text('Confirm'),
@@ -126,4 +127,6 @@ class _GiveScreenState extends State<GiveScreen> {
       ),
     );
   }
+
+
 }

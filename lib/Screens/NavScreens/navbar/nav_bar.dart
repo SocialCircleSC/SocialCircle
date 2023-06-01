@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/screens/messaging/message_home.dart';
 import 'package:community/screens/navscreens/church/church_screen.dart';
 import 'package:community/screens/navscreens/give/give_screen.dart';
-import 'package:community/screens/navscreens/groups/group_screen.dart';
 import 'package:community/screens/navscreens/homescreen/home_screen.dart';
 import 'package:community/screens/navscreens/homescreen/post_screen.dart';
 import 'package:community/screens/navscreens/profile/profile_screen/profile_screen.dart';
@@ -13,7 +12,6 @@ import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
@@ -232,29 +230,29 @@ class _NavBarState extends State<NavBar> {
                   icon: const Icon(Icons.house_outlined),
                   title: const Text('Home'),
                   selectedIcon: const Icon(Icons.house_rounded),
-                  selectedColor: SecondaryColor,
-                  backgroundColor: PrimaryColor,
+                  selectedColor: PrimaryColor,
+                  backgroundColor: BlackColor,
                 ),
                 BottomBarItem(
                   icon: const Icon(Icons.circle_outlined),
                   title: const Text('Orb'),
                   selectedIcon: const Icon(Icons.circle_rounded),
-                  selectedColor: SecondaryColor,
-                  backgroundColor: PrimaryColor,
+                  selectedColor: PrimaryColor,
+                  backgroundColor: BlackColor,
                 ),
                 BottomBarItem(
                   icon: const Icon(Icons.monetization_on_outlined),
                   title: const Text('Give'),
                   selectedIcon: const Icon(Icons.monetization_on_rounded),
-                  selectedColor: SecondaryColor,
-                  backgroundColor: PrimaryColor,
+                  selectedColor: PrimaryColor,
+                  backgroundColor: BlackColor,
                 ),
                 BottomBarItem(
                   icon: const Icon(Icons.person_outlined),
                   title: const Text('Profile'),
                   selectedIcon: const Icon(Icons.person_rounded),
-                  selectedColor: SecondaryColor,
-                  backgroundColor: PrimaryColor,
+                  selectedColor: PrimaryColor,
+                  backgroundColor: BlackColor,
                 ),
               ],
               hasNotch: true,

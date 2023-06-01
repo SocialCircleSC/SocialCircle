@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 //Things to work on
 // The show/hide password icon not working responsively.
 Future<void> main() async {
   //Initialize Flutter Binding
   WidgetsFlutterBinding.ensureInitialized();
-  // Stripe.publishableKey =
-  //     "pk_test_51N8yrxEdOD179lXVPatM50pacKj371QQZgulC2rGoMUqYjRRlLwwPtw4tgsDyFUq37nlS1YP6WqYyFAcVSNDU5Xl007TgETRGA";
-  // await Stripe.instance.applySettings();
   await Firebase.initializeApp();
-  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "lib/.env");
+  Stripe.publishableKey =
+      "pk_test_51N8yrxEdOD179lXVPatM50pacKj371QQZgulC2rGoMUqYjRRlLwwPtw4tgsDyFUq37nlS1YP6WqYyFAcVSNDU5Xl007TgETRGA";
+  //await dotenv.load(fileName: "./env");
+  await Stripe.instance.applySettings();
 
   //Force device to be in portrait mode
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
