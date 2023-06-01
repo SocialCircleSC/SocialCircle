@@ -12,8 +12,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await dotenv.load(fileName: "lib/.env");
-  Stripe.publishableKey =
-      "pk_test_51N8yrxEdOD179lXVPatM50pacKj371QQZgulC2rGoMUqYjRRlLwwPtw4tgsDyFUq37nlS1YP6WqYyFAcVSNDU5Xl007TgETRGA";
+  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
   //await dotenv.load(fileName: "./env");
   await Stripe.instance.applySettings();
 

@@ -16,7 +16,7 @@ class CardPayment extends StatefulWidget {
 
 class _CardPaymentState extends State<CardPayment> {
   Map<String, dynamic>? paymentIntent;
-  var clientKey = dotenv.env['STRIPE_SECRET']!;
+  //String? clientKey = DotEnv().env['STRIPE_SECRET'];
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class _CardPaymentState extends State<CardPayment> {
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
-          'Authorization': 'Bearer ' + clientKey, //SecretKey used here
+          'Authorization': 'Bearer ' + dotenv.env['STRIPE_SECRET']!, //SecretKey used here
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
