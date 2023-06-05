@@ -23,14 +23,20 @@ class SignUpFormChurch extends StatefulWidget {
   State<SignUpFormChurch> createState() => _SignUpFormChurchState();
 }
 
+enum SingingCharacter { starter, standard, premium, payg }
+
 class _SignUpFormChurchState extends State<SignUpFormChurch> {
+  SingingCharacter? _character = SingingCharacter.starter;
+
+  String plan = "Starter";
+  List<String> paymentPlans = ["Starter", "Standard", "Premium", "PAYG"];
+
   bool _isObscure = false;
   bool checkedValue = false;
   bool newValue = true;
   String empty = "empty";
 
   final auth = FirebaseAuth.instance;
-
   TextEditingController churchNameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -206,7 +212,192 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
           ),
           child: const Text("Sign Up"),
           onPressed: () {
-            signUp(emailController.text, passwordController.text);
+            showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: ((context) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const SizedBox(height: 15),
+                      const Text(
+                        "Choose Your Plan",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 5),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Details: All plans share the same features. The difference in price is based on the size of your church ",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Features: ",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "1) Tithes and Offering portal ",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "2) Unlimited Messaging between all Church members",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "3) Online enagement dashboard for all members to share stories, annoucements prayers and more!",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "To select a plan, press the circle next to plan, then the plan itself in order to confirm",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: PrimaryColor),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Card(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const SizedBox(height: 5),
+                            ListTile(
+                              title: const Text("Starter Plan: \$39.99"),
+                              leading: Radio<SingingCharacter>(
+                                value: SingingCharacter.starter,
+                                groupValue: _character,
+                                onChanged: (SingingCharacter? value) {
+                                  setState(() {
+                                    _character = value;
+                                  });
+                                },
+                              ),
+                              subtitle: const Text("Max Members: 200"),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Card(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              title: const Text("Standard Plan: \$59.99"),
+                              leading: Radio<SingingCharacter>(
+                                value: SingingCharacter.standard,
+                                groupValue: _character,
+                                onChanged: (SingingCharacter? value) {
+                                  setState(() {
+                                    _character = value;
+                                  });
+                                },
+                              ),
+                              subtitle: const Text("Max Members: 500"),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Card(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              title: const Text("Premium Plan: \$129.99"),
+                              leading: Radio<SingingCharacter>(
+                                value: SingingCharacter.premium,
+                                groupValue: _character,
+                                onChanged: (SingingCharacter? value) {
+                                  setState(() {
+                                    _character = value;
+                                  });
+                                },
+                              ),
+                              subtitle: const Text("Max Members: 1000"),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Card(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              title:
+                                  const Text("Pay As You Grow Plan: \$199.99"),
+                              leading: Radio<SingingCharacter>(
+                                value: SingingCharacter.payg,
+                                groupValue: _character,
+                                onChanged: (SingingCharacter? value) {
+                                  setState(() {
+                                    _character = value;
+                                  });
+                                },
+                              ),
+                              subtitle: const Text(
+                                  "Base Members: 1500 (+\$25 per 250 additional members)"),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: const Text("Pay"),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: SecondaryColor),
+                      ),
+                      
+                    ],
+                  );
+                }));
+            //signUp(emailController.text, passwordController.text);
           },
         ),
       ],

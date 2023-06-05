@@ -56,7 +56,8 @@ class _CardPaymentState extends State<CardPayment> {
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
-          'Authorization': 'Bearer ' + dotenv.env['STRIPE_SECRET']!, //SecretKey used here
+          'Authorization':
+              'Bearer ' + dotenv.env['STRIPE_SECRET']!, //SecretKey used here
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
@@ -139,6 +140,27 @@ class _CardPaymentState extends State<CardPayment> {
       String ss = "exception 3 :$e";
     } catch (e) {
       log('$e');
+    }
+  }
+
+  final client = http.Client();
+  static Map<String, String> headers = {
+    'Authorization': 'Bearer ' + dotenv.env['STRIPE_SECRET']!,
+    'Content-Type': 'application/x-www-form-urlencoded'
+  };
+
+  Future<Map<String, dynamic>> _createCustomer() async {
+    final String url = 'https://api.stripe.com/v1/customers';
+    var response = await client.post(
+      Uri.parse(url),
+      headers: headers,
+      body: {'description': 'new customer'},
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      log(json.decode(response.body));
+      throw 'Failed to register as a customer.';
     }
   }
 }
