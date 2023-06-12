@@ -24,16 +24,16 @@ class _LoginFormState extends State<LoginForm> {
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('The System Back Button is Deactivated')));
+            const SnackBar(content: Text('The System Back Button is Deactivated')));
         return false;
       },
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: TextField(
               controller: emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Email Address",
                 labelStyle: TextStyle(color: TextFieldColor),
                 focusedBorder: UnderlineInputBorder(
@@ -43,14 +43,14 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: TextField(
               obscureText: !_isObscure,
               controller: passwordController,
               decoration: InputDecoration(
                 labelText: "Password",
-                labelStyle: TextStyle(color: TextFieldColor),
-                focusedBorder: UnderlineInputBorder(
+                labelStyle: const TextStyle(color: TextFieldColor),
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: PrimaryColor),
                 ),
                 suffixIcon: IconButton(
@@ -76,7 +76,7 @@ class _LoginFormState extends State<LoginForm> {
               backgroundColor: PrimaryColor,
               padding: LogInButtonPadding,
             ),
-            child: Text("Login"),
+            child: const Text("Login"),
             onPressed: () {
               signIn(emailController.text, passwordController.text);
             },
@@ -97,7 +97,7 @@ class _LoginFormState extends State<LoginForm> {
           .then((uid) => {
                 Fluttertoast.showToast(msg: "Login Successful"),
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => NavBar()))
+                    MaterialPageRoute(builder: (context) => const NavBar()))
               })
           .catchError((e) {
         Fluttertoast.showToast(msg: "Please enter a valid email and password");

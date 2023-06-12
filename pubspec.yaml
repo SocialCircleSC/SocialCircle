@@ -51,6 +51,8 @@ dependencies:
   equatable: ^2.0.5
   go_router: ^7.1.1
   flutter_dotenv: ^5.0.2
+  url_launcher: ^6.1.11
+  webview_flutter: ^4.2.2
 
   flutter:
     sdk: flutter

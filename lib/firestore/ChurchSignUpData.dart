@@ -14,13 +14,15 @@ Future<void> churchSetup(
   final User? user = auth.currentUser;
   final uid = user?.uid;
 
-  circle.doc(uid).set({
+  await circle.doc(uid).set({
     "First Name": churchName,
     "Last Name": ' ',
     'Street Address': address,
     'Phone Number': phoneN,
     'Email Address': email,
     'Status': 'Church',
+    'Payment Plan': 'None',
+    'Number of Members': 0,
     'Church ID': uid,
     'Events': [event1],
     'ListStatus': [
@@ -40,7 +42,7 @@ Future<void> churchSetup(
   });
 
   //For Members
-  circle.doc(uid).collection('members').doc(uid).set({
+  await circle.doc(uid).collection('members').doc(uid).set({
     "Email Address": email,
     "ID": uid,
     "First Name": churchName,
@@ -50,28 +52,19 @@ Future<void> churchSetup(
   });
 
   //For messages
-  circle
-      .doc(uid)
-      .collection('members')
-      .doc(uid)
-      .collection("messages")
-      .doc()
-      .set({
+  await circle.doc(uid).collection("messages").doc("Welcome").set({
     "Title": "Welcome!",
     'Image':
         "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
     'TimeStamp': FieldValue.serverTimestamp(),
     'Creator': uid,
-    'Text': "Welcome to SocialOrb Messaging Center! This is just a Welcome message. Any messages sent will not be replied to",
-    'Members': FieldValue.arrayUnion(uid as List),
-
-    
+    'Text':
+        "Welcome to SocialOrb Messaging Center! This is just a Welcome message. Any messages sent will not be replied to",
+    'Members': FieldValue.arrayUnion([uid]),
   });
 
   //For interactions
-  circle
-      .doc(uid)
-      .collection('members')
+  await circle
       .doc(uid)
       .collection("messages")
       .doc("Welcome")
@@ -87,7 +80,7 @@ Future<void> churchSetup(
   });
 
   //For posts
-  circle.doc(uid).collection('posts').doc('welcomePost').set({
+  await circle.doc(uid).collection('posts').doc('welcomePost').set({
     "First Name": churchName,
     "Last Name": ' ',
     "ID": uid,
@@ -103,7 +96,7 @@ Future<void> churchSetup(
   });
 
   //For comments
-  circle
+  await circle
       .doc(uid)
       .collection('posts')
       .doc('welcomePost')
@@ -124,7 +117,7 @@ Future<void> churchSetup(
   });
 
   // Upload to user collecetion
-  typeUser.doc(uid).set({
+  await typeUser.doc(uid).set({
     //Maybe add church description?
     "First Name": churchName,
     "Last Name": ' ',

@@ -2,19 +2,14 @@
 
 import 'package:community/Screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/firestore/churchSignUpData.dart';
+import 'package:community/screens/navscreens/homescreen/payment.dart';
 import 'package:community/themes/theme.dart';
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/services.dart';
 import 'package:community/sizes/size.dart';
-
-//Fill out entire screen with content
-//Make the bottom navigation bar thin
-//Make it look like the YouVersion Bible App
-//Make it
-//Remove
-//Add event to calendar
+import 'package:url_launcher/url_launcher.dart';
 
 class SignUpFormChurch extends StatefulWidget {
   const SignUpFormChurch({Key? key}) : super(key: key);
@@ -26,11 +21,6 @@ class SignUpFormChurch extends StatefulWidget {
 enum SingingCharacter { starter, standard, premium, payg }
 
 class _SignUpFormChurchState extends State<SignUpFormChurch> {
-  SingingCharacter? _character = SingingCharacter.starter;
-
-  String plan = "Starter";
-  List<String> paymentPlans = ["Starter", "Standard", "Premium", "PAYG"];
-
   bool _isObscure = false;
   bool checkedValue = false;
   bool newValue = true;
@@ -211,232 +201,42 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
             padding: SignUpButtonPadding,
           ),
           child: const Text("Sign Up"),
-          onPressed: () {
-            showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: ((context) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const SizedBox(height: 15),
-                      const Text(
-                        "Choose Your Plan",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 5),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "Details: All plans share the same features. The difference in price is based on the size of your church ",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "Features: ",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "1) Tithes and Offering portal ",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "2) Unlimited Messaging between all Church members",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "3) Online enagement dashboard for all members to share stories, annoucements prayers and more!",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "To select a plan, press the circle next to plan, then the plan itself in order to confirm",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: PrimaryColor),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Card(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const SizedBox(height: 5),
-                            ListTile(
-                              title: const Text("Starter Plan: \$39.99"),
-                              leading: Radio<SingingCharacter>(
-                                value: SingingCharacter.starter,
-                                groupValue: _character,
-                                onChanged: (SingingCharacter? value) {
-                                  setState(() {
-                                    _character = value;
-                                  });
-                                },
-                              ),
-                              subtitle: const Text("Max Members: 200"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Card(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              title: const Text("Standard Plan: \$59.99"),
-                              leading: Radio<SingingCharacter>(
-                                value: SingingCharacter.standard,
-                                groupValue: _character,
-                                onChanged: (SingingCharacter? value) {
-                                  setState(() {
-                                    _character = value;
-                                  });
-                                },
-                              ),
-                              subtitle: const Text("Max Members: 500"),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Card(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              title: const Text("Premium Plan: \$129.99"),
-                              leading: Radio<SingingCharacter>(
-                                value: SingingCharacter.premium,
-                                groupValue: _character,
-                                onChanged: (SingingCharacter? value) {
-                                  setState(() {
-                                    _character = value;
-                                  });
-                                },
-                              ),
-                              subtitle: const Text("Max Members: 1000"),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Card(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              title:
-                                  const Text("Pay As You Grow Plan: \$199.99"),
-                              leading: Radio<SingingCharacter>(
-                                value: SingingCharacter.payg,
-                                groupValue: _character,
-                                onChanged: (SingingCharacter? value) {
-                                  setState(() {
-                                    _character = value;
-                                  });
-                                },
-                              ),
-                              subtitle: const Text(
-                                  "Base Members: 1500 (+\$25 per 250 additional members)"),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Text("Pay"),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: SecondaryColor),
-                      ),
-                      
-                    ],
-                  );
-                }));
-            //signUp(emailController.text, passwordController.text);
+          onPressed: () async {
+            if (passwordController.text != confirmPasswordController.text) {
+              Fluttertoast.showToast(
+                  msg:
+                      "Please make sure your password is the same as your confirm passowrd");
+            } else if (churchNameController.text.isEmpty ||
+                addressController.text.isEmpty ||
+                emailController.text.isEmpty ||
+                phoneNumberController.text.isEmpty ||
+                weeklyEventController.text.isEmpty ||
+                passwordController.text.isEmpty ||
+                confirmPasswordController.text.isEmpty) {
+              Fluttertoast.showToast(msg: "Please fill out all the forms");
+            } else {
+              if (passwordController.text != confirmPasswordController.text) {
+                Fluttertoast.showToast(
+                    msg:
+                        "Please make sure your password is the same as your confirm passowrd");
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RecurringPayment(
+                              email: emailController.text,
+                              password: passwordController.text,
+                              churchName: churchNameController.text,
+                              churchAddress: addressController.text,
+                              phoneNumber: phoneNumberController.text,
+                              weeklyEvent: weeklyEventController.text,
+                            )));
+              }
+            }
           },
         ),
       ],
     );
   }
 
-  void signUp(String email, String password) async {
-    if (passwordController.text != confirmPasswordController.text) {
-      Fluttertoast.showToast(
-          msg:
-              "Please make sure your password is the same as your confirm passowrd");
-    }
-    // ignore: unrelated_type_equality_checks
-
-    else {
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: emailController.text, password: passwordController.text);
-
-        churchSetup(
-          churchNameController.text,
-          addressController.text,
-          phoneNumberController.text,
-          emailController.text,
-          weeklyEventController.text,
-        );
-
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const NavBar()));
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          Fluttertoast.showToast(msg: "The Password is too weak");
-        } else if (e.code == 'email-already-in-use') {
-          Fluttertoast.showToast(msg: "Email already exists");
-        }
-      } catch (e) {
-        debugPrint(e.toString());
-      }
-    }
-  }
 }
