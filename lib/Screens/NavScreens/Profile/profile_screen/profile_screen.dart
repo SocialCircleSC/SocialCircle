@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String lName = "";
     String stat = "";
     String pPic = "";
-    String em = "";
+    //String em = "";
 
     await FirebaseFirestore.instance
         .collection('users')
@@ -143,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   spreadRadius: 2,
                                   blurRadius: 10,
                                   color: Colors.black.withOpacity(0.1),
-                                  offset: Offset(0, 10))
+                                  offset: const Offset(0, 10))
                             ],
                             shape: BoxShape.circle,
                             image: DecorationImage(
@@ -226,6 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   getLikeCount(document) {
     int likeCount = 0;
+    // ignore: prefer_typing_uninitialized_variables
     var exMap;
     exMap = document;
     likeCount = exMap.length;
@@ -233,6 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   getLikeStatus(document, id) {
+    // ignore: unused_local_variable
     List variable = document;
     if (document.contains(id)) {
       return true;

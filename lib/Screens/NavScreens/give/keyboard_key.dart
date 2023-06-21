@@ -22,7 +22,7 @@ class _KeyboardKeyState extends State<KeyboardKey> {
     }
     return Text(
       widget.label,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
@@ -37,9 +37,7 @@ class _KeyboardKeyState extends State<KeyboardKey> {
       },
       child: AspectRatio(
         aspectRatio: 2,
-        child: Container(
-          child: Center(child: renderLabel()),
-        ),
+        child: Center(child: renderLabel()),
       ),
     );
   }

@@ -1,3 +1,6 @@
+import 'package:community/notifications/push_noti.dart';
+import 'package:community/screens/navscreens/navbar/nav_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
@@ -5,8 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-//Things to work on
-// The show/hide password icon not working responsively.
+final navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   //Initialize Flutter Binding
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,11 +17,25 @@ Future<void> main() async {
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
   //await dotenv.load(fileName: "./env");
   await Stripe.instance.applySettings();
+  await PushNotifications().initNotifications();
 
-  //Force device to be in portrait mode
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) {
-    runApp(MainPage());
+  FirebaseAuth.instance.authStateChanges().listen((event) {
+    if (event == null) {
+      //Force device to be in portrait mode
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+          .then((_) {
+        runApp(const MainPage());
+      });
+    } else {
+      //Force device to be in portrait mode
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+          .then((_) {
+        runApp(const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: NavBar(),
+        ));
+      });
+    }
   });
 }
 
@@ -36,11 +52,11 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('The System Back Button is Deactivated')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The System Back Button is Deactivated')));
         return false;
       },
-      child: MaterialApp(
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: LoginScreen(),
       ),

@@ -1,8 +1,9 @@
 import 'package:community/screens/navscreens/give/keyboard_key.dart';
-import 'package:community/screens/navscreens/give/pay_with_card.dart';
+import 'package:community/screens/navscreens/give/stripe_give_screen.dart';
 import 'package:community/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class GiveScreen extends StatefulWidget {
   const GiveScreen({Key? key}) : super(key: key);
@@ -12,6 +13,22 @@ class GiveScreen extends StatefulWidget {
 }
 
 class _GiveScreenState extends State<GiveScreen> {
+  final payController = CardFormEditController();
+
+  @override
+  void initState() {
+    payController.addListener(update);
+    super.initState();
+  }
+
+  void update() => setState(() {});
+
+  @override
+  void dispose() {
+    payController.removeListener(update);
+    payController.dispose();
+    super.dispose();
+  }
 
   String amount = "";
   List<List<dynamic>> keys = [
@@ -91,9 +108,8 @@ class _GiveScreenState extends State<GiveScreen> {
                     disabledBackgroundColor: Colors.grey[200]),
                 onPressed: amount.isNotEmpty
                     ? () async {
-                        //payment();
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CardPayment()));
+                            builder: (context) => const StripeGive()));
                       }
                     : null,
                 child: const Padding(
@@ -127,6 +143,4 @@ class _GiveScreenState extends State<GiveScreen> {
       ),
     );
   }
-
-
 }

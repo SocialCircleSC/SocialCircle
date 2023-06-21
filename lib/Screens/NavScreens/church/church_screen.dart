@@ -1,12 +1,12 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/firestore/addNewEvent.dart';
 import 'package:community/firestore/addNewStatus.dart';
 import 'package:community/firestore/deleteEvent.dart';
 import 'package:community/firestore/changeStatus.dart';
-import 'package:community/firestore/deleteStatus.dart';
 import 'package:community/firestore/update_church_pictures.dart';
-import 'package:community/screens/navscreens/profile/editscreens/edit_church_profile.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,6 @@ import 'package:community/sizes/size.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
 class ChurchScreen extends StatefulWidget {
   const ChurchScreen({Key? key}) : super(key: key);
@@ -315,7 +314,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                                               Navigator.pop(
                                                                   context);
                                                             },
-                                                            child: Text("Add"),
+                                                            child: const Text("Add"),
                                                             style: ElevatedButton.styleFrom(
                                                                 backgroundColor:
                                                                     PrimaryColor,
@@ -506,7 +505,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                                                   color:
                                                                       PrimaryColor),
                                                             ))
-                                                        : Text(" "),
+                                                        : const Text(" "),
                                                   ),
                                                 ],
                                               ),
@@ -547,7 +546,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                             ImagePicker imagePicker = ImagePicker();
                             List<XFile>? file =
                                 await imagePicker.pickMultiImage();
-                            if (file!.length != 3) {
+                            if (file.length != 3) {
                               Fluttertoast.showToast(
                                   msg:
                                       "You must pick exactly 3 pictures. You have " +
@@ -587,7 +586,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                     endIndent: 10,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 10.0),
+                    padding: const EdgeInsets.only(left: 10.0),
                     child: Row(
                       children: [
                         const Text(
@@ -682,7 +681,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                                                     (BuildContext
                                                                         context) {
                                                                   return AlertDialog(
-                                                                    title: Text(
+                                                                    title: const Text(
                                                                         "Confirm"),
                                                                     content: Text("Are you sure you want to delete " +
                                                                         snapshot1
@@ -746,7 +745,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                   },
                                 );
                               },
-                              icon: Icon(Icons.add)),
+                              icon: const Icon(Icons.add)),
                       ],
                     ),
                   ),

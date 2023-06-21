@@ -1,22 +1,24 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/screens/messaging/new_message.dart';
 import 'package:community/screens/messaging/specific_message.dart';
-import 'package:community/sizes/size.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:search_page/search_page.dart';
 import 'package:intl/intl.dart';
 
 import '../../themes/theme.dart';
 
-class messageHome extends StatefulWidget {
-  const messageHome({super.key});
+class MessageHome extends StatefulWidget {
+  const MessageHome({super.key});
+
+  static const route = '/community/screens/messaging/message_home.dart';
 
   @override
-  State<messageHome> createState() => _messageHomeState();
+  State<MessageHome> createState() => _MessageHomeState();
 }
 
-class _messageHomeState extends State<messageHome> {
+class _MessageHomeState extends State<MessageHome> {
   String churchID = "";
   String userID = "";
   String name = "";
@@ -145,6 +147,7 @@ class _messageHomeState extends State<messageHome> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
+                          // ignore: unused_local_variable
                           bool sender = false;
                           if (userID == data["Creator"]) {
                             sender = true;
@@ -196,6 +199,7 @@ class _messageHomeState extends State<messageHome> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
+                          // ignore: unused_local_variable
                           bool sender = false;
                           if (userID == data["Creator"]) {
                             sender = true;
@@ -261,60 +265,14 @@ class _messageHomeState extends State<messageHome> {
         .limit(1)
         .get();
 
-    info.docs.forEach((element) {
+    for (var element in info.docs) {
       setState(() {
         retString = element["Text"];
       });
-    });
+    }
     return retString;
   }
 }
 
 
 
-
-// SingleChildScrollView(
-//                 child: Wrap(
-//                   children: [
-//                     SizedBox(
-//                         height: displayHeight(context),
-//                         width: displayWidth(context),
-//                         child: ListView(
-//                           children: snapshot.data!.docs.map((document) {
-//                             return Column(
-//                               children: [
-//                                 Card(
-//                                   clipBehavior: Clip.antiAlias,
-//                                   child: ConstrainedBox(
-//                                     constraints: BoxConstraints(
-//                                         minHeight:
-//                                             displayHeight(context) * 0.1),
-//                                     child: Column(children: [
-//                                       SizedBox(
-//                                         height: displayHeight(context) * 0.01,
-//                                       ),
-//                                       ListTile(
-//                                         leading: Container(
-//                                           width: 50,
-//                                           height: 50,
-//                                           decoration: BoxDecoration(
-//                                               border: Border.all(
-//                                                   width: 4, color: BlackColor),
-//                                               shape: BoxShape.circle,
-//                                               image: DecorationImage(
-//                                                   fit: BoxFit.fitWidth,
-//                                                   image: NetworkImage(
-//                                                       document["Image"]))),
-//                                         ),
-//                                         title: Text(document["Name"]),
-//                                       )
-//                                     ]),
-//                                   ),
-//                                 ),
-//                               ],
-//                             );
-//                           }).toList(),
-//                         ))
-//                   ],
-//                 ),
-//               );

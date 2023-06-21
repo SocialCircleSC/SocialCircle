@@ -1,15 +1,14 @@
 // ignore_for_file: unused_local_variable
 
-import 'package:community/Screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/firestore/churchSignUpData.dart';
-import 'package:community/screens/navscreens/homescreen/payment.dart';
+import 'package:community/screens/authscreens/login/login_screen.dart';
+
 import 'package:community/themes/theme.dart';
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/services.dart';
 import 'package:community/sizes/size.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SignUpFormChurch extends StatefulWidget {
   const SignUpFormChurch({Key? key}) : super(key: key);
@@ -220,17 +219,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
                     msg:
                         "Please make sure your password is the same as your confirm passowrd");
               } else {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RecurringPayment(
-                              email: emailController.text,
-                              password: passwordController.text,
-                              churchName: churchNameController.text,
-                              churchAddress: addressController.text,
-                              phoneNumber: phoneNumberController.text,
-                              weeklyEvent: weeklyEventController.text,
-                            )));
+                signUp(emailController.text, passwordController.text);
               }
             }
           },
@@ -239,4 +228,34 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
     );
   }
 
+  void signUp(String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text);
+
+      churchSetup(
+        churchNameController.text,
+        addressController.text,
+        passwordController.text,
+        emailController.text,
+        weeklyEventController.text,
+      );
+
+      await FirebaseAuth.instance.signOut();
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginScreen()));
+      Fluttertoast.showToast(
+          msg: "Congrats on making an account. Please login to use the app",
+          toastLength: Toast.LENGTH_LONG);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        Fluttertoast.showToast(msg: "The Password is too weak");
+      } else if (e.code == 'email-already-in-use') {
+        Fluttertoast.showToast(msg: "Email already exists");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 }

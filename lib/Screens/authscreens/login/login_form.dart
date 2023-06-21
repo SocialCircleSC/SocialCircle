@@ -23,8 +23,8 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('The System Back Button is Deactivated')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The System Back Button is Deactivated')));
         return false;
       },
       child: Column(
@@ -72,7 +72,7 @@ class _LoginFormState extends State<LoginForm> {
           SizedBox(height: displayHeight(context) * 0.02),
           TextButton(
             style: TextButton.styleFrom(
-              primary: WhiteColor,
+              foregroundColor: WhiteColor,
               backgroundColor: PrimaryColor,
               padding: LogInButtonPadding,
             ),
@@ -99,6 +99,7 @@ class _LoginFormState extends State<LoginForm> {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const NavBar()))
               })
+          // ignore: body_might_complete_normally_catch_error
           .catchError((e) {
         Fluttertoast.showToast(msg: "Please enter a valid email and password");
       });

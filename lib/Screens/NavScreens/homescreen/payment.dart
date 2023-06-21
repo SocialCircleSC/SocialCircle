@@ -1,15 +1,10 @@
-import 'dart:async';
-
 import 'package:community/screens/authscreens/signup/church_form.dart';
 import 'package:community/screens/navscreens/homescreen/payment_webview.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../../firestore/churchSignUpData.dart';
+
 import '../../../themes/theme.dart';
-import '../navbar/nav_bar.dart';
+
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
@@ -56,6 +51,8 @@ class _RecurringPaymentState extends State<RecurringPayment> {
   final Uri premiumUri = Uri.parse(dotenv.env['STRIPE_PREMIUM_URI']!);
 
   final Uri paygUri = Uri.parse(dotenv.env['STRIPE_PAYG_URI']!);
+
+  
 
   @override
   Widget build(BuildContext context) {

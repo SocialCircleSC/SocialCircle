@@ -1,7 +1,6 @@
-// ignore_for_file: deprecated_member_use, prefer_const_constructors
+// ignore_for_file: deprecated_member_use, prefer_const_constructors, prefer_typing_uninitialized_variables, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/screens/navscreens/homescreen/edit_post.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +60,7 @@ class _GroupCardState extends State<GroupCard> {
           ID = value.get('Church ID');
         });
 
-        if (this.mounted) {
+        if (mounted) {
           setState(() {
             churchID = ID;
             //memID = uid;
@@ -76,7 +75,7 @@ class _GroupCardState extends State<GroupCard> {
           ID = value.get('Church ID');
         });
 
-        if (this.mounted) {
+        if (mounted) {
           setState(() {
             churchID = ID;
             //memID = ID;
@@ -123,7 +122,7 @@ class _GroupCardState extends State<GroupCard> {
             }
             return Column(
               children: [
-                Container(
+                SizedBox(
                   height: displayHeight(context) * 0.05,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -141,7 +140,7 @@ class _GroupCardState extends State<GroupCard> {
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: displayHeight(context) * 0.75,
                   child: ListView(
                     children: snapshot.data!.docs.map((document) {
@@ -150,135 +149,133 @@ class _GroupCardState extends State<GroupCard> {
                         child: ConstrainedBox(
                           constraints: BoxConstraints(
                               minHeight: displayHeight(context) * 0.1),
-                          child: Container(
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: displayHeight(context) * 0.01,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: displayHeight(context) * 0.01,
+                              ),
+                              ListTile(
+                                
+                                leading: CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('lib/assets/fp_profile.jpg'),
                                 ),
-                                ListTile(
-                                  
-                                  leading: CircleAvatar(
-                                    backgroundImage:
-                                        AssetImage('lib/assets/fp_profile.jpg'),
-                                  ),
-                                  title: Text(document['First Name'] +
-                                      " " +
-                                      document['Last Name']),
-                                  subtitle: Text(
-                                    document['Status'],
+                                title: Text(document['First Name'] +
+                                    " " +
+                                    document['Last Name']),
+                                subtitle: Text(
+                                  document['Status'],
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.6)),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    document['Text'],
                                     style: TextStyle(
                                         color: Colors.black.withOpacity(0.6)),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      document['Text'],
-                                      style: TextStyle(
-                                          color: Colors.black.withOpacity(0.6)),
+                              ),
+                              // SizedBox(
+                              //   height: displayHeight(context) * 0.01,
+                              // ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Row(
+                                  children: <Widget>[
+                                    RichText(
+                                      text: TextSpan(
+                                        text: document['Likes'].toString(),
+                                        style: TextStyle(
+                                          color: BlackColor,
+                                          fontSize: 12,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                // SizedBox(
-                                //   height: displayHeight(context) * 0.01,
-                                // ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 5),
-                                  child: Row(
-                                    children: <Widget>[
-                                      RichText(
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 90),
+                                      child: RichText(
+                                        
                                         text: TextSpan(
-                                          text: document['Likes'].toString(),
-                                          style: TextStyle(
-                                            color: BlackColor,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 90),
-                                        child: RichText(
-                                          
-                                          text: TextSpan(
-                                            // ignore: prefer_const_literals_to_create_immutables
-                                            children: [
-                                              WidgetSpan(
-                                                child: Icon(
-                                                  Icons.comment_sharp,
-                                                  size: 20,
-                                                ),
+                                          // ignore: prefer_const_literals_to_create_immutables
+                                          children: [
+                                            WidgetSpan(
+                                              child: Icon(
+                                                Icons.comment_sharp,
+                                                size: 20,
                                               ),
-                                              TextSpan(
-                                                text: "0",
-                                                style: TextStyle(
-                                                  color: BlackColor,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 90),
-                                        child: DropdownButton(
-                                            style: TextStyle(
+                                            ),
+                                            TextSpan(
+                                              text: "0",
+                                              style: TextStyle(
                                                 color: BlackColor,
-                                                fontSize: 12),
-                                            value: dropdownvalue,
-                                            iconSize: 20,
-                                            items: items.map((String items) {
-                                              //This is where you can check for status and stuff like that to drop down or not
-                                              return DropdownMenuItem(
-                                                value: items,
-                                                child: Text(items),
-                                              );
-                                            }).toList(),
-                                            icon:
-                                                Icon(Icons.keyboard_arrow_down),
-                                            onChanged: (String? newValue) {
-                                              dropdownvalue = newValue!;
-                                              if (newValue == items[0]) {
-                                                // Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(
-                                                //       builder: (context) =>
-                                                //           const EditPost()),
-                                                // );
-                                              } else if (newValue == items[1]) {
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: Text("Confirm"),
-                                                        content: Text(
-                                                            "Are you sure you want to delete this post?"),
-                                                        actions: [
-                                                          TextButton(
-                                                            child: Text("Yes"),
-                                                            onPressed: () {},
-                                                          ),
-                                                          TextButton(
-                                                            child: Text("No"),
-                                                            onPressed: () {},
-                                                          ),
-                                                        ],
-                                                      );
-                                                    });
-                                              }
-                                            }),
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 90),
+                                      child: DropdownButton(
+                                          style: TextStyle(
+                                              color: BlackColor,
+                                              fontSize: 12),
+                                          value: dropdownvalue,
+                                          iconSize: 20,
+                                          items: items.map((String items) {
+                                            //This is where you can check for status and stuff like that to drop down or not
+                                            return DropdownMenuItem(
+                                              value: items,
+                                              child: Text(items),
+                                            );
+                                          }).toList(),
+                                          icon:
+                                              Icon(Icons.keyboard_arrow_down),
+                                          onChanged: (String? newValue) {
+                                            dropdownvalue = newValue!;
+                                            if (newValue == items[0]) {
+                                              // Navigator.push(
+                                              //   context,
+                                              //   MaterialPageRoute(
+                                              //       builder: (context) =>
+                                              //           const EditPost()),
+                                              // );
+                                            } else if (newValue == items[1]) {
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                      title: Text("Confirm"),
+                                                      content: Text(
+                                                          "Are you sure you want to delete this post?"),
+                                                      actions: [
+                                                        TextButton(
+                                                          child: Text("Yes"),
+                                                          onPressed: () {},
+                                                        ),
+                                                        TextButton(
+                                                          child: Text("No"),
+                                                          onPressed: () {},
+                                                        ),
+                                                      ],
+                                                    );
+                                                  });
+                                            }
+                                          }),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       );

@@ -15,7 +15,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
-import '../../../sizes/size.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -36,6 +35,7 @@ class _NavBarState extends State<NavBar> {
     final User? user = auth.currentUser;
     final uid = user?.uid;
 
+    // ignore: prefer_typing_uninitialized_variables
     var cID;
 
     //Get ChurchID
@@ -78,6 +78,7 @@ class _NavBarState extends State<NavBar> {
           extendBody: true, // To make floating action button notch transparent
           body: PageView(
             controller: controller,
+            physics: NeverScrollableScrollPhysics(),
             children: const [
               HomeScreen(),
               ChurchScreen(),
@@ -91,115 +92,10 @@ class _NavBarState extends State<NavBar> {
               IconButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => messageHome()));
+                        MaterialPageRoute(builder: (context) => MessageHome()));
                   },
                   icon: Icon(
                     Icons.message_rounded,
-                    color: BlackColor,
-                  )),
-              IconButton(
-                  onPressed: () {
-                    //Show Groups
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Column(
-                            children: [
-                              Text(
-                                "Change Page",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w400),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              if (userID == churchID)
-                                TextField(
-                                  controller: groupController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: 1,
-                                  decoration: const InputDecoration(
-                                    hintText: "Add New Group",
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: PrimaryColor),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: PrimaryColor),
-                                    ),
-                                    border: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: PrimaryColor),
-                                    ),
-                                  ),
-                                ),
-                              if (userID == churchID)
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Fluttertoast.showToast(
-                                        msg: groupController.text +
-                                            " has been added",
-                                        toastLength: Toast.LENGTH_SHORT);
-                                    setState(() {
-                                      groupController.text = "";
-                                    });
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Add"),
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: PrimaryColor,
-                                      foregroundColor: WhiteColor),
-                                ),
-                            ],
-                          ),
-                          content: SizedBox(
-                            height: 200,
-                            width: 400,
-                            child: ListView.separated(
-                                shrinkWrap: true,
-                                itemBuilder: (context, index2) {
-                                  return Card(
-                                    clipBehavior: Clip.antiAlias,
-                                    child: ConstrainedBox(
-                                      constraints: BoxConstraints(
-                                        minHeight:
-                                            displayHeight(context) * 0.07,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          ListTile(
-                                            title: Text("Choir"),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                separatorBuilder: (context, index) {
-                                  return const Divider(
-                                    height: 10,
-                                    thickness: 0.5,
-                                  );
-                                },
-                                itemCount: 1),
-                          ),
-                          actions: [
-                            TextButton(
-                              child: const Text("Done"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  icon: Icon(
-                    Icons.group,
                     color: BlackColor,
                   )),
               PopupMenuButton<String>(

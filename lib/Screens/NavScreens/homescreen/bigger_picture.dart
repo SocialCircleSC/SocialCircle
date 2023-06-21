@@ -1,4 +1,3 @@
-import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/sizes/size.dart';
 import 'package:flutter/material.dart';
 import 'package:community/themes/theme.dart';

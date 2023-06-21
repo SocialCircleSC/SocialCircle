@@ -64,6 +64,7 @@ dependencies:
   provider: ^6.0.5
   permission_handler: ^10.2.0
   flutter_stripe: ^9.2.0
+  firebase_messaging: ^14.6.3
 
 dev_dependencies:
   flutter_test:

@@ -1,13 +1,20 @@
 import 'package:community/screens/authscreens/login/login_screen.dart';
 import 'package:community/themes/theme.dart';
 import 'package:community/screens/authscreens/resetpassword/reset_button.dart';
-import 'package:community/screens/authScreens/resetpassword/reset_form.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:community/sizes/size.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-//Maybe Create a backbutton for this page. Because Android has a deault on, but im not sure if i phone does
-class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({super.key});
+
+  @override
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+}
+
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,17 +52,30 @@ class ResetPasswordScreen extends StatelessWidget {
             SizedBox(
               height: displayHeight(context) * 0.01,
             ),
-            Text("Please enter your email address",
-                style: subTitle.copyWith(fontWeight: FontWeight.w600)),
+            TextField(
+              controller: emailController,
+              style: subTitle.copyWith(fontWeight: FontWeight.w600),
+              decoration: const InputDecoration(
+                  hintText: "Email",
+                  hintStyle: TextStyle(color: TextFieldColor),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: PrimaryColor))),
+            ),
             SizedBox(height: displayHeight(context) * 0.01),
-            const ResetForm(),
+            //const ResetForm(),
             SizedBox(
               height: displayHeight(context) * 0.04,
             ),
             GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const LoginScreen()));
+                onTap: () async {
+                  FirebaseAuth.instance
+                      .sendPasswordResetEmail(email: emailController.text);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()));
+                  Fluttertoast.showToast(
+                      msg: "Please check your email to reset password");
                 },
                 child: const ResetButton()),
           ]),

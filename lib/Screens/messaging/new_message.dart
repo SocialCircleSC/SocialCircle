@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/firestore/createGroup.dart';
-import 'package:community/screens/messaging/specific_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,6 +29,7 @@ class _NewMessageState extends State<NewMessage> {
   Future getListOfMembers(String churchID, String userID, String name) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
+    // ignore: unused_local_variable
     final uid = user?.uid;
 
     await FirebaseFirestore.instance

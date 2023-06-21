@@ -1,16 +1,12 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:chewie/chewie.dart';
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/firestore/commentPost.dart';
 import 'package:community/firestore/delete_comment.dart';
-import 'package:community/firestore/delete_post.dart';
-import 'package:community/screens/navscreens/homescreen/bigger_picture.dart';
+
 import 'package:community/screens/navscreens/homescreen/edit_post.dart';
-import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:video_player/video_player.dart';
+
 
 import '../../../sizes/size.dart';
 import '../../../themes/theme.dart';
@@ -243,79 +239,79 @@ class _CommentsState extends State<Comments> {
                                             ),
                                           ),
                                         ),
-                                        if (document["Type"] == "Image")
-                                          //Only show image if it exists
-                                          Padding(
-                                            padding: const EdgeInsets.all(1.0),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Stack(
-                                                children: [
-                                                  CarouselSlider(
-                                                      options: CarouselOptions(
-                                                        viewportFraction: 1,
-                                                        enlargeCenterPage: true,
-                                                        enableInfiniteScroll:
-                                                            false,
-                                                        height: displayHeight(
-                                                                context) *
-                                                            0.55,
-                                                      ),
-                                                      items: document['Picture']
-                                                          .map<Widget>(((e) {
-                                                        return Builder(builder:
-                                                            (BuildContext
-                                                                context) {
-                                                          return GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) =>
-                                                                          BiggerPicture(
-                                                                              picture: e)));
-                                                            },
-                                                            child: Stack(
-                                                              alignment: Alignment
-                                                                  .bottomCenter,
-                                                              children: [
-                                                                ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              7),
-                                                                  child: Image
-                                                                      .network(
-                                                                    e,
-                                                                    width: displayWidth(
-                                                                        context),
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                  ),
-                                                                ),
-                                                                if (document[
-                                                                            'Picture']
-                                                                        .length !=
-                                                                    1)
-                                                                  AnimatedSmoothIndicator(
-                                                                    activeIndex: document[
-                                                                            "Picture"]
-                                                                        .indexWhere((f) =>
-                                                                            f ==
-                                                                            e),
-                                                                    count: document[
-                                                                            'Picture']
-                                                                        .length,
-                                                                  ),
-                                                              ],
-                                                            ),
-                                                          );
-                                                        });
-                                                      })).toList()),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
+                                        // if (document["Type"] == "Image")
+                                        //   //Only show image if it exists
+                                        //   Padding(
+                                        //     padding: const EdgeInsets.all(1.0),
+                                        //     child: Align(
+                                        //       alignment: Alignment.centerLeft,
+                                        //       child: Stack(
+                                        //         children: [
+                                        //           CarouselSlider(
+                                        //               options: CarouselOptions(
+                                        //                 viewportFraction: 1,
+                                        //                 enlargeCenterPage: true,
+                                        //                 enableInfiniteScroll:
+                                        //                     false,
+                                        //                 height: displayHeight(
+                                        //                         context) *
+                                        //                     0.55,
+                                        //               ),
+                                        //               items: document['Picture']
+                                        //                   .map<Widget>(((e) {
+                                        //                 return Builder(builder:
+                                        //                     (BuildContext
+                                        //                         context) {
+                                        //                   return GestureDetector(
+                                        //                     onTap: () {
+                                        //                       Navigator.push(
+                                        //                           context,
+                                        //                           MaterialPageRoute(
+                                        //                               builder: (context) =>
+                                        //                                   BiggerPicture(
+                                        //                                       picture: e)));
+                                        //                     },
+                                        //                     child: Stack(
+                                        //                       alignment: Alignment
+                                        //                           .bottomCenter,
+                                        //                       children: [
+                                        //                         ClipRRect(
+                                        //                           borderRadius:
+                                        //                               BorderRadius
+                                        //                                   .circular(
+                                        //                                       7),
+                                        //                           child: Image
+                                        //                               .network(
+                                        //                             e,
+                                        //                             width: displayWidth(
+                                        //                                 context),
+                                        //                             fit: BoxFit
+                                        //                                 .cover,
+                                        //                           ),
+                                        //                         ),
+                                        //                         if (document[
+                                        //                                     'Picture']
+                                        //                                 .length !=
+                                        //                             1)
+                                        //                           AnimatedSmoothIndicator(
+                                        //                             activeIndex: document[
+                                        //                                     "Picture"]
+                                        //                                 .indexWhere((f) =>
+                                        //                                     f ==
+                                        //                                     e),
+                                        //                             count: document[
+                                        //                                     'Picture']
+                                        //                                 .length,
+                                        //                           ),
+                                        //                       ],
+                                        //                     ),
+                                        //                   );
+                                        //                 });
+                                        //               })).toList()),
+                                        //         ],
+                                        //       ),
+                                        //     ),
+                                        //   ),
                                         // if (document["Type"] == "Video")
                                         //   Align(
                                         //     alignment: Alignment.center,
@@ -487,6 +483,7 @@ class _CommentsState extends State<Comments> {
   }
 }
 
+// ignore: unused_element
 void _goToEditScreen(BuildContext context, String cID, String fName,
     String lName, String status, String textPost, String docID) async {
   Navigator.push(

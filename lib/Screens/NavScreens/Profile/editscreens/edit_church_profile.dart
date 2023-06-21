@@ -90,7 +90,7 @@ class _EditChurchProfileState extends State<EditChurchProfile> {
                                     spreadRadius: 2,
                                     blurRadius: 10,
                                     color: Colors.black.withOpacity(0.1),
-                                    offset: Offset(0, 10))
+                                    offset: const Offset(0, 10))
                               ],
                               shape: BoxShape.circle,
                               image: DecorationImage(
@@ -108,7 +108,7 @@ class _EditChurchProfileState extends State<EditChurchProfile> {
                                     spreadRadius: 2,
                                     blurRadius: 10,
                                     color: Colors.black.withOpacity(0.1),
-                                    offset: Offset(0, 10))
+                                    offset: const Offset(0, 10))
                               ],
                               shape: BoxShape.circle,
                               image: DecorationImage(

@@ -1,5 +1,4 @@
 import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
-import 'package:community/screens/authscreens/login/login_form.dart';
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +31,10 @@ class PaymentWebView extends StatefulWidget {
 }
 
 class _PaymentWebViewState extends State<PaymentWebView> {
+  // ignore: prefer_typing_uninitialized_variables
   var controller;
   String link = "";
+  @override
   void initState() {
     super.initState();
     if (widget.type == 'starter') {
@@ -94,6 +95,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
 
   void signUp(String email, String password) async {
     try {
+      // ignore: unused_local_variable
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: widget.email, password: widget.password);
@@ -103,7 +105,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
         widget.churchAddress,
         widget.phoneNumber,
         widget.email,
-        widget.email,
+        widget.weeklyEvent,
       );
 
       Navigator.of(context).pushReplacement(
@@ -119,3 +121,5 @@ class _PaymentWebViewState extends State<PaymentWebView> {
     }
   }
 }
+
+//THIS IS OLAOLUWA OLOJEDE'S CODE. Also Demon Slayer Season 3 was a Banger man!! 6/19/2023

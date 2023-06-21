@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, dead_code
 
 import 'package:community/screens/gettingstarted/choose_church.dart';
-import 'package:community/firestore/memberSignUpData.dart';
 import 'package:community/themes/theme.dart';
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';

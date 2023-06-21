@@ -1,5 +1,6 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 Future<void> sendMessage(String churchID, String userID, String documentID,
     String type, String messageText, String name) async {

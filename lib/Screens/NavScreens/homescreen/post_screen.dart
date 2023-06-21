@@ -158,7 +158,7 @@ class _PostScreenState extends State<PostScreen> {
                       if (imageList.isEmpty) {
                         ImagePicker imagePicker = ImagePicker();
                         List<XFile>? file = await imagePicker.pickMultiImage();
-                        if (file!.length > 15) {
+                        if (file.length > 15) {
                           Fluttertoast.showToast(
                               msg: "The max number of photos is 15. You have " +
                                   file.length.toString(),
@@ -184,43 +184,43 @@ class _PostScreenState extends State<PostScreen> {
 
                   //For Video
 
-                  // ElevatedButton.icon(
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: SecondaryColor,
-                  //   ),
-                  //   label: const Text("Add Video"),
-                  //   icon: const Icon(
-                  //     Icons.camera_alt,
-                  //     color: Colors.black,
-                  //   ),
-                  //   onPressed: () async {
-                  //     if (imageList.isEmpty) {
-                  //       final imagePicker = ImagePicker();
-                  //       final file = await imagePicker.pickVideo(
-                  //           source: ImageSource.gallery);
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: SecondaryColor,
+                    ),
+                    label: const Text("Add Video"),
+                    icon: const Icon(
+                      Icons.camera_alt,
+                      color: Colors.black,
+                    ),
+                    onPressed: () async {
+                      if (imageList.isEmpty) {
+                        final imagePicker = ImagePicker();
+                        final file = await imagePicker.pickVideo(
+                            source: ImageSource.gallery);
 
-                  //       const fileSizeLimit = 250000000; //In Bytes
-                  //       final fileSize = await file!.length();
+                        const fileSizeLimit = 250000000; //In Bytes
+                        final fileSize = await file!.length();
 
-                  //       if (fileSize >= fileSizeLimit) {
-                  //         Fluttertoast.showToast(
-                  //             msg:
-                  //                 "The file is too big, please pick a smaller video",
-                  //             toastLength: Toast.LENGTH_LONG);
-                  //       } else {
-                  //         setState(() {
-                  //           imageList.add(File(file.path));
-                  //           type = "Video";
-                  //         });
-                  //       }
-                  //     } else {
-                  //       Fluttertoast.showToast(
-                  //           msg:
-                  //               "Please remove the pictures or video you have below",
-                  //           toastLength: Toast.LENGTH_LONG);
-                  //     }
-                  //   },
-                  // ),
+                        if (fileSize >= fileSizeLimit) {
+                          Fluttertoast.showToast(
+                              msg:
+                                  "The file is too big, please pick a smaller video",
+                              toastLength: Toast.LENGTH_LONG);
+                        } else {
+                          setState(() {
+                            imageList.add(File(file.path));
+                            type = "Video";
+                          });
+                        }
+                      } else {
+                        Fluttertoast.showToast(
+                            msg:
+                                "Please remove the pictures or video you have below",
+                            toastLength: Toast.LENGTH_LONG);
+                      }
+                    },
+                  ),
                 ],
               ),
               if (type == "Image")

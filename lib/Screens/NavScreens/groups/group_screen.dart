@@ -18,7 +18,7 @@ class _GroupScreenState extends State<GroupScreen> {
         return false;
       },
       child: 
-      GroupCard(),
+      const GroupCard(),
     );
   }
 }

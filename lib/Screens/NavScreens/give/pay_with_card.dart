@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, unused_element
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -38,7 +40,7 @@ class _CardPaymentState extends State<CardPayment> {
                   onPressed: () {
                     makePayment();
                   },
-                  child: Text("Payment")),
+                  child: const Text("Payment")),
             ]),
       ),
     );
@@ -52,7 +54,7 @@ class _CardPaymentState extends State<CardPayment> {
         'payment_method_types[]': 'card'
       };
 
-      // TODO: POST request to stripe
+      
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
@@ -77,10 +79,10 @@ class _CardPaymentState extends State<CardPayment> {
 
   Future<void> makePayment() async {
     try {
-      // TODO: Create Payment intent
+      
       paymentIntent = await createPaymentIntent('100', 'USD');
 
-      // TODO: Initialte Payment Sheet
+     
       await Stripe.instance
           .initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
@@ -94,7 +96,7 @@ class _CardPaymentState extends State<CardPayment> {
         log("Success");
       });
 
-      // TODO: now finally display payment sheeet
+      
       displayPaymentSheet(); // Payment Sheet
     } catch (e, s) {
       String ss = "exception 1 :$e";
@@ -129,14 +131,14 @@ class _CardPaymentState extends State<CardPayment> {
           ),
         );
 
-        // TODO: update payment intent to null
+        
         paymentIntent = null;
       }).onError((error, stackTrace) {
         String ss = "exception 2 :$error";
         String s2 = "reason :$stackTrace";
       });
     } on StripeException catch (e) {
-      print('Error is:---> $e');
+      //print('Error is:---> $e');
       String ss = "exception 3 :$e";
     } catch (e) {
       log('$e');
@@ -150,7 +152,7 @@ class _CardPaymentState extends State<CardPayment> {
   };
 
   Future<Map<String, dynamic>> _createCustomer() async {
-    final String url = 'https://api.stripe.com/v1/customers';
+    const String url = 'https://api.stripe.com/v1/customers';
     var response = await client.post(
       Uri.parse(url),
       headers: headers,

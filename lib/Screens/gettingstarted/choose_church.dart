@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unused_local_variable
 
 import 'package:community/screens/authscreens/login/login_screen.dart';
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
@@ -68,6 +68,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     final uid = user?.uid;
+    // ignore: prefer_typing_uninitialized_variables
     var memberID;
     List<Map<String, dynamic>> answer = [];
     List<Map<String, dynamic>> answerId = [];

@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/firestore/sendMessage.dart';
 import 'package:community/screens/messaging/message_model.dart';
-import 'package:community/sizes/size.dart';
 import 'package:flutter/material.dart';
-import 'package:grouped_list/grouped_list.dart';
-import 'package:intl/intl.dart';
 
 import '../../themes/theme.dart';
 

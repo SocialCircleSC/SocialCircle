@@ -4,6 +4,8 @@ import 'package:community/Screens/AuthScreens/signup/church_signup.dart';
 import 'package:community/themes/theme.dart';
 import 'package:community/sizes/size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ChooseUser extends StatefulWidget {
   const ChooseUser({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class ChooseUser extends StatefulWidget {
 }
 
 class _ChooseUserState extends State<ChooseUser> {
+  TextEditingController myController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -77,7 +80,8 @@ class _ChooseUserState extends State<ChooseUser> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
+                  foregroundColor: WhiteColor,
+                  backgroundColor: PrimaryColor,
                 ),
               ),
               SizedBox(
@@ -85,10 +89,53 @@ class _ChooseUserState extends State<ChooseUser> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SignUpChurch()));
+                  showAlertDialog(BuildContext context) {
+                    // set up the buttons
+                    Widget cancelButton = TextButton(
+                      child: const Text("I do not have my code"),
+                      onPressed: () {},
+                    );
+                    Widget continueButton = TextButton(
+                      child: const Text("Continue"),
+                      onPressed: () {
+                        if (myController.text ==
+                            dotenv.env['CHURCH_SIGNUP_CODE']!) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SignUpChurch()));
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "The code is correct",
+                              toastLength: Toast.LENGTH_LONG);
+                        }
+                      },
+                    );
+
+                    // set up the AlertDialog
+                    AlertDialog alert = AlertDialog(
+                      title: const Text("Church Confirmation"),
+                      content: TextField(
+                        controller: myController,
+                        decoration:
+                            const InputDecoration(hintText: "Type your code"),
+                      ),
+                      actions: [
+                        cancelButton,
+                        continueButton,
+                      ],
+                    );
+
+                    // show the dialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return alert;
+                      },
+                    );
+                  }
+
+                  showAlertDialog(context);
                 },
                 child: const Text(
                   'Church',
@@ -98,11 +145,14 @@ class _ChooseUserState extends State<ChooseUser> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: WhiteColor, backgroundColor: PrimaryColor,
+                  foregroundColor: WhiteColor,
+                  backgroundColor: PrimaryColor,
                 ),
               ),
             ]),
       ),
     );
-  }
+  }  
 }
+
+
