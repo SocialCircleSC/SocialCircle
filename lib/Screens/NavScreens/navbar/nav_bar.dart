@@ -15,7 +15,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
-
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
 
@@ -89,6 +88,12 @@ class _NavBarState extends State<NavBar> {
           backgroundColor: Colors.grey[50],
           appBar: AppBar(
             actions: <Widget>[
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.lightbulb,
+                    color: BlackColor,
+                  )),
               IconButton(
                   onPressed: () {
                     Navigator.push(context,

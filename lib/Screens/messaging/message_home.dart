@@ -6,6 +6,7 @@ import 'package:community/screens/messaging/specific_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../themes/theme.dart';
 
@@ -104,6 +105,9 @@ class _MessageHomeState extends State<MessageHome> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+
+            
+
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -199,6 +203,7 @@ class _MessageHomeState extends State<MessageHome> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
+                          
                           // ignore: unused_local_variable
                           bool sender = false;
                           if (userID == data["Creator"]) {

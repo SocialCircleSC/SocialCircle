@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:community/main.dart';
 import 'package:community/screens/messaging/message_home.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   // print('Title: ${message.notification?.title}');
@@ -18,10 +19,8 @@ class PushNotifications {
       return;
     }
 
-    navigatorKey.currentState?.pushNamed(
-      MessageHome.route,
-      arguments: message,
-    );
+    Navigator.push(BuildContext as BuildContext,
+        MaterialPageRoute(builder: (context) => const MessageHome()));
   }
 
   Future initPushNotifications() async {

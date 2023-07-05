@@ -38,6 +38,8 @@ class _CardInfoState extends State<CardInfo> {
   ];
 
   bool switchState = false;
+
+  bool buttonColor = false;
   //Get Church ID
   var churchID;
   var userID;
@@ -139,6 +141,53 @@ class _CardInfoState extends State<CardInfo> {
             return SingleChildScrollView(
               child: Wrap(
                 children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                        height: 20,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 110),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    buttonColor = !buttonColor;
+                                  });
+                                },
+                                child: Text(
+                                  "Discover",
+                                  style: TextStyle(
+                                      color: buttonColor
+                                          ? BlackColor
+                                          : PrimaryColor),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    buttonColor = !buttonColor;
+                                  });
+                                },
+                                child: Text(
+                                  "Home",
+                                  style: TextStyle(
+                                      color: buttonColor
+                                          ? PrimaryColor
+                                          : BlackColor),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0),
+                              ),
+                            ],
+                          ),
+                        )),
+                  ),
                   SizedBox(
                     height: displayHeight(context) * 0.84,
                     child: ListView(
