@@ -89,12 +89,6 @@ class _NavBarState extends State<NavBar> {
           appBar: AppBar(
             actions: <Widget>[
               IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.lightbulb,
-                    color: BlackColor,
-                  )),
-              IconButton(
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => MessageHome()));

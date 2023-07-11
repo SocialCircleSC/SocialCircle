@@ -109,17 +109,69 @@ class _PostScreenState extends State<PostScreen> {
           actions: <Widget>[
             ElevatedButton(
               onPressed: () {
-                if (postTextController.text.isEmpty) {
-                  Fluttertoast.showToast(msg: "Please type a message or text");
-                } else {
-                  postDataChu(postTextController.text, status, profilePic,
-                      firstN, lastN, churchID, userID, imageList, type);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const NavBar()),
-                  );
-                  Fluttertoast.showToast(msg: "Post Successful!");
-                }
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Destination"),
+                        content:
+                            const Text("Where would you like to post this?"),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                if (postTextController.text.isEmpty) {
+                                  Fluttertoast.showToast(
+                                      msg: "Please type a message or text");
+                                } else {
+                                  postDataChu(
+                                      postTextController.text,
+                                      status,
+                                      profilePic,
+                                      firstN,
+                                      lastN,
+                                      churchID,
+                                      userID,
+                                      imageList,
+                                      type);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const NavBar()),
+                                  );
+                                  Fluttertoast.showToast(
+                                      msg: "Post Successful!");
+                                }
+                              },
+                              child: const Text("Church")),
+                          TextButton(
+                              onPressed: () {
+                                if (postTextController.text.isEmpty) {
+                                  Fluttertoast.showToast(
+                                      msg: "Please type a message or text");
+                                } else {
+                                  postDataChu(
+                                      postTextController.text,
+                                      status,
+                                      profilePic,
+                                      firstN,
+                                      lastN,
+                                      "7PEVPi7V6VU7fMsXCA5X0m8crxj2",
+                                      userID,
+                                      imageList,
+                                      type);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const NavBar()),
+                                  );
+                                  Fluttertoast.showToast(
+                                      msg: "Post Successful!");
+                                }
+                              },
+                              child: const Text("Discover")),
+                        ],
+                      );
+                    });
               },
               child: const Text(
                 'Post',

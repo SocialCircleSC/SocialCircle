@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:community/sizes/size.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -39,12 +40,14 @@ class _CardInfoState extends State<CardInfo> {
 
   bool switchState = false;
 
-  bool buttonColor = false;
+  bool buttonColor = true;
   //Get Church ID
   var churchID;
   var userID;
   var profilePic;
   var userName;
+  var temp;
+  var temp2 = "7PEVPi7V6VU7fMsXCA5X0m8crxj2";
 
   //Get the member's church ID
   Future getChurchID() async {
@@ -69,6 +72,7 @@ class _CardInfoState extends State<CardInfo> {
 
     setState(() {
       churchID = cID;
+      temp = cID;
       userID = uid;
       profilePic = pPic;
       userName = uName;
@@ -121,7 +125,7 @@ class _CardInfoState extends State<CardInfo> {
           //change here
           stream: FirebaseFirestore.instance
               .collection("circles")
-              .doc(churchID)
+              .doc(churchID) //should not be set in the build
               .collection("posts")
               .limit(200)
               .orderBy('TimeStamp', descending: true)
@@ -153,7 +157,12 @@ class _CardInfoState extends State<CardInfo> {
                               ElevatedButton(
                                 onPressed: () {
                                   setState(() {
-                                    buttonColor = !buttonColor;
+                                    if (buttonColor == true) {
+                                      setState(() {
+                                        churchID = temp2;
+                                        buttonColor = !buttonColor;
+                                      });
+                                    }
                                   });
                                 },
                                 child: Text(
@@ -170,7 +179,12 @@ class _CardInfoState extends State<CardInfo> {
                               ElevatedButton(
                                 onPressed: () {
                                   setState(() {
-                                    buttonColor = !buttonColor;
+                                    if (buttonColor == false) {
+                                      setState(() {
+                                        churchID = temp;
+                                        buttonColor = !buttonColor;
+                                      });
+                                    }
                                   });
                                 },
                                 child: Text(
