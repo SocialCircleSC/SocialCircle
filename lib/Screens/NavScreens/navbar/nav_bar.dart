@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community/screens/messaging/message_home.dart';
 import 'package:community/screens/navscreens/church/church_screen.dart';
 import 'package:community/screens/navscreens/give/give_screen.dart';
+import 'package:community/screens/navscreens/give/stripe_give_screen.dart';
 import 'package:community/screens/navscreens/homescreen/home_screen.dart';
 import 'package:community/screens/navscreens/homescreen/post_screen.dart';
 import 'package:community/screens/navscreens/profile/profile_screen/profile_screen.dart';
@@ -28,6 +29,7 @@ class _NavBarState extends State<NavBar> {
   TextEditingController groupController = TextEditingController();
   String churchID = "";
   String userID = "";
+  String giveLink = "";
 
   Future getUserAndChurchInfo() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -36,6 +38,7 @@ class _NavBarState extends State<NavBar> {
 
     // ignore: prefer_typing_uninitialized_variables
     var cID;
+    var gLink;
 
     //Get ChurchID
     await FirebaseFirestore.instance
@@ -46,11 +49,21 @@ class _NavBarState extends State<NavBar> {
       cID = value.get('Church ID');
     });
 
+    //getGiveLink
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(cID)
+        .get()
+        .then((value) {
+      gLink = value.get('GiveUrl');
+    });
+
     setState(() {
       churchID = cID;
-      userID = uid.toString();
+      giveLink = gLink;
     });
   }
+
 
   @override
   void didChangeDependencies() {
@@ -78,10 +91,12 @@ class _NavBarState extends State<NavBar> {
           body: PageView(
             controller: controller,
             physics: NeverScrollableScrollPhysics(),
-            children: const [
+            children: [
               HomeScreen(),
               ChurchScreen(),
-              GiveScreen(),
+              StripeGive(
+                link: giveLink,
+              ),
               ProfileScreen(),
             ],
           ),

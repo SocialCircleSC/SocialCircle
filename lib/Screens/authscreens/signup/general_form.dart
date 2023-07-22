@@ -7,9 +7,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:community/storage/storage_services.dart';
 import 'package:community/sizes/size.dart';
+import '../../../firestore/guestSignup.dart';
+import '../Login/login_screen.dart';
 
 class SignUpForm extends StatefulWidget {
-  const SignUpForm({Key? key}) : super(key: key);
+  final bool guest;
+  const SignUpForm({Key? key, required this.guest}) : super(key: key);
 
   @override
   State<SignUpForm> createState() => _SignUpFormState();
@@ -147,20 +150,37 @@ class _SignUpFormState extends State<SignUpForm> {
             padding: SignUpButtonPadding,
           ),
           child: Text("Sign Up"),
-          onPressed: () {
+          onPressed: () async {
             if (passwordController.text != confirmPasswordController.text) {
               Fluttertoast.showToast(
                   msg:
                       "Please make sure your password is the same as your confirm passowrd");
             } else {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChooseChurch(
-                          email: emailController.text,
-                          password: passwordController.text,
-                          firstName: firstNameController.text,
-                          lastName: lastNameController.text)));
+              if (widget.guest == true) {
+                UserCredential userCredential = await FirebaseAuth.instance
+                    .createUserWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text);
+                guestSetup(firstNameController.text, lastNameController.text,
+                    emailController.text);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
+                Fluttertoast.showToast(
+                    msg:
+                        "Welcome to SocialOrb!",
+                    toastLength: Toast.LENGTH_LONG);
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChooseChurch(
+                              email: emailController.text,
+                              password: passwordController.text,
+                              firstName: firstNameController.text,
+                              lastName: lastNameController.text,
+                              guest: false,
+                            )));
+              }
             }
           },
         ),

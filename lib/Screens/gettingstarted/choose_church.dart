@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable
 
 import 'package:community/screens/authscreens/login/login_screen.dart';
+import 'package:community/screens/authscreens/signup/guest_signup.dart';
 import 'package:community/screens/navscreens/navbar/nav_bar.dart';
 import 'package:community/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,7 @@ import 'package:community/sizes/size.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../firestore/addChurchMemList.dart';
+import '../../firestore/guestSignup.dart';
 import '../../firestore/memberSignUpData.dart';
 
 class ChooseChurch extends StatefulWidget {
@@ -17,13 +19,15 @@ class ChooseChurch extends StatefulWidget {
   final String password;
   final String firstName;
   final String lastName;
+  final bool guest;
 
   const ChooseChurch(
       {Key? key,
       required this.email,
       required this.password,
       required this.firstName,
-      required this.lastName})
+      required this.lastName,
+      required this.guest})
       : super(key: key);
 
   @override
@@ -204,6 +208,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
                                                           email: widget.email,
                                                           password:
                                                               widget.password);
+
                                               userSetup(
                                                   widget.firstName,
                                                   widget.lastName,
@@ -232,7 +237,12 @@ class _ChooseChurchState extends State<ChooseChurch> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          NavBar()));
+                                                          LoginScreen()));
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Your acocunt has been created. Please Login to use the app",
+                                                  toastLength:
+                                                      Toast.LENGTH_LONG);
                                             } on FirebaseAuthException catch (e) {
                                               if (e.code == 'weak-password') {
                                                 Fluttertoast.showToast(

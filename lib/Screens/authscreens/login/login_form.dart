@@ -104,7 +104,7 @@ class _LoginFormState extends State<LoginForm> {
         Fluttertoast.showToast(msg: "Please enter a valid email and password");
       });
     } catch (e) {
-      Fluttertoast.showToast(msg: e.toString());
+      //Fluttertoast.showToast(msg: e.toString());
     }
   }
 }

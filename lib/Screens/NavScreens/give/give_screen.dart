@@ -109,7 +109,7 @@ class _GiveScreenState extends State<GiveScreen> {
                 onPressed: amount.isNotEmpty
                     ? () async {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const StripeGive()));
+                            builder: (context) =>  StripeGive(link: '',)));
                       }
                     : null,
                 child: const Padding(

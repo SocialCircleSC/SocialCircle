@@ -1,11 +1,13 @@
 import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
 import 'package:community/Screens/AuthScreens/signup/general_signup.dart';
 import 'package:community/Screens/AuthScreens/signup/church_signup.dart';
+import 'package:community/screens/authscreens/signup/guest_signup.dart';
 import 'package:community/themes/theme.dart';
 import 'package:community/sizes/size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChooseUser extends StatefulWidget {
   const ChooseUser({Key? key}) : super(key: key);
@@ -88,12 +90,21 @@ class _ChooseUserState extends State<ChooseUser> {
                 height: displayHeight(context) * 0.01,
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   showAlertDialog(BuildContext context) {
                     // set up the buttons
                     Widget cancelButton = TextButton(
                       child: const Text("I do not have my code"),
-                      onPressed: () {},
+                      onPressed: () async {
+                        //Open Email
+                        Uri _url =
+                            Uri.parse('https://calendly.com/socialorb/30min');
+                        if (await launchUrl(_url)) {
+                          await launchUrl(_url);
+                        } else {
+                          throw 'Could not launch $_url';
+                        }
+                      },
                     );
                     Widget continueButton = TextButton(
                       child: const Text("Continue"),
@@ -149,10 +160,30 @@ class _ChooseUserState extends State<ChooseUser> {
                   backgroundColor: PrimaryColor,
                 ),
               ),
+              SizedBox(
+                height: displayHeight(context) * 0.01,
+              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (context) => const GuestSignUp()));
+              //   },
+              //   child: const Text(
+              //     'Guest',
+              //     style: TextStyle(
+              //       fontSize: 20,
+              //       fontWeight: FontWeight.w700,
+              //     ),
+              //   ),
+              //   style: ElevatedButton.styleFrom(
+              //     foregroundColor: WhiteColor,
+              //     backgroundColor: PrimaryColor,
+              //   ),
+              // ),
             ]),
       ),
     );
-  }  
+  }
 }
-
-

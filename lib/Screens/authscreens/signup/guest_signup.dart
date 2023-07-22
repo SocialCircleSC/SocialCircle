@@ -1,15 +1,19 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
-import 'package:community/Screens/AuthScreens/signup/general_form.dart';
-import 'package:community/themes/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:community/sizes/size.dart';
 
-class SignUpScreen extends StatelessWidget {
-  
-  const SignUpScreen({Key? key}) : super(key: key);
+import '../../../sizes/size.dart';
+import '../../../themes/theme.dart';
+import '../Login/login_screen.dart';
+import 'general_form.dart';
 
+class GuestSignUp extends StatefulWidget {
+  const GuestSignUp({super.key});
+
+  @override
+  State<GuestSignUp> createState() => _GuestSignUpState();
+}
+
+class _GuestSignUpState extends State<GuestSignUp> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -44,7 +48,7 @@ class SignUpScreen extends StatelessWidget {
               Padding(
                 padding: DefaultPadding,
                 child: Text(
-                  "Create Account",
+                  "Create Guest Account",
                   style: titleText,
                 ),
               ),
@@ -83,11 +87,11 @@ class SignUpScreen extends StatelessWidget {
               SizedBox(
                 height: displayHeight(context) * 0.01,
               ),
-              Padding(
+              const Padding(
                 padding: DefaultPadding,
-                child: SignUpForm(guest: false,),
+                child: SignUpForm(guest: true),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               SizedBox(

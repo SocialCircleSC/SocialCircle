@@ -126,6 +126,7 @@ Future<void> churchSetup(
     'Church Name': churchName,
     'Email Address': email,
     'Status': 'Church',
+    "GiveUrl": "",
     "ID": uid,
     'Church ID': uid,
     'ProfilePicture':
