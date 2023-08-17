@@ -1,12 +1,11 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/screens/messaging/new_message.dart';
-import 'package:community/screens/messaging/specific_message.dart';
+import 'package:socialorb/screens/messaging/new_message.dart';
+import 'package:socialorb/screens/messaging/specific_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../themes/theme.dart';
 
@@ -117,9 +116,9 @@ class _MessageHomeState extends State<MessageHome> {
                           combName: combName,
                         )));
           },
-          child: const Icon(Icons.message),
           backgroundColor: PrimaryColor,
           foregroundColor: WhiteColor,
+          child: const Icon(Icons.message),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
         body: StreamBuilder(

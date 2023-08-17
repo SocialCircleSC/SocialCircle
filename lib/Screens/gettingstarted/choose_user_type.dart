@@ -1,9 +1,8 @@
-import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
-import 'package:community/Screens/AuthScreens/signup/general_signup.dart';
-import 'package:community/Screens/AuthScreens/signup/church_signup.dart';
-import 'package:community/screens/authscreens/signup/guest_signup.dart';
-import 'package:community/themes/theme.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/Screens/AuthScreens/Login/login_screen.dart';
+import 'package:socialorb/Screens/AuthScreens/signup/general_signup.dart';
+import 'package:socialorb/Screens/AuthScreens/signup/church_signup.dart';
+import 'package:socialorb/themes/theme.dart';
+import 'package:socialorb/sizes/size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -74,16 +73,16 @@ class _ChooseUserState extends State<ChooseUser> {
                       MaterialPageRoute(
                           builder: (context) => const SignUpScreen()));
                 },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: WhiteColor,
+                  backgroundColor: PrimaryColor,
+                ),
                 child: const Text(
                   'Member',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: WhiteColor,
-                  backgroundColor: PrimaryColor,
                 ),
               ),
               SizedBox(
@@ -97,12 +96,12 @@ class _ChooseUserState extends State<ChooseUser> {
                       child: const Text("I do not have my code"),
                       onPressed: () async {
                         //Open Email
-                        Uri _url =
+                        Uri url =
                             Uri.parse('https://calendly.com/socialorb/30min');
-                        if (await launchUrl(_url)) {
-                          await launchUrl(_url);
+                        if (await launchUrl(url)) {
+                          await launchUrl(url);
                         } else {
-                          throw 'Could not launch $_url';
+                          throw 'Could not launch $url';
                         }
                       },
                     );
@@ -148,16 +147,16 @@ class _ChooseUserState extends State<ChooseUser> {
 
                   showAlertDialog(context);
                 },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: WhiteColor,
+                  backgroundColor: PrimaryColor,
+                ),
                 child: const Text(
                   'Church',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: WhiteColor,
-                  backgroundColor: PrimaryColor,
                 ),
               ),
               SizedBox(

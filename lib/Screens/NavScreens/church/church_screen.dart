@@ -1,16 +1,16 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable
+// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, use_build_context_synchronously
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/firestore/addNewEvent.dart';
-import 'package:community/firestore/addNewStatus.dart';
-import 'package:community/firestore/deleteEvent.dart';
-import 'package:community/firestore/changeStatus.dart';
-import 'package:community/firestore/update_church_pictures.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/firestore/addNewEvent.dart';
+import 'package:socialorb/firestore/addNewStatus.dart';
+import 'package:socialorb/firestore/deleteEvent.dart';
+import 'package:socialorb/firestore/changeStatus.dart';
+import 'package:socialorb/firestore/update_church_pictures.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/sizes/size.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -196,14 +196,14 @@ class _ChurchScreenState extends State<ChurchScreen> {
                   ),
                   Center(
                     child: Text(
-                      firstName + " " + lastName,
+                      "$firstName $lastName",
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.w400),
                     ),
                   ),
                   Center(
                     child: Text(
-                      "Status: " + status,
+                      "Status: $status",
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w300),
                     ),
@@ -243,7 +243,6 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                         ),
                                         if (userID == churchID)
                                           ElevatedButton(
-                                              child: const Text("Status"),
                                               style: ElevatedButton.styleFrom(
                                                   backgroundColor: PrimaryColor,
                                                   foregroundColor: WhiteColor),
@@ -300,9 +299,8 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                                                   statusController
                                                                       .text);
                                                               Fluttertoast.showToast(
-                                                                  msg: statusController
-                                                                          .text +
-                                                                      " has been added",
+                                                                  msg: "${statusController
+                                                                          .text} has been added",
                                                                   toastLength: Toast
                                                                       .LENGTH_SHORT);
                                                               setState(() {
@@ -314,12 +312,12 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                                               Navigator.pop(
                                                                   context);
                                                             },
-                                                            child: const Text("Add"),
                                                             style: ElevatedButton.styleFrom(
                                                                 backgroundColor:
                                                                     PrimaryColor,
                                                                 foregroundColor:
                                                                     WhiteColor),
+                                                            child: const Text("Add"),
                                                           ),
                                                         ],
                                                       ),
@@ -389,7 +387,8 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                                     );
                                                   },
                                                 );
-                                              })
+                                              },
+                                              child: const Text("Status"))
                                       ],
                                     ),
                                   ),
@@ -410,14 +409,10 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                               child: Column(
                                                 children: [
                                                   ListTile(
-                                                    title: Text(memberList[
+                                                    title: Text("${memberList[
                                                                     index]
-                                                                ['First Name']
-                                                            .toString() +
-                                                        " " +
-                                                        memberList[index]
-                                                                ['Last Name']
-                                                            .toString()),
+                                                                ['First Name']} ${memberList[index]
+                                                                ['Last Name']}"),
                                                     subtitle: Text(
                                                         memberList[index]
                                                                 ['Status']
@@ -549,8 +544,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                             if (file.length != 3) {
                               Fluttertoast.showToast(
                                   msg:
-                                      "You must pick exactly 3 pictures. You have " +
-                                          file.length.toString(),
+                                      "You must pick exactly 3 pictures. You have ${file.length}",
                                   toastLength: Toast.LENGTH_LONG);
                             } else {
                               setState(() {
@@ -635,8 +629,7 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                               addNewEven(churchID,
                                                   eventController.text);
                                               Fluttertoast.showToast(
-                                                  msg: eventController.text +
-                                                      " has been added",
+                                                  msg: "${eventController.text} has been added",
                                                   toastLength:
                                                       Toast.LENGTH_SHORT);
                                               setState(() {
@@ -644,10 +637,10 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                               });
                                               Navigator.pop(context);
                                             },
-                                            child: const Text("Add"),
                                             style: ElevatedButton.styleFrom(
                                                 backgroundColor: PrimaryColor,
                                                 foregroundColor: WhiteColor),
+                                            child: const Text("Add"),
                                           ),
                                         ],
                                       ),
@@ -683,10 +676,8 @@ class _ChurchScreenState extends State<ChurchScreen> {
                                                                   return AlertDialog(
                                                                     title: const Text(
                                                                         "Confirm"),
-                                                                    content: Text("Are you sure you want to delete " +
-                                                                        snapshot1
-                                                                            .data!["Events"][index3]
-                                                                            .toString()),
+                                                                    content: Text("Are you sure you want to delete ${snapshot1
+                                                                            .data!["Events"][index3]}"),
                                                                     actions: [
                                                                       TextButton(
                                                                         child: const Text(

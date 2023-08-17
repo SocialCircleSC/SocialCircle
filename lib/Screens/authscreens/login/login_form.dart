@@ -1,9 +1,9 @@
-import 'package:community/screens/navscreens/navbar/nav_bar.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/screens/navscreens/navbar/nav_bar.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/sizes/size.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);

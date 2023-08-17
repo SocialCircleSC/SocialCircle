@@ -1,11 +1,11 @@
-import 'package:community/notifications/push_noti.dart';
-import 'package:community/screens/messaging/message_home.dart';
-import 'package:community/screens/navscreens/navbar/nav_bar.dart';
+import 'package:socialorb/notifications/push_noti.dart';
+import 'package:socialorb/screens/messaging/message_home.dart';
+import 'package:socialorb/screens/navscreens/navbar/nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
+import 'package:socialorb/Screens/AuthScreens/Login/login_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

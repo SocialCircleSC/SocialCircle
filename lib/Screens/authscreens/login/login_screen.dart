@@ -1,10 +1,10 @@
-// ignore_for_file: unnecessary_new, prefer_const_constructors
+// ignore_for_file: unnecessary_new, prefer_const_constructors, library_private_types_in_public_api
 
-import 'package:community/screens/authscreens/login/login_form.dart';
-import 'package:community/screens/gettingstarted/choose_user_type.dart';
-import 'package:community/themes/theme.dart';
-import 'package:community/screens/authScreens/resetpassword/reset_password_screen.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/screens/authscreens/login/login_form.dart';
+import 'package:socialorb/screens/gettingstarted/choose_user_type.dart';
+import 'package:socialorb/themes/theme.dart';
+import 'package:socialorb/screens/authScreens/resetpassword/reset_password_screen.dart';
+import 'package:socialorb/sizes/size.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

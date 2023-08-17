@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors, prefer_typing_uninitialized_variables, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/sizes/size.dart';
 
 class GroupCard extends StatefulWidget {
   const GroupCard({Key? key}) : super(key: key);

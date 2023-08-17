@@ -1,5 +1,7 @@
-import 'package:community/screens/authscreens/signup/church_form.dart';
-import 'package:community/screens/navscreens/homescreen/payment_webview.dart';
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
+import 'package:socialorb/screens/authscreens/signup/church_form.dart';
+import 'package:socialorb/screens/navscreens/homescreen/payment_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -307,9 +309,9 @@ class _RecurringPaymentState extends State<RecurringPayment> {
                                 )));
                   }
                 },
-                child: const Text("Pay"),
                 style:
                     ElevatedButton.styleFrom(backgroundColor: SecondaryColor),
+                child: const Text("Pay"),
               ),
             ],
           );

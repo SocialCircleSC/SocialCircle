@@ -1,4 +1,4 @@
-import 'package:community/screens/navscreens/groups/group_card.dart';
+import 'package:socialorb/screens/navscreens/groups/group_card.dart';
 import 'package:flutter/material.dart';
 
 class GroupScreen extends StatefulWidget {

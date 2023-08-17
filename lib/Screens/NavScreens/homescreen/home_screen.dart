@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:community/screens/navscreens/homescreen/card_info.dart';
+import 'package:socialorb/screens/navscreens/homescreen/card_info.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {

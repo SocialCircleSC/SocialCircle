@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:community/main.dart';
-import 'package:community/screens/messaging/message_home.dart';
+import 'package:socialorb/screens/messaging/message_home.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 

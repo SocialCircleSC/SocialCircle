@@ -1,5 +1,7 @@
-import 'package:community/Screens/AuthScreens/Login/login_screen.dart';
-import 'package:community/screens/navscreens/navbar/nav_bar.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:socialorb/Screens/AuthScreens/Login/login_screen.dart';
+import 'package:socialorb/screens/navscreens/navbar/nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

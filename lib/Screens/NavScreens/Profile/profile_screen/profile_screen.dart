@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/screens/navscreens/profile/editscreens/edit_user_profile.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/screens/navscreens/profile/editscreens/edit_user_profile.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -168,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Center(
                   child: Text(
-                    "Status: " + status,
+                    "Status: $status",
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w300),
                   ),

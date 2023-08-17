@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../sizes/size.dart';
@@ -19,7 +19,7 @@ class _GuestSignUpState extends State<GuestSignUp> {
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('The System Back Button is Deactivated')));
+            const SnackBar(content: Text('The System Back Button is Deactivated')));
         return false;
       },
       child: Scaffold(
@@ -31,7 +31,7 @@ class _GuestSignUpState extends State<GuestSignUp> {
             onPressed: (() {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
               );
             }),
             icon: const Icon(
@@ -71,7 +71,7 @@ class _GuestSignUpState extends State<GuestSignUp> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginScreen()));
+                                builder: (context) => const LoginScreen()));
                       },
                       child: Text(
                         "Log In",

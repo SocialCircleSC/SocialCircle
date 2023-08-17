@@ -1,4 +1,4 @@
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
 
 class ResetForm extends StatelessWidget {

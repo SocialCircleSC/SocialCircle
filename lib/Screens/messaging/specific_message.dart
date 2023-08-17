@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/firestore/sendMessage.dart';
-import 'package:community/screens/messaging/message_model.dart';
+import 'package:socialorb/firestore/sendMessage.dart';
+import 'package:socialorb/screens/messaging/message_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../themes/theme.dart';

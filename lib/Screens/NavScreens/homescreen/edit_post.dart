@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chewie/chewie.dart';
-import 'package:community/firestore/updateDataChurch.dart';
-import 'package:community/screens/navscreens/navbar/nav_bar.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/firestore/updateDataChurch.dart';
+import 'package:socialorb/screens/navscreens/navbar/nav_bar.dart';
+import 'package:socialorb/themes/theme.dart';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -113,8 +113,7 @@ class _EditPostState extends State<EditPost> {
                         List<XFile>? file = await imagePicker.pickMultiImage();
                         if (file.length > 15) {
                           Fluttertoast.showToast(
-                              msg: "The max number of photos is 15. You have " +
-                                  file.length.toString(),
+                              msg: "The max number of photos is 15. You have ${file.length}",
                               toastLength: Toast.LENGTH_LONG);
                         } else {
                           setState(() {

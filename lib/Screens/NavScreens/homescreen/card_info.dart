@@ -3,16 +3,16 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/firestore/delete_post.dart';
-import 'package:community/screens/navscreens/homescreen/bigger_picture.dart';
-import 'package:community/screens/navscreens/homescreen/comments_screen.dart';
-import 'package:community/screens/navscreens/homescreen/edit_post.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/firestore/delete_post.dart';
+import 'package:socialorb/screens/navscreens/homescreen/bigger_picture.dart';
+import 'package:socialorb/screens/navscreens/homescreen/comments_screen.dart';
+import 'package:socialorb/screens/navscreens/homescreen/edit_post.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/sizes/size.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -165,6 +165,9 @@ class _CardInfoState extends State<CardInfo> {
                                     }
                                   });
                                 },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0),
                                 child: Text(
                                   "Discover",
                                   style: TextStyle(
@@ -172,9 +175,6 @@ class _CardInfoState extends State<CardInfo> {
                                           ? BlackColor
                                           : PrimaryColor),
                                 ),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    elevation: 0),
                               ),
                               ElevatedButton(
                                 onPressed: () {
@@ -187,6 +187,9 @@ class _CardInfoState extends State<CardInfo> {
                                     }
                                   });
                                 },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0),
                                 child: Text(
                                   "Home",
                                   style: TextStyle(
@@ -194,9 +197,6 @@ class _CardInfoState extends State<CardInfo> {
                                           ? PrimaryColor
                                           : BlackColor),
                                 ),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    elevation: 0),
                               ),
                             ],
                           ),

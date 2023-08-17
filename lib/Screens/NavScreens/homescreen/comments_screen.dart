@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/firestore/commentPost.dart';
-import 'package:community/firestore/delete_comment.dart';
+import 'package:socialorb/firestore/commentPost.dart';
+import 'package:socialorb/firestore/delete_comment.dart';
 
-import 'package:community/screens/navscreens/homescreen/edit_post.dart';
+import 'package:socialorb/screens/navscreens/homescreen/edit_post.dart';
 import 'package:flutter/material.dart';
 
 
@@ -120,13 +120,13 @@ class _CommentsState extends State<Comments> {
                   }),
                 );
               },
-              child: const Icon(
-                Icons.comment,
-                color: BlackColor,
-              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 elevation: 0,
+              ),
+              child: const Icon(
+                Icons.comment,
+                color: BlackColor,
               ),
             )
           ],

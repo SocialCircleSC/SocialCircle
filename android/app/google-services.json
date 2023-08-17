@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:482988779159:android:79da9efddf1cdd39712bd2",
         "android_client_info": {
-          "package_name": "com.example.community"
+          "package_name": "com.socialorb"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "482988779159-basd0f473802kn9drrj3mqk7u6igqmvm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.community",
+            "package_name": "com.socialorb",
             "certificate_hash": "3207d37201dcdef75188add53eb2212752f1d556"
           }
         },

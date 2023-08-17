@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:community/firestore/update_profile.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/firestore/update_profile.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

@@ -1,17 +1,14 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable
 
-import 'package:community/screens/authscreens/login/login_screen.dart';
-import 'package:community/screens/authscreens/signup/guest_signup.dart';
-import 'package:community/screens/navscreens/navbar/nav_bar.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/screens/authscreens/login/login_screen.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/sizes/size.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../firestore/addChurchMemList.dart';
-import '../../firestore/guestSignup.dart';
 import '../../firestore/memberSignUpData.dart';
 
 class ChooseChurch extends StatefulWidget {
@@ -192,11 +189,8 @@ class _ChooseChurchState extends State<ChooseChurch> {
                                     return AlertDialog(
                                       title: Text("Confirm"),
                                       content: Text(
-                                          "Are you sure you want to pick " +
-                                              allChurches[index]
-                                                  .values
-                                                  .toString() +
-                                              " as your church?"),
+                                          "Are you sure you want to pick ${allChurches[index]
+                                                  .values} as your church?"),
                                       actions: [
                                         TextButton(
                                           child: Text("Yes"),
@@ -233,6 +227,7 @@ class _ChooseChurchState extends State<ChooseChurch> {
                                                   widget.email,
                                                   widget.firstName,
                                                   widget.lastName);
+                                              // ignore: use_build_context_synchronously
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(

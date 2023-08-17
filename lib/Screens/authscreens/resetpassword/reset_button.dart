@@ -1,6 +1,6 @@
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/sizes/size.dart';
 
 
 

@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/screens/navscreens/give/give_screen.dart';
-import 'package:community/themes/theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:socialorb/screens/navscreens/give/give_screen.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 

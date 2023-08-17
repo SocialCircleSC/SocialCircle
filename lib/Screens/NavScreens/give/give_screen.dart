@@ -1,6 +1,6 @@
-import 'package:community/screens/navscreens/give/keyboard_key.dart';
-import 'package:community/screens/navscreens/give/stripe_give_screen.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/screens/navscreens/give/keyboard_key.dart';
+import 'package:socialorb/screens/navscreens/give/stripe_give_screen.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -85,7 +85,7 @@ class _GiveScreenState extends State<GiveScreen> {
     if (amount.isNotEmpty) {
       NumberFormat f = NumberFormat('#,###');
 
-      display = '\$' + f.format(int.parse(amount));
+      display = '\$${f.format(int.parse(amount))}';
     }
     return Expanded(
         child: Center(
@@ -109,7 +109,7 @@ class _GiveScreenState extends State<GiveScreen> {
                 onPressed: amount.isNotEmpty
                     ? () async {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>  StripeGive(link: '',)));
+                            builder: (context) =>  const StripeGive(link: '',)));
                       }
                     : null,
                 child: const Padding(

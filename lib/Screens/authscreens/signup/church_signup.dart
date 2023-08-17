@@ -1,8 +1,8 @@
-import 'package:community/screens/authscreens/login/login_screen.dart';
-import 'package:community/screens/authscreens/signup/church_form.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/screens/authscreens/login/login_screen.dart';
+import 'package:socialorb/screens/authscreens/signup/church_form.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/sizes/size.dart';
 
 class SignUpChurch extends StatefulWidget {
   const SignUpChurch({Key? key}) : super(key: key);

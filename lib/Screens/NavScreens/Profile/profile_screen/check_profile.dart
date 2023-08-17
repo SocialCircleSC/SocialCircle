@@ -72,14 +72,14 @@ class _CheckProfileState extends State<CheckProfile> {
             ),
             Center(
               child: Text(
-                widget.firstName + " " + widget.lastName,
+                "${widget.firstName} ${widget.lastName}",
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
               ),
             ),
             Center(
               child: Text(
-                "Status: " + widget.status,
+                "Status: ${widget.status}",
                 style:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
               ),

@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'package:community/screens/navscreens/homescreen/payment.dart';
+import 'package:socialorb/screens/navscreens/homescreen/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';

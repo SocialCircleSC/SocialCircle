@@ -1,15 +1,14 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community/screens/messaging/message_home.dart';
-import 'package:community/screens/navscreens/church/church_screen.dart';
-import 'package:community/screens/navscreens/give/give_screen.dart';
-import 'package:community/screens/navscreens/give/stripe_give_screen.dart';
-import 'package:community/screens/navscreens/homescreen/home_screen.dart';
-import 'package:community/screens/navscreens/homescreen/post_screen.dart';
-import 'package:community/screens/navscreens/profile/profile_screen/profile_screen.dart';
-import 'package:community/main.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/screens/messaging/message_home.dart';
+import 'package:socialorb/screens/navscreens/church/church_screen.dart';
+import 'package:socialorb/screens/navscreens/give/stripe_give_screen.dart';
+import 'package:socialorb/screens/navscreens/homescreen/home_screen.dart';
+import 'package:socialorb/screens/navscreens/homescreen/post_screen.dart';
+import 'package:socialorb/screens/navscreens/profile/profile_screen/profile_screen.dart';
+import 'package:socialorb/main.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -38,6 +37,7 @@ class _NavBarState extends State<NavBar> {
 
     // ignore: prefer_typing_uninitialized_variables
     var cID;
+    // ignore: prefer_typing_uninitialized_variables
     var gLink;
 
     //Get ChurchID
@@ -185,6 +185,7 @@ class _NavBarState extends State<NavBar> {
                 MaterialPageRoute(builder: (context) => const PostScreen()),
               );
             },
+            // ignore: sort_child_properties_last
             child: Icon(Icons.add),
             backgroundColor: PrimaryColor,
             foregroundColor: WhiteColor,
@@ -207,6 +208,7 @@ class _NavBarState extends State<NavBar> {
 
   Future<void> _signOut() async {
     await FirebaseAuth.instance.signOut();
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const MainPage()));
     Fluttertoast.showToast(msg: "Logout Successful");

@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
@@ -59,7 +59,7 @@ class _CardPaymentState extends State<CardPayment> {
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
           'Authorization':
-              'Bearer ' + dotenv.env['STRIPE_SECRET']!, //SecretKey used here
+              'Bearer ${dotenv.env['STRIPE_SECRET']!}', //SecretKey used here
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
@@ -147,7 +147,7 @@ class _CardPaymentState extends State<CardPayment> {
 
   final client = http.Client();
   static Map<String, String> headers = {
-    'Authorization': 'Bearer ' + dotenv.env['STRIPE_SECRET']!,
+    'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET']!}',
     'Content-Type': 'application/x-www-form-urlencoded'
   };
 

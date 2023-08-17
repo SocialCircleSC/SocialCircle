@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:community/firestore/updateChurchProfile.dart';
+import 'package:socialorb/firestore/updateChurchProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

@@ -88,7 +88,7 @@ Future<void> churchSetup(
     "ID": uid,
     "Church ID": uid,
     "Status": 'Church',
-    "Text": "Welcome to " + churchName + "'s Orb!",
+    "Text": "Welcome to $churchName's Orb!",
     "LikedBy": [],
     'Picture': [],
     'ProfilePicture':

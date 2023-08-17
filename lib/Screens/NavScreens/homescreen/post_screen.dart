@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, sort_child_properties_last
 
 import 'dart:io';
 
@@ -6,11 +6,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:community/screens/navscreens/navbar/nav_bar.dart';
-import 'package:community/firestore/postDataChurch.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/screens/navscreens/navbar/nav_bar.dart';
+import 'package:socialorb/firestore/postDataChurch.dart';
+import 'package:socialorb/sizes/size.dart';
 
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/themes/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import "package:flutter/material.dart";
@@ -212,8 +212,7 @@ class _PostScreenState extends State<PostScreen> {
                         List<XFile>? file = await imagePicker.pickMultiImage();
                         if (file.length > 15) {
                           Fluttertoast.showToast(
-                              msg: "The max number of photos is 15. You have " +
-                                  file.length.toString(),
+                              msg: "The max number of photos is 15. You have ${file.length}",
                               toastLength: Toast.LENGTH_LONG);
                         } else {
                           setState(() {

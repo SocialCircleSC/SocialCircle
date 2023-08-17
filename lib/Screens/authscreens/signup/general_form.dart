@@ -1,15 +1,13 @@
-// ignore_for_file: prefer_const_constructors, dead_code
+// ignore_for_file: prefer_const_constructors, dead_code, unused_local_variable
 
-import 'package:community/screens/gettingstarted/choose_church.dart';
-import 'package:community/themes/theme.dart';
+import 'package:socialorb/screens/gettingstarted/choose_church.dart';
+import 'package:socialorb/themes/theme.dart';
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:community/storage/storage_services.dart';
-import 'package:community/sizes/size.dart';
+import 'package:socialorb/storage/storage_services.dart';
+import 'package:socialorb/sizes/size.dart';
 import '../../../firestore/guestSignup.dart';
-import '../Login/login_screen.dart';
-
 class SignUpForm extends StatefulWidget {
   final bool guest;
   const SignUpForm({Key? key, required this.guest}) : super(key: key);
@@ -163,8 +161,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         password: passwordController.text);
                 guestSetup(firstNameController.text, lastNameController.text,
                     emailController.text);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
+                
                 Fluttertoast.showToast(
                     msg:
                         "Welcome to SocialOrb!",
