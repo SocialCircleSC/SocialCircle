@@ -230,11 +230,10 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
 
   void signUp(String email, String password) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
 
-      churchSetup(
+      await churchSetup(
         churchNameController.text,
         addressController.text,
         passwordController.text,
@@ -243,11 +242,11 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
       );
 
       await FirebaseAuth.instance.signOut();
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginScreen()));
       Fluttertoast.showToast(
           msg: "Congrats on making an account. Please login to use the app",
           toastLength: Toast.LENGTH_LONG);
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginScreen()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         Fluttertoast.showToast(msg: "The Password is too weak");
