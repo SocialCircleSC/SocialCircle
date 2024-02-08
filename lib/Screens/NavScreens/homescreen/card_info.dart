@@ -86,8 +86,8 @@ class _CardInfoState extends State<CardInfo> {
   }
 
   var chewieController;
-  var vController = VideoPlayerController.network(
-      "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Users%2FChurches%2FGhKxRVYOhaaapZPbEmsMsFOFImN2%2F1687226151192435?alt=media&token=4e77a65a-25fe-4663-ac15-46ff90fd22f8")
+  var vController = VideoPlayerController.networkUrl(Uri.parse(
+      "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Users%2FChurches%2FGhKxRVYOhaaapZPbEmsMsFOFImN2%2F1687226151192435?alt=media&token=4e77a65a-25fe-4663-ac15-46ff90fd22f8"))
     ..initialize();
   @override
   void initState() {
@@ -346,9 +346,9 @@ class _CardInfoState extends State<CardInfo> {
                                             controller: ChewieController(
                                                 videoPlayerController:
                                                     VideoPlayerController
-                                                        .network(
+                                                        .networkUrl(Uri.parse(
                                                             document["Picture"]
-                                                                [0])
+                                                                [0]))
                                                       ..initialize()),
                                           ),
                                         ),

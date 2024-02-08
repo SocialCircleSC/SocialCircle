@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socialorb/screens/messaging/message_home.dart';
 import 'package:socialorb/screens/navscreens/church/church_screen.dart';
-import 'package:socialorb/screens/navscreens/give/stripe_give_screen.dart';
 import 'package:socialorb/screens/navscreens/homescreen/home_screen.dart';
 import 'package:socialorb/screens/navscreens/homescreen/post_screen.dart';
 import 'package:socialorb/screens/navscreens/profile/profile_screen/profile_screen.dart';
@@ -92,7 +91,7 @@ class _NavBarState extends State<NavBar> {
           body: PageView(
             controller: controller,
             physics: NeverScrollableScrollPhysics(),
-            children: [
+            children: const [
               HomeScreen(),
               ChurchScreen(),
               GiveScreen(),

@@ -1,9 +1,11 @@
 import 'package:socialorb/screens/navscreens/give/keyboard_key.dart';
-import 'package:socialorb/screens/navscreens/give/stripe_give_screen.dart';
 import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GiveScreen extends StatefulWidget {
   const GiveScreen({Key? key}) : super(key: key);
@@ -14,6 +16,58 @@ class GiveScreen extends StatefulWidget {
 
 class _GiveScreenState extends State<GiveScreen> {
   final payController = CardFormEditController();
+
+  Map<String, dynamic>? paymentIntent;
+
+  void makePayment() async {
+    try {
+      paymentIntent = await createPaymentIntent();
+      var gpay = PaymentSheetGooglePay(
+        merchantCountryCode: "US",
+        currencyCode: "US",
+        testEnv: true,
+      );
+
+      await Stripe.instance.initPaymentSheet(
+          paymentSheetParameters: SetupPaymentSheetParameters(
+        paymentIntentClientSecret: paymentIntent!["client-secret"],
+        style: ThemeMode.dark,
+        merchantDisplayName: "SocialOrb",
+        googlePay: gpay,
+      ));
+
+      displayPaymentSheet();
+    } catch (e) {}
+  }
+
+  void displayPaymentSheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet();
+      debugPrint("DONE");
+    } catch (e) {
+      debugPrint("FAILED");
+    }
+  }
+
+  createPaymentIntent() async {
+    try {
+      Map<String, dynamic> body = {
+        "amount": "1000",
+        "currency": "US",
+      };
+
+      http.Response response = await http.post(
+          Uri.parse("http://api.stripe.com/v1/payment_intents"),
+          body: body,
+          headers: {
+            "Authorization": "Bearer ${dotenv.env['STRIPE_SECRET']!}",
+            "Content-Type": "application/x-www-form-urlendcoded",
+          });
+      return json.decode(response.body);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 
   @override
   void initState() {
@@ -97,6 +151,11 @@ class _GiveScreenState extends State<GiveScreen> {
   }
 
   renderConfirmButtom() {
+    //  async {
+    //                     Navigator.of(context).push(MaterialPageRoute(
+    //                         builder: (context) =>  const StripeGive(link: '',)));
+    //                   }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -108,8 +167,9 @@ class _GiveScreenState extends State<GiveScreen> {
                     disabledBackgroundColor: Colors.grey[200]),
                 onPressed: amount.isNotEmpty
                     ? () async {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>  const StripeGive(link: '',)));
+                        debugPrint("Ok Ok");
+                        makePayment();
+                        debugPrint("Last Last");
                       }
                     : null,
                 child: const Padding(

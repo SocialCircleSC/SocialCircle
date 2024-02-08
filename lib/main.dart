@@ -9,6 +9,7 @@ import 'package:socialorb/Screens/AuthScreens/Login/login_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 final navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
@@ -26,7 +27,7 @@ Future<void> main() async {
       //Force device to be in portrait mode
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
           .then((_) {
-        runApp(const MainPage());
+        runApp(MainPage());
       });
     } else {
       //Force device to be in portrait mode
@@ -49,8 +50,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
-
   final firebaseMessaging = FirebaseMessaging.instance;
 
   void handleMessage(RemoteMessage? message) {
@@ -82,6 +81,7 @@ class _MainPageState extends State<MainPage> {
     //print("Token:  $fCMToken");
     initPushNotifications();
   }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

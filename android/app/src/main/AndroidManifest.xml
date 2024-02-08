@@ -6,7 +6,9 @@
         android:requestLegacyExternalStorage="true"
         android:label="SocialOrb"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+       
+        >
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -23,6 +25,9 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+             <meta-data
+    android:name="com.google.android.gms.wallet.api.enabled"
+    android:value="true" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
