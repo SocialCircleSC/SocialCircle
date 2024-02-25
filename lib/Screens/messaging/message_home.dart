@@ -104,9 +104,6 @@ class _MessageHomeState extends State<MessageHome> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-
-            
-
             Navigator.push(
                 context,
                 MaterialPageRoute(

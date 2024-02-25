@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:socialorb/Screens/messaging/add_members.dart';
 import 'package:socialorb/firestore/sendMessage.dart';
 import 'package:socialorb/screens/messaging/message_model.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class SpecificMessage extends StatefulWidget {
   final String name;
   final String title;
   final String sender;
+
 
   const SpecificMessage({
     super.key,
@@ -30,6 +32,8 @@ class SpecificMessage extends StatefulWidget {
 class _SpecificMessageState extends State<SpecificMessage> {
   List<MessageModel> messages = [];
   TextEditingController newMessage = TextEditingController();
+  String dropdownValue = 'One';
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +57,33 @@ class _SpecificMessageState extends State<SpecificMessage> {
                 color: BlackColor,
               ),
             ),
-            title: Text(widget.title)),
+            title: Text(widget.title),
+            actions: [
+               DropdownButton(
+            icon: Icon(Icons.more_vert),
+          
+            onChanged: (String? newValue) {
+              setState(() {
+                if(newValue == "Add more members"){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID,)));
+                }
+                
+              });
+            },
+            items: <String>['Add more members']
+                .map<DropdownMenuItem<String>>(
+              (String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              },
+            ).toList(),
+          
+               ),
+            ],
+            
+            ),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection("circles")
@@ -155,9 +185,9 @@ class _SpecificMessageState extends State<SpecificMessage> {
                           Expanded(
                             child: TextField(
                               controller: newMessage,
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                  fillColor: Colors.grey[700],
+                                  fillColor: Colors.teal[200],
                                   filled: true,
                                   contentPadding: const EdgeInsets.all(12),
                                   hintText: "Start typing here...",

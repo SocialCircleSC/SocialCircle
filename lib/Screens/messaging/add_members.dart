@@ -6,21 +6,21 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../themes/theme.dart';
 
-class NewMessage extends StatefulWidget {
+class AddMembers extends StatefulWidget {
   final String churchID;
   final String userID;
   final String combName;
-  const NewMessage(
+  const AddMembers(
       {super.key,
       required this.churchID,
       required this.userID,
       required this.combName});
 
   @override
-  State<NewMessage> createState() => _NewMessageState();
+  State<AddMembers> createState() => _AddMembersState();
 }
 
-class _NewMessageState extends State<NewMessage> {
+class _AddMembersState extends State<AddMembers> {
   String name = "";
   bool tempBool = false;
   List addList = [];
@@ -126,7 +126,7 @@ class _NewMessageState extends State<NewMessage> {
                   }
                 },
                 child: const Text(
-                  "Create",
+                  "Add",
                   style: TextStyle(color: SecondaryColor),
                 ))
           ],

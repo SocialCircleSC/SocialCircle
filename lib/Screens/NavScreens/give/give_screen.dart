@@ -1,10 +1,13 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:socialorb/Screens/NavScreens/give/pay_with_card.dart';
 import 'package:socialorb/screens/navscreens/give/keyboard_key.dart';
 import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GiveScreen extends StatefulWidget {
@@ -18,56 +21,6 @@ class _GiveScreenState extends State<GiveScreen> {
   final payController = CardFormEditController();
 
   Map<String, dynamic>? paymentIntent;
-
-  void makePayment() async {
-    try {
-      paymentIntent = await createPaymentIntent();
-      var gpay = PaymentSheetGooglePay(
-        merchantCountryCode: "US",
-        currencyCode: "US",
-        testEnv: true,
-      );
-
-      await Stripe.instance.initPaymentSheet(
-          paymentSheetParameters: SetupPaymentSheetParameters(
-        paymentIntentClientSecret: paymentIntent!["client-secret"],
-        style: ThemeMode.dark,
-        merchantDisplayName: "SocialOrb",
-        googlePay: gpay,
-      ));
-
-      displayPaymentSheet();
-    } catch (e) {}
-  }
-
-  void displayPaymentSheet() async {
-    try {
-      await Stripe.instance.presentPaymentSheet();
-      debugPrint("DONE");
-    } catch (e) {
-      debugPrint("FAILED");
-    }
-  }
-
-  createPaymentIntent() async {
-    try {
-      Map<String, dynamic> body = {
-        "amount": "1000",
-        "currency": "US",
-      };
-
-      http.Response response = await http.post(
-          Uri.parse("http://api.stripe.com/v1/payment_intents"),
-          body: body,
-          headers: {
-            "Authorization": "Bearer ${dotenv.env['STRIPE_SECRET']!}",
-            "Content-Type": "application/x-www-form-urlendcoded",
-          });
-      return json.decode(response.body);
-    } catch (e) {
-      throw Exception(e.toString());
-    }
-  }
 
   @override
   void initState() {
@@ -167,14 +120,12 @@ class _GiveScreenState extends State<GiveScreen> {
                     disabledBackgroundColor: Colors.grey[200]),
                 onPressed: amount.isNotEmpty
                     ? () async {
-                        debugPrint("Ok Ok");
-                        makePayment();
-                        debugPrint("Last Last");
+                         makePayment();
                       }
                     : null,
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text('Confirm'),
+                  child: Text('Confirm', style: TextStyle(color: WhiteColor),),
                 )),
           ),
         ],
@@ -202,5 +153,130 @@ class _GiveScreenState extends State<GiveScreen> {
         ),
       ),
     );
+  }
+
+
+
+
+  //For Stripe
+    createPaymentIntent(String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': calculateAmount(amount),
+        'currency': currency,
+        'payment_method_types[]': 'card'
+      };
+
+      
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization':
+              'Bearer ${dotenv.env['STRIPE_SECRET']!}', //SecretKey used here
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+
+      log('Payment Intent Body->>> ${response.body.toString()}');
+      return jsonDecode(response.body);
+    } catch (e) {
+      log('err charging user: ${e.toString()}');
+    }
+  }
+
+  calculateAmount(String amount) {
+    amount = "${amount}00";
+    final calculatedAmout = (int.parse(amount));
+    return calculatedAmout.toString();
+  }
+
+  Future<void> makePayment() async {
+    try {
+      
+      paymentIntent = await createPaymentIntent(amount, 'USD');
+
+     
+      await Stripe.instance
+          .initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: paymentIntent!['client_secret'],
+          customerId: paymentIntent!['customer'],
+          style: ThemeMode.light,
+          merchantDisplayName: 'SocialOrb',
+        ),
+      )
+          .then((value) {
+        log("Success");
+      });
+
+      
+      displayPaymentSheet(); // Payment Sheet
+    } catch (e, s) {
+      String ss = "exception 1 :$e";
+      String s2 = "reason :$s";
+      log("exception 1:$e");
+    }
+  }
+
+  void displayPaymentSheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet().then((value) {
+        showDialog(
+          context: context,
+          builder: (_) => const AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Icon(
+                        Icons.check_circle,
+                        color: SecondaryColor,
+                      ),
+                    ),
+                    Text("Payment Successfull"),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+
+        
+        paymentIntent = null;
+      }).onError((error, stackTrace) {
+        String ss = "exception 2 :$error";
+        String s2 = "reason :$stackTrace";
+      });
+    } on StripeException catch (e) {
+      //print('Error is:---> $e');
+      String ss = "exception 3 :$e";
+    } catch (e) { 
+      log('$e');
+    }
+  }
+
+  final client = http.Client();
+  static Map<String, String> headers = {
+    'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET']!}',
+    'Content-Type': 'application/x-www-form-urlencoded'
+  };
+
+  Future<Map<String, dynamic>> _createCustomer() async {
+    const String url = 'https://api.stripe.com/v1/customers';
+    var response = await client.post(
+      Uri.parse(url),
+      headers: headers,
+      body: {'description': 'new customer'},
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      log(json.decode(response.body));
+      throw 'Failed to register as a customer.';
+    }
   }
 }

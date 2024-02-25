@@ -18,8 +18,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await dotenv.load(fileName: "lib/.env");
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
-  //await dotenv.load(fileName: "./env");
   await Stripe.instance.applySettings();
+  //await dotenv.load(fileName: "./env");
+  //await Stripe.instance.applySettings();
   //await initNotifications();
 
   FirebaseAuth.instance.authStateChanges().listen((event) {
