@@ -32,7 +32,7 @@ class SpecificMessage extends StatefulWidget {
 class _SpecificMessageState extends State<SpecificMessage> {
   List<MessageModel> messages = [];
   TextEditingController newMessage = TextEditingController();
-  String dropdownValue = 'One';
+  var dropdownValue = ['Add Members', 'Remove Members'];
 
 
   @override
@@ -64,13 +64,13 @@ class _SpecificMessageState extends State<SpecificMessage> {
           
             onChanged: (String? newValue) {
               setState(() {
-                if(newValue == "Add more members"){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID,)));
+                if(newValue == "Add"){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID, documentID: widget.documentID,)));
                 }
                 
               });
             },
-            items: <String>['Add more members']
+            items: <String>['Add', 'Remove']
                 .map<DropdownMenuItem<String>>(
               (String value) {
                 return DropdownMenuItem<String>(
@@ -78,6 +78,7 @@ class _SpecificMessageState extends State<SpecificMessage> {
                   child: Text(value),
                 );
               },
+              
             ).toList(),
           
                ),

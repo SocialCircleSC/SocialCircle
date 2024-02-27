@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:socialorb/firestore/addMemberMessage.dart';
 import 'package:socialorb/firestore/createGroup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:socialorb/firestore/removeMemberMessage.dart';
 
 import '../../themes/theme.dart';
 
@@ -10,11 +12,13 @@ class AddMembers extends StatefulWidget {
   final String churchID;
   final String userID;
   final String combName;
+  final String documentID;
   const AddMembers(
       {super.key,
       required this.churchID,
       required this.userID,
-      required this.combName});
+      required this.combName, 
+      required this.documentID});
 
   @override
   State<AddMembers> createState() => _AddMembersState();
@@ -89,44 +93,56 @@ class _AddMembersState extends State<AddMembers> {
           ),
           actions: [
             TextButton(
-                onPressed: () {
+                onPressed: () async{
                   if (addList.isEmpty) {
                     Fluttertoast.showToast(
-                        msg: "Please add one or more members",
+                        msg: "Please select one or more members",
                         toastLength: Toast.LENGTH_LONG);
                   } else {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text("Name this new Chat"),
-                            content: TextFormField(
-                              controller: nameController,
-                            ), //Cant be empty
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      addList.add(widget.userID);
-                                    });
-                                    createGroup(widget.churchID, widget.userID,
-                                        addList, nameController.text);
-                                    Navigator.pop(context);
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                TextButton(
+                                  onPressed: () async{
+                                     //End
+                    addMemberMessage(widget.churchID, widget.userID, widget.documentID);
+                    Fluttertoast.showToast(
+                        msg: "Added a member",
+                        toastLength: Toast.LENGTH_LONG);   
+                  
                                     Navigator.pop(context);
                                   },
-                                  child: const Text("Finish")),
+                                  child: const Text("Add Members")),
+                                  TextButton(
+                                  onPressed: () async{
+                                     //End
+                    removeMemberMessage(widget.churchID, widget.userID, widget.documentID);
+                    Fluttertoast.showToast(
+                        msg: "Added a member",
+                        toastLength: Toast.LENGTH_LONG);   
+                  
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Remove Members")),
                               TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
                                   child: const Text("Cancel")),
-                            ],
+                              ],
+                            ),
+                          
                           );
                         });
+
                   }
                 },
                 child: const Text(
-                  "Add",
+                  "Edit",
                   style: TextStyle(color: SecondaryColor),
                 ))
           ],
