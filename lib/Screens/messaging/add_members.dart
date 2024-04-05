@@ -117,17 +117,6 @@ class _AddMembersState extends State<AddMembers> {
                                     Navigator.pop(context);
                                   },
                                   child: const Text("Add Members")),
-                                  TextButton(
-                                  onPressed: () async{
-                                     //End
-                    removeMemberMessage(widget.churchID, widget.userID, widget.documentID);
-                    Fluttertoast.showToast(
-                        msg: "Added a member",
-                        toastLength: Toast.LENGTH_LONG);   
-                  
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("Remove Members")),
                               TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);

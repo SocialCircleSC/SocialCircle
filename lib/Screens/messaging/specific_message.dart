@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socialorb/Screens/messaging/add_members.dart';
+import 'package:socialorb/Screens/messaging/remove_members.dart';
 import 'package:socialorb/firestore/sendMessage.dart';
 import 'package:socialorb/screens/messaging/message_model.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class SpecificMessage extends StatefulWidget {
 class _SpecificMessageState extends State<SpecificMessage> {
   List<MessageModel> messages = [];
   TextEditingController newMessage = TextEditingController();
-  var dropdownValue = ['Add Members', 'Remove Members'];
+  //var dropdownValue = ['Add Members', 'Remove Members'];
 
 
   @override
@@ -64,13 +65,15 @@ class _SpecificMessageState extends State<SpecificMessage> {
           
             onChanged: (String? newValue) {
               setState(() {
-                if(newValue == "Add"){
+                if(newValue == "Add Members"){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID, documentID: widget.documentID,)));
+                }else if(newValue == "Remove Members"){
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => RemoveMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID, documentID: widget.documentID,)));
                 }
                 
               });
             },
-            items: <String>['Add', 'Remove']
+            items: <String>['Add Members', 'Remove Members']
                 .map<DropdownMenuItem<String>>(
               (String value) {
                 return DropdownMenuItem<String>(
