@@ -16,6 +16,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+import 'package:vimeo_video_player/vimeo_video_player.dart';
+
 
 class CardInfo extends StatefulWidget {
   const CardInfo({Key? key}) : super(key: key);
@@ -209,6 +211,7 @@ class _CardInfoState extends State<CardInfo> {
                         return Column(
                           children: [
                             Card(
+                              color: Colors.white,
                               clipBehavior: Clip.antiAlias,
                               child: ConstrainedBox(
                                 constraints: BoxConstraints(
@@ -224,7 +227,7 @@ class _CardInfoState extends State<CardInfo> {
                                         height: 50,
                                         decoration: BoxDecoration(
                                             border: Border.all(
-                                                width: 4, color: BlackColor),
+                                                width: 2, color: BlackColor),
                                             shape: BoxShape.circle,
                                             image: DecorationImage(
                                                 fit: BoxFit.fitWidth,
@@ -236,7 +239,7 @@ class _CardInfoState extends State<CardInfo> {
                                           document['Last Name']),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(8),
+                                      padding: const EdgeInsets.all(18),
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(

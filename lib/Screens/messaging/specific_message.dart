@@ -45,8 +45,13 @@ class _SpecificMessageState extends State<SpecificMessage> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Colors.grey.shade300,
+        backgroundColor: Colors.blue.shade50,
         appBar: AppBar(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(15),
+              )
+            ),
             backgroundColor: PrimaryColor,
             elevation: 0,
             leading: IconButton(
@@ -191,7 +196,7 @@ class _SpecificMessageState extends State<SpecificMessage> {
                               controller: newMessage,
                               style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                  fillColor: Colors.teal[200],
+                                  fillColor: Colors.white,
                                   filled: true,
                                   contentPadding: const EdgeInsets.all(12),
                                   hintText: "Start typing here...",

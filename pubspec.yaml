@@ -67,6 +67,7 @@ dependencies:
   permission_handler: ^10.2.0
   flutter_stripe: ^9.5.0+1
   firebase_messaging: ^14.6.3
+  vimeo_video_player: ^0.0.15
 
 dev_dependencies:
   flutter_lints: ^2.0.2

@@ -85,8 +85,8 @@ class _NavBarState extends State<NavBar> {
         return false;
       },
       child: MaterialApp(
-        theme: ThemeData.light(),
         home: Scaffold(
+          backgroundColor: Colors.white,
           extendBody: true, // To make floating action button notch transparent
           body: PageView(
             controller: controller,
