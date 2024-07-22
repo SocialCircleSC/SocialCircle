@@ -92,7 +92,7 @@ class _MessageHomeState extends State<MessageHome> {
             child: TextField(
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                hintText: "Search Members",
+                hintText: "Search",
               ),
               onChanged: (val) {
                 setState(() {

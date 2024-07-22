@@ -162,6 +162,10 @@ class _AddMembersState extends State<AddMembers> {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.black, width: 1),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
                           onTap: () {
                             setState(() {
                               if (addList.contains(data["ID"])) {

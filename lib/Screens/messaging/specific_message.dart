@@ -120,7 +120,7 @@ class _SpecificMessageState extends State<SpecificMessage> {
                       itemBuilder: (context, index) {
                         return Container(
                           padding: EdgeInsets.only(
-                              top: 4,
+                              top: 10,
                               bottom: 4,
                               left: snapshot.data!.docs[index]['Sender'] ==
                                       widget.userID
