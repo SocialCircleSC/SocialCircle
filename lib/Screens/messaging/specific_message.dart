@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socialorb/Screens/messaging/add_members.dart';
+import 'package:socialorb/Screens/messaging/all_members.dart';
 import 'package:socialorb/Screens/messaging/remove_members.dart';
 import 'package:socialorb/firestore/sendMessage.dart';
 import 'package:socialorb/screens/messaging/message_model.dart';
@@ -74,11 +75,14 @@ class _SpecificMessageState extends State<SpecificMessage> {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID, documentID: widget.documentID,)));
                 }else if(newValue == "Remove Members"){
                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RemoveMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID, documentID: widget.documentID,)));
+                }else if(newValue == "All Members"){
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => AllMembers(churchID: widget.churchID, userID: widget.userID, combName: widget.name, documentID: widget.documentID)));
                 }
+  
                 
               });
             },
-            items: <String>['Add Members', 'Remove Members']
+            items: <String>["All Members",'Add Members', 'Remove Members']
                 .map<DropdownMenuItem<String>>(
               (String value) {
                 return DropdownMenuItem<String>(

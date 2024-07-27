@@ -154,39 +154,43 @@ class _NewMessageState extends State<NewMessage> {
                         as Map<String, dynamic>;
 
                     if (name.isEmpty) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.black, width: 1),
-                            borderRadius: BorderRadius.circular(5),
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(color: Colors.black, width: 1),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  if (addList.contains(data["ID"])) {
+                                    addList.remove(data["ID"]);
+                                  } else {
+                                    addList.add(data["ID"]);
+                                  }
+                                });
+                              },
+                              tileColor: addList.contains(data["ID"])
+                                  ? PrimaryColor
+                                  : WhiteColor,
+                              leading: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 4, color: BlackColor),
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        fit: BoxFit.fitWidth,
+                                        image:
+                                            NetworkImage(data["ProfilePicture"]))),
+                              ),
+                              title: Text(
+                                  data["First Name"] + " " + data["Last Name"]),
+                            ),
                           ),
-                          onTap: () {
-                            setState(() {
-                              if (addList.contains(data["ID"])) {
-                                addList.remove(data["ID"]);
-                              } else {
-                                addList.add(data["ID"]);
-                              }
-                            });
-                          },
-                          tileColor: addList.contains(data["ID"])
-                              ? PrimaryColor
-                              : WhiteColor,
-                          leading: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                border: Border.all(width: 4, color: BlackColor),
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    fit: BoxFit.fitWidth,
-                                    image:
-                                        NetworkImage(data["ProfilePicture"]))),
-                          ),
-                          title: Text(
-                              data["First Name"] + " " + data["Last Name"]),
-                        ),
+                        ],
                       );
                     }
 

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:socialorb/firestore/addMemberMessage.dart';
 import 'package:socialorb/firestore/createGroup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,12 +9,12 @@ import 'package:socialorb/firestore/removeMemberMessage.dart';
 
 import '../../themes/theme.dart';
 
-class RemoveMembers extends StatefulWidget {
+class AllMembers extends StatefulWidget {
   final String churchID;
   final String userID;
   final String combName;
   final String documentID;
-  const RemoveMembers(
+  const AllMembers(
       {super.key,
       required this.churchID,
       required this.userID,
@@ -21,26 +22,24 @@ class RemoveMembers extends StatefulWidget {
       required this.documentID});
 
   @override
-  State<RemoveMembers> createState() => _RemoveMembersState();
+  State<AllMembers> createState() => _AllMembersState();
 }
 
-class _RemoveMembersState extends State<RemoveMembers> {
+class _AllMembersState extends State<AllMembers> {
   String name = "";
-  String creatorID = "";
   bool tempBool = false;
   List addList = [];
   TextEditingController nameController = TextEditingController();
   bool checkedValue = false;
   List<dynamic> membersList= [];
 
-    Future getListOfMembers() async {
+  Future getListOfMembers() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     // ignore: unused_local_variable
     final uid = user?.uid;
 
     List<dynamic> messageList = [];
-    var currentID;
 
 
     await FirebaseFirestore.instance
@@ -51,12 +50,10 @@ class _RemoveMembersState extends State<RemoveMembers> {
         .get()
         .then((value) {
           messageList = value["Members"];
-          currentID = value["Creator"];
           });
 
       setState(() {
         membersList = messageList;
-        creatorID = currentID;
       });
   }
  
@@ -66,6 +63,10 @@ class _RemoveMembersState extends State<RemoveMembers> {
     getListOfMembers();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,61 +107,10 @@ class _RemoveMembersState extends State<RemoveMembers> {
               
             ],
           ),
-          actions: [
-            TextButton(
-                onPressed: () async{
-                  if (addList.isEmpty) {
-                    Fluttertoast.showToast(
-                        msg: "Please select one or more members",
-                        toastLength: Toast.LENGTH_LONG);
-                  } else {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                  TextButton(
-                                  onPressed: () async{
-                                     if(creatorID == widget.userID){
-                                      removeMemberMessage(widget.churchID, widget.userID, widget.documentID);
-                                    Fluttertoast.showToast(
-                                        msg: "Removed",
-                                        toastLength: Toast.LENGTH_LONG);   
-                  
-                                    Navigator.pop(context);
-                                     }else{
-                                        Fluttertoast.showToast(
-                                            msg: "You do not have permission to remove members",
-                                            toastLength: Toast.LENGTH_LONG);   
-                    
-                                          Navigator.pop(context);
-                                     }
-                                  },
-                                  child: const Text("Remove Members")),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("Cancel")),
-                              ],
-                            ),
-                          
-                          );
-                        });
-
-                  }
-                },
-                child: const Text(
-                  "Edit",
-                  style: TextStyle(color: SecondaryColor),
-                ))
-          ],
         ),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
-               .collection("users")
+              .collection("users")
               .where("ID", whereIn: membersList)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -174,12 +124,12 @@ class _RemoveMembersState extends State<RemoveMembers> {
                 ],
               );
             } else {
-              //Data[ID] is not in the collection change it
-              return ListView.builder(                               
+              return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     var data = snapshot.data!.docs[index].data()
                         as Map<String, dynamic>;
+
                     if (name.isEmpty) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -200,8 +150,7 @@ class _RemoveMembersState extends State<RemoveMembers> {
                           tileColor: addList.contains(data["ID"])
                               ? PrimaryColor
                               : WhiteColor,
-
-                        leading: Container(
+                          leading: Container(
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
@@ -212,7 +161,6 @@ class _RemoveMembersState extends State<RemoveMembers> {
                                     image:
                                         NetworkImage(data["ProfilePicture"]))),
                           ),
-                          
                           title: Text(
                               data["First Name"] + " " + data["Last Name"]),
                         ),
@@ -237,6 +185,18 @@ class _RemoveMembersState extends State<RemoveMembers> {
                                 children: [
                                 
                                   ListTile(
+                                    leading: Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(width: 4, color: BlackColor),
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              fit: BoxFit.fitWidth,
+                                              image: NetworkImage(
+                                                  data["ProfilePicture"]))),
+                                    ),
                                     title: Text(
                                         data["First Name"] + " " + data["Last Name"]),
                                   ),

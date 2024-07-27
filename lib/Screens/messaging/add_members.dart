@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:socialorb/firestore/addMemberMessage.dart';
 import 'package:socialorb/firestore/createGroup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,30 +27,49 @@ class AddMembers extends StatefulWidget {
 
 class _AddMembersState extends State<AddMembers> {
   String name = "";
+  String creatorID = "";
   bool tempBool = false;
   List addList = [];
   TextEditingController nameController = TextEditingController();
   bool checkedValue = false;
+  List<dynamic> membersList= [];
 
-  Future getListOfMembers(String churchID, String userID, String name) async {
+  Future getListOfMembers() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     // ignore: unused_local_variable
     final uid = user?.uid;
 
+    List<dynamic> messageList = [];
+    var currentID;
+
+
     await FirebaseFirestore.instance
-        .collection('users')
-        .where("Church ID", isEqualTo: widget.churchID)
+        .collection('circles')
+        .doc(widget.churchID)
+        .collection("messages")
+        .doc(widget.documentID)
         .get()
         .then((value) {
-      for (int i = 0; i < value.size; i++) {
-        if (value.docs[i].id == name) {
-          setState(() {
-            tempBool == true;
+          messageList = value["Members"];
+          currentID = value["Creator"];
           });
-        }
-      }
-    });
+
+      setState(() {
+        membersList = messageList;
+        creatorID = currentID;
+      });
+  }
+ 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getListOfMembers();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -108,13 +128,22 @@ class _AddMembersState extends State<AddMembers> {
                               children: <Widget>[
                                 TextButton(
                                   onPressed: () async{
-                                     //End
-                    addMemberMessage(widget.churchID, widget.userID, widget.documentID);
-                    Fluttertoast.showToast(
-                        msg: "Added a member",
-                        toastLength: Toast.LENGTH_LONG);   
+                                    
+                                    if(creatorID == widget.userID){
+                                      addMemberMessage(widget.churchID, widget.userID, widget.documentID);
+                                      Fluttertoast.showToast(
+                                          msg: "Added a member",
+                                          toastLength: Toast.LENGTH_LONG);   
                   
-                                    Navigator.pop(context);
+                                        
+                                    }else{
+                                      Fluttertoast.showToast(
+                                          msg: "You do not have permission to add members",
+                                          toastLength: Toast.LENGTH_LONG);   
+                  
+                                    
+                                    }
+                    
                                   },
                                   child: const Text("Add Members")),
                               TextButton(
@@ -139,7 +168,7 @@ class _AddMembersState extends State<AddMembers> {
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection("users")
-              .where("Church ID", isEqualTo: widget.churchID)
+              .where("ID", whereNotIn: membersList)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

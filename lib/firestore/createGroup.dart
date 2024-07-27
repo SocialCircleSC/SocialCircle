@@ -11,6 +11,7 @@ Future<void> createGroup(
       .collection("messages")
       .add({
     "Creator": userID,
+    "Message ID": " ",
     "Image":
         "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
     "Text": "Start the conversation",
@@ -21,6 +22,16 @@ Future<void> createGroup(
   });
 
   docRef;
+
+  await FirebaseFirestore.instance
+          .collection("circles")
+          .doc(churchID)
+          .collection("messages")
+          .doc(docRef.id)
+          .update({
+        "Message ID": docRef.id,
+  }); 
+  
   //Add interaction section
   await FirebaseFirestore.instance
       .collection("circles")
