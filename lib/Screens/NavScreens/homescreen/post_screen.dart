@@ -18,6 +18,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class PostScreen extends StatefulWidget {
   const PostScreen({Key? key}) : super(key: key);
 
@@ -71,6 +73,8 @@ class _PostScreenState extends State<PostScreen> {
       userID = uID;
       profilePic = pPic;
     });
+
+      await dotenv.load(fileName: "lib/.env");
   }
 
   @override
@@ -102,7 +106,7 @@ class _PostScreenState extends State<PostScreen> {
             }),
             icon: const Icon(
               Icons.arrow_back_sharp,
-              color: PrimaryColor,
+              color: BlackColor,
             ),
           ),
 
@@ -155,7 +159,7 @@ class _PostScreenState extends State<PostScreen> {
                                       profilePic,
                                       firstN,
                                       lastN,
-                                      "7PEVPi7V6VU7fMsXCA5X0m8crxj2",
+                                      dotenv.env['DISCOVER_CODE']!,
                                       userID,
                                       imageList,
                                       type);
@@ -175,7 +179,7 @@ class _PostScreenState extends State<PostScreen> {
               },
               child: const Text(
                 'Post',
-                style: TextStyle(color: PrimaryColor),
+                style: TextStyle(color: BlackColor),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
@@ -199,9 +203,11 @@ class _PostScreenState extends State<PostScreen> {
 
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: SecondaryColor,
+                      backgroundColor: PrimaryColor,
                     ),
-                    label: const Text("Add Image"),
+                    label: const Text("Add Image",
+                      style: TextStyle(color: BlackColor),
+                    ),
                     icon: const Icon(
                       Icons.camera,
                       color: Colors.black,
@@ -237,9 +243,11 @@ class _PostScreenState extends State<PostScreen> {
 
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: SecondaryColor,
+                      backgroundColor: PrimaryColor,
                     ),
-                    label: const Text("Add Video"),
+                    label: const Text("Add Video",
+                      style: TextStyle(color: BlackColor)
+                    ),
                     icon: const Icon(
                       Icons.camera_alt,
                       color: Colors.black,

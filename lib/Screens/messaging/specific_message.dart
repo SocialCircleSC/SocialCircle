@@ -72,9 +72,9 @@ class _SpecificMessageState extends State<SpecificMessage> {
             onChanged: (String? newValue) {
               setState(() {
                 if(newValue == "Add Members"){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID, documentID: widget.documentID,)));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID, documentID: widget.documentID, title: widget.title,)));
                 }else if(newValue == "Remove Members"){
-                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => RemoveMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID, documentID: widget.documentID,)));
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => RemoveMembers(churchID: widget.churchID, combName: widget.name, userID: widget.userID, documentID: widget.documentID, title: widget.title,)));
                 }else if(newValue == "All Members"){
                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AllMembers(churchID: widget.churchID, userID: widget.userID, combName: widget.name, documentID: widget.documentID)));
                 }

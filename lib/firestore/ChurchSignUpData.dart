@@ -64,6 +64,14 @@ Future<void> churchSetup(
         "Welcome to SocialOrb Messaging Center! This is just a Welcome message. Any messages sent will not be replied to",
     'Members': FieldValue.arrayUnion([uid]),
   });
+  
+    //For Giving
+  await circle.doc(uid).collection("giving").doc().set({
+    "Giver": uid,
+    'Amount': 0,
+    'Date': FieldValue.serverTimestamp(),
+ 
+  });
 
   //For interactions
   await circle

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:socialorb/Screens/NavScreens/give/pay_with_card.dart';
+import 'package:socialorb/firestore/giveFirestore.dart';
 import 'package:socialorb/screens/navscreens/give/keyboard_key.dart';
 import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
@@ -202,12 +203,13 @@ class _GiveScreenState extends State<GiveScreen> {
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: paymentIntent!['client_secret'],
           customerId: paymentIntent!['customer'],
-          style: ThemeMode.light,
+          style: ThemeMode.light, 
           merchantDisplayName: 'SocialOrb',
         ),
       )
           .then((value) {
-        log("Success");
+            log("Success");
+            giveFirestore(int.parse(amount));
       });
 
       

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:socialorb/Screens/messaging/specific_message.dart';
 import 'package:socialorb/firestore/addMemberMessage.dart';
 import 'package:socialorb/firestore/createGroup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,12 +15,13 @@ class AddMembers extends StatefulWidget {
   final String userID;
   final String combName;
   final String documentID;
+  final String title;
   const AddMembers(
       {super.key,
       required this.churchID,
       required this.userID,
       required this.combName, 
-      required this.documentID});
+      required this.documentID, required this.title});
 
   @override
   State<AddMembers> createState() => _AddMembersState();
@@ -135,13 +137,13 @@ class _AddMembersState extends State<AddMembers> {
                                           msg: "Added a member",
                                           toastLength: Toast.LENGTH_LONG);   
                   
-                                        
+                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SpecificMessage(churchID: widget.churchID, userID: widget.userID, documentID: widget.documentID, name: widget.combName, sender: widget.userID, title: widget.title, )));
                                     }else{
                                       Fluttertoast.showToast(
                                           msg: "You do not have permission to add members",
                                           toastLength: Toast.LENGTH_LONG);   
                   
-                                    
+                                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => SpecificMessage(churchID: widget.churchID, userID: widget.userID, documentID: widget.documentID, name: widget.combName, sender: widget.userID, title: widget.title, )));
                                     }
                     
                                   },
