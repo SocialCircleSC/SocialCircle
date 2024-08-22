@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:socialorb/Screens/NavScreens/give/pay_with_card.dart';
 import 'package:socialorb/firestore/giveFirestore.dart';
 import 'package:socialorb/screens/navscreens/give/keyboard_key.dart';
@@ -20,8 +22,50 @@ class GiveScreen extends StatefulWidget {
 
 class _GiveScreenState extends State<GiveScreen> {
   final payController = CardFormEditController();
+  String stripeID = "";
+  String receiptE = "";
 
   Map<String, dynamic>? paymentIntent;
+
+    //Get the member's church ID
+  Future getStripeConnectedID() async {
+    String sID = "";
+    String cID = "";
+    String rEmail = "";
+
+    //Get church ID
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user?.uid;
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((value) {
+      cID = value.get('Church ID');
+      rEmail = value.get('Email Address');
+    });
+
+    await FirebaseFirestore.instance
+        .collection('circles')
+        .doc(cID)
+        .get()
+        .then((value) {
+      sID = value.get('Stripe Connected ID');
+    });
+
+    setState(() {
+      stripeID = sID;
+      receiptE = rEmail;
+    });
+  }
+
+    @override
+  void didChangeDependencies() {
+    getStripeConnectedID();
+    super.didChangeDependencies();
+  }
 
   @override
   void initState() {
@@ -165,7 +209,9 @@ class _GiveScreenState extends State<GiveScreen> {
       Map<String, dynamic> body = {
         'amount': calculateAmount(amount),
         'currency': currency,
-        'payment_method_types[]': 'card'
+        'payment_method_types[]': 'card',
+        'transfer_group': stripeID,
+        'receipt_email': receiptE,
       };
 
       
@@ -179,7 +225,7 @@ class _GiveScreenState extends State<GiveScreen> {
         body: body,
       );
 
-      log('Payment Intent Body->>> ${response.body.toString()}');
+      log('Payment Intent Body->>> ${response.body.toString()}'); 
       return jsonDecode(response.body);
     } catch (e) {
       log('err charging user: ${e.toString()}');
@@ -209,7 +255,7 @@ class _GiveScreenState extends State<GiveScreen> {
       )
           .then((value) {
             log("Success");
-            giveFirestore(int.parse(amount));
+            
       });
 
       
@@ -246,8 +292,6 @@ class _GiveScreenState extends State<GiveScreen> {
             ),
           ),
         );
-
-        
         paymentIntent = null;
       }).onError((error, stackTrace) {
         String ss = "exception 2 :$error";
@@ -259,6 +303,7 @@ class _GiveScreenState extends State<GiveScreen> {
     } catch (e) { 
       log('$e');
     }
+    giveFirestore(int.parse(amount));
   }
 
   final client = http.Client();

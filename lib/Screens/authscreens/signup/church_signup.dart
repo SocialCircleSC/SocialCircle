@@ -1,3 +1,4 @@
+import 'package:socialorb/Screens/authscreens/signup/church_sub.dart';
 import 'package:socialorb/screens/authscreens/login/login_screen.dart';
 import 'package:socialorb/screens/authscreens/signup/church_form.dart';
 import 'package:socialorb/themes/theme.dart';
@@ -5,13 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:socialorb/sizes/size.dart';
 
 class SignUpChurch extends StatefulWidget {
-  const SignUpChurch({Key? key}) : super(key: key);
+  final int planID;
+  const SignUpChurch({Key? key, required this.planID}) : super(key: key);
 
   @override
   State<SignUpChurch> createState() => _SignUpChurchState();
 }
 
 class _SignUpChurchState extends State<SignUpChurch> {
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -85,9 +88,9 @@ class _SignUpChurchState extends State<SignUpChurch> {
               SizedBox(
                 height: displayHeight(context) * 0.01,
               ),
-              const Padding(
+               Padding(
                 padding: DefaultPadding,
-                child: SignUpFormChurch(),
+                child: SignUpFormChurch(planID: widget.planID,),
               ),
               SizedBox(
                 height: displayHeight(context) * 0.06,

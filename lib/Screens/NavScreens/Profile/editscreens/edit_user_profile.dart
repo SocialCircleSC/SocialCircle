@@ -221,15 +221,15 @@ class _EditProfileState extends State<EditProfile> {
                     padding: SignUpButtonPadding,
                   ),
                   child: const Text("Update"),
-                  onPressed: () {
+                  onPressed: () async {
                     updateProfile(
                         widget.userID,
                         firstNameController.text,
                         lastNameController.text,
                         emailController.text,
                         passwordController.text,
-                        imagePath[0]);
-                    Navigator.pop(context);
+                        imagePath);
+                        Navigator.pop(context);
                   },
                 ),
               ],

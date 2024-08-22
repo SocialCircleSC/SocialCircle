@@ -8,7 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 Future<void> updateProfile(String userID, String fName, String lName,
-    String email, String password, String image) async {
+    String email, String password, var image) async {
   FirebaseAuth auth = FirebaseAuth.instance;
   final User? user = auth.currentUser;
   String pic = "";
@@ -38,14 +38,14 @@ Future<void> updateProfile(String userID, String fName, String lName,
           .ref()
           .child('/Users')
           .child('/Churches')
-          .child('/$userID')
+          .child('/$userID') 
           .child(uniqueFileName);
 
       try {
-        await ref.putFile(File(image));
+        await ref.putFile(File(image[0]));
         pic = await ref.getDownloadURL();
       } catch (e) {
-        debugPrint("THIS ISNT WORKING WHY!");
+        debugPrint("Not working");
       }
 
     postToCircle.update({

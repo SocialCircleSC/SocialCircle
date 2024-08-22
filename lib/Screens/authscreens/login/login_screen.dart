@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors, library_private_types_in_public_api
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:socialorb/Screens/authscreens/signup/church_signup.dart';
 import 'package:socialorb/screens/authscreens/login/login_form.dart';
 import 'package:socialorb/screens/gettingstarted/choose_user_type.dart';
 import 'package:socialorb/themes/theme.dart';
@@ -7,6 +9,7 @@ import 'package:socialorb/screens/authScreens/resetpassword/reset_password_scree
 import 'package:socialorb/sizes/size.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -24,6 +27,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //firebase
   final auth = FirebaseAuth.instance;
+
+  //CommunitCode
+  TextEditingController churchCode = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -86,12 +92,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   );
                 },
-                child: Text(
-                  "Sign Up",
-                  style: textButton.copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationThickness: 1,
+                child: GestureDetector(
+                  child: Text(
+                    "Sign Up",
+                    style: textButton.copyWith(
+                      decoration: TextDecoration.underline,
+                      decorationThickness: 1,
+                    ),
+                    
                   ),
+                  onTap: () async {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseUser()));
+                  },
                 ),
               ),
             ],
@@ -134,5 +146,13 @@ class _LoginScreenState extends State<LoginScreen> {
         ]),
       ),
     );
+  }
+}
+
+void openURl(String site) async {
+  if(await launchUrl(Uri.parse(site))){
+    await launchUrl(Uri.parse(site));
+  }else{
+    throw 'Could not launch site';
   }
 }

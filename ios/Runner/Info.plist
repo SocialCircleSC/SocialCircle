@@ -47,6 +47,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
+		<string>http</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<key>LSApplicationQueriesSchemes</key>
 	<key>NSAppTransportSecurity</key>

@@ -102,13 +102,13 @@ class _PaymentWebViewState extends State<PaymentWebView> {
           .createUserWithEmailAndPassword(
               email: widget.email, password: widget.password);
 
-      churchSetup(
-        widget.churchName,
-        widget.churchAddress,
-        widget.phoneNumber,
-        widget.email,
-        widget.weeklyEvent,
-      );
+      // churchSetup(
+      //   widget.churchName,
+      //   widget.churchAddress,
+      //   widget.phoneNumber,
+      //   widget.email,
+      //   widget.weeklyEvent,
+      // );
 
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const NavBar()));

@@ -1,6 +1,7 @@
 import 'package:socialorb/Screens/AuthScreens/Login/login_screen.dart';
 import 'package:socialorb/Screens/AuthScreens/signup/general_signup.dart';
 import 'package:socialorb/Screens/AuthScreens/signup/church_signup.dart';
+import 'package:socialorb/Screens/authscreens/signup/church_sub.dart';
 import 'package:socialorb/themes/theme.dart';
 import 'package:socialorb/sizes/size.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class ChooseUser extends StatefulWidget {
 
 class _ChooseUserState extends State<ChooseUser> {
   TextEditingController myController = TextEditingController();
+  TextEditingController churchCode = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -90,62 +92,63 @@ class _ChooseUserState extends State<ChooseUser> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  showAlertDialog(BuildContext context) {
-                    // set up the buttons
-                    Widget cancelButton = TextButton(
-                      child: const Text("I do not have my code"),
-                      onPressed: () async {
-                        //Open Email
-                        Uri url =
-                            Uri.parse('https://calendly.com/socialorb/30min');
-                        if (await launchUrl(url)) {
-                          await launchUrl(url);
-                        } else {
-                          throw 'Could not launch $url';
-                        }
-                      },
-                    );
-                    Widget continueButton = TextButton(
-                      child: const Text("Continue"),
-                      onPressed: () {
-                        if (myController.text ==
-                            dotenv.env['CHURCH_SIGNUP_CODE']!) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SignUpChurch()));
-                        } else {
-                          Fluttertoast.showToast(
-                              msg: "The code is correct",
-                              toastLength: Toast.LENGTH_LONG);
-                        }
-                      },
-                    );
-
-                    // set up the AlertDialog
-                    AlertDialog alert = AlertDialog(
-                      title: const Text("Church Confirmation"),
-                      content: TextField(
-                        controller: myController,
-                        decoration:
-                            const InputDecoration(hintText: "Type your code"),
-                      ),
-                      actions: [
-                        cancelButton,
-                        continueButton,
-                      ],
-                    );
-
-                    // show the dialog
                     showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return alert;
-                      },
-                    );
-                  }
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text("Do you have your code?"),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Main text
+                                  TextFormField(
+                                    style: TextStyle(color: Colors.black),
+                                    controller: churchCode,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      hintText: 'Enter sign up code',
+                                      hintStyle: TextStyle(color: Colors.black, fontSize: 16),
+                                    ),
+                                  ),
 
-                  showAlertDialog(context);
+                                  // Spacing between the list and the buttons
+                                  SizedBox(height: 20),
+
+                                  // Row with two buttons
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton(
+                                        
+                                        onPressed: () {
+                                         
+                                          if(churchCode.text == dotenv.env['CHURCH_SIGNUP_CODE']!){
+                                            
+                                            Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => SignUpChurch(planID: 0)),);
+                                            
+                                            
+                                          }else{
+
+                                          }
+
+                                        },
+                                        child: Text('Yes'),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          openURl(dotenv.env['CALENDY_SITE']!);
+                                        },
+                                        child: Text('No'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+    },
+  );
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: WhiteColor,
@@ -184,5 +187,13 @@ class _ChooseUserState extends State<ChooseUser> {
             ]),
       ),
     );
+  }
+}
+
+void openURl(String site) async {
+  if(await launchUrl(Uri.parse(site))){
+    await launchUrl(Uri.parse(site));
+  }else{
+    throw 'Could not launch site';
   }
 }

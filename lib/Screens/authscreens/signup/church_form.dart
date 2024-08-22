@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously
 
-import 'package:socialorb/firestore/churchSignUpData.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:socialorb/firestore/ChurchSignUpData.dart';
 import 'package:socialorb/screens/authscreens/login/login_screen.dart';
 
 import 'package:socialorb/themes/theme.dart';
@@ -9,21 +10,35 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/services.dart';
 import 'package:socialorb/sizes/size.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
 
 class SignUpFormChurch extends StatefulWidget {
-  const SignUpFormChurch({Key? key}) : super(key: key);
+  final int planID;
+  const SignUpFormChurch({Key? key, required this.planID}) : super(key: key);
 
   @override
   State<SignUpFormChurch> createState() => _SignUpFormChurchState();
 }
 
-enum SingingCharacter { starter, standard, premium, payg }
+enum SingingCharacter {starter, standard, premium, payg }
 
 class _SignUpFormChurchState extends State<SignUpFormChurch> {
   bool _isObscure = false;
   bool checkedValue = false;
   bool newValue = true;
   String empty = "empty";
+  String customerStripeID = "";
+  String paymentMethodID = "";
+  String connectedAccountID = "";
+  String customerID = "";
+  String priceID = ""; //This will be permanent
+  Map<String, dynamic>? paymentIntent;
+  var jsonR;
 
   final auth = FirebaseAuth.instance;
   TextEditingController churchNameController = TextEditingController();
@@ -34,6 +49,23 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController weeklyEventController = TextEditingController();
 
+  //@override
+
+  // void initState(){
+  //   super.initState();
+
+  //       // Listen for URL changes in the WebView
+  //   flutterWebViewPlugin.onUrlChanged.listen((String url) {
+  //     if (url.contains("your_redirect_url")) {
+  //       // The user has reached the redirect URL
+  //       // Close the WebView
+  //       flutterWebViewPlugin.close();
+
+  //       // Navigate back to Flutter
+  //       Navigator.of(context).pop();
+  //     }
+  //   });
+  // }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -219,7 +251,41 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
                     msg:
                         "Please make sure your password is the same as your confirm passowrd");
               } else {
-                signUp(emailController.text, passwordController.text);
+
+                try{
+
+                  //Before steps 
+                  //await createPaymentIntent();
+
+
+                  // //1) Collect payment info
+                  // await collectPaymentInfo();
+
+                  // debugPrint("Done1");
+
+                  // //2)Create connected account
+                  // connectedAccountID = await createConnectedAccount(emailController.text);
+                  // debugPrint("Done2");
+                  // //3) Attach Payment to Customer
+                  // customerID = await createCustomer(emailController.text);
+                  // debugPrint("Done3");
+                  // //4) Set Up recurring payment
+                  // await createSubscription(customerID, dotenv.env['STRIPE_STARTER_ID']!);
+
+                  // debugPrint("Done4");
+                  // //5) Redirect to complete onboarding
+                  // await redirectToOnboarding(connectedAccountID);
+                  // debugPrint("Done5");
+
+                  //6) Sign them up
+                  signUp(emailController.text, passwordController.text);
+                  //debugPrint("Done?");
+                  //7) Redirect back to app
+                  //_launchURL(widget.planID);
+                  
+                  } catch (e){
+                    debugPrint("Error with onboarding");
+                }
               }
             }
           },
@@ -233,13 +299,12 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
 
-      await churchSetup(
-        churchNameController.text,
-        addressController.text,
-        passwordController.text,
-        emailController.text,
-        weeklyEventController.text,
-      );
+      await churchSetup(churchNameController.text, addressController.text, 
+        phoneNumberController.text, emailController.text, 
+        weeklyEventController.text);
+
+
+      
 
       await FirebaseAuth.instance.signOut();
       Fluttertoast.showToast(
@@ -257,4 +322,208 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
       debugPrint(e.toString());
     }
   }
+
+  Future<void> createPaymentIntent() async {
+     try {
+        final Map<String, dynamic> body = {
+        'amount': '2000', // The amount in the smallest currency unit (e.g., cents for USD)
+        'currency': 'usd', // The currency
+        'payment_method_types[]': 'card', // Payment methods
+      };
+
+      
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization':
+              'Bearer ${dotenv.env['STRIPE_SECRET']!}', //SecretKey used here
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+      );
+
+      jsonR = jsonDecode(response.body);
+      jsonR = jsonR['clientSecret'];
+
+      //log('Payment Intent Body->>> ${response.body.toString()}'); 
+      //return jsonDecode(response.body);
+    } catch (e) {
+      debugPrint('err charging user: ${e.toString()}');
+    }
+  }
+
+  Future<void> collectPaymentInfo() async {
+      debugPrint("Done1");
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: const SetupPaymentSheetParameters(
+          //paymentIntentClientSecret: clientSecret,
+          // Customize the appearance of the payment sheet
+          style: ThemeMode.dark, // or ThemeMode.light
+          merchantDisplayName: 'SocialOrb',
+        ),
+      );
+    
+      debugPrint("Done2");
+      try{
+        await Stripe.instance.presentPaymentSheet();
+        var paymentMethod = await Stripe.instance.confirmPayment(paymentIntentClientSecret: 'plink_1PovKyEdOD179lXVUqEILO8j');//Need to create payment intent for recurring payment of 60
+        //And put it as a parameter
+      
+         showDialog(
+          context: context,
+          builder: (_) => const AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Icon(
+                        Icons.check_circle,
+                        color: SecondaryColor,
+                      ),
+                    ),
+                    Text("Payment Info Saved"),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      
+      
+      paymentMethodID = paymentMethod.id;
+      
+      } catch (e){
+        debugPrint(e.toString());
+      }
+      //paymentMethod;
+      paymentMethodID;
+      debugPrint("Done3");
+    
+  }
+
+  //Create connected account
+  Future<String> createConnectedAccount(String email) async {
+    final url = Uri.parse('https://api.stripe.com/v1/accounts');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET']}',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'type': 'express',
+        'email': email,
+      },
+    );
+    if (response.statusCode == 200) {
+      final accountData = jsonDecode(response.body);
+      final accountID = accountData['id'];
+      connectedAccountID = accountData['id'];
+      return accountID;
+     
+    } else {
+      throw Exception('Failed to create connected account: ${response.body}');
+    }
 }
+
+
+Future<void> attachPaymentMethodToCustomer(
+    String paymentMethodId, String customerId) async {
+  final url = Uri.parse('https://api.stripe.com/v1/payment_methods/$paymentMethodId/attach');
+  final response = await http.post(
+    url,
+    headers: {
+      'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET_KEY']}',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: {
+      'customer': customerId,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    print('Payment method attached to customer: $customerId');
+  } else {
+    throw Exception('Failed to attach payment method: ${response.body}');
+  }
+}
+
+Future<void> redirectToOnboarding(String accountId) async {
+  final url = Uri.parse('https://api.stripe.com/v1/account_links');
+  final response = await http.post(
+    url,
+    headers: {
+      'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET_KEY']}',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: {
+      'account': accountId,
+      'return_url': 'social-orb.com',
+      'type': 'account_onboarding',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final linkData = jsonDecode(response.body);
+    final onboardingUrl = linkData['url'];
+    //await launch(onboardingUrl);
+  } else {
+    throw Exception('Failed to create account link: ${response.body}');
+  }
+}
+
+Future<void> createSubscription(String customerId, String priceId) async {
+  final url = Uri.parse('https://api.stripe.com/v1/subscriptions');
+  final response = await http.post(
+    url,
+    headers: {
+      'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET_KEY']}',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: {
+      'customer': customerId,
+      'items[0][price]': priceId,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final subscriptionData = jsonDecode(response.body);
+    final subscriptionId = subscriptionData['id'];
+    print('Subscription created: $subscriptionId');
+  } else {
+    throw Exception('Failed to create subscription: ${response.body}');
+  }
+}
+
+
+
+
+  //Create a church recuring payment link to be used
+  Future<String> createCustomer(String email) async {
+    final url = Uri.parse('https://api.stripe.com/v1/customers');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET']!}', 
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'email': email,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      customerStripeID = body['id'];
+      return body['id']; // This is the customer ID
+    } else {
+      throw Exception('Failed to create customer: ${response.body}');
+    }
+  }
+
+
+}
+
+

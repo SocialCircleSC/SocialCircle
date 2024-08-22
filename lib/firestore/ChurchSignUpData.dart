@@ -23,7 +23,8 @@ Future<void> churchSetup(
     'Phone Number': phoneN,
     'Email Address': email,
     'Status': 'Church',
-    'Payment Plan': 'None',
+    'Stripe Connected ID': "N/A",
+
     'Number of Members': 0,
     'Church ID': uid,
     'Events': [event1],
