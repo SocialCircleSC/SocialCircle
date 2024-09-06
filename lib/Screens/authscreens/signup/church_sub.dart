@@ -4,12 +4,17 @@ import 'dart:developer';
 
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:socialorb/Screens/NavScreens/navbar/nav_bar.dart';
 import 'package:socialorb/Screens/authscreens/signup/church_signup.dart';
+import 'package:socialorb/firestore/changePlan.dart';
 import 'package:socialorb/themes/theme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ChurchSub extends StatefulWidget {
-  const ChurchSub({super.key});
+  final String churchID;
+
+  const ChurchSub({super.key, required this.churchID});
 
   @override
   State<ChurchSub> createState() => _ChurchSubState();
@@ -24,12 +29,18 @@ class _ChurchSubState extends State<ChurchSub> {
         title: const Text("Choose Your Plan"),
       ),
 
-      body: HorizontalCardScroll(),
+      body: HorizontalCardScroll(churchValue: widget.churchID,),
     );
   }
 }
 
 class HorizontalCardScroll extends StatelessWidget {
+  late final String churchValue;
+
+    // Accept value via constructor
+  HorizontalCardScroll({required this.churchValue});
+
+
   @override
   Widget build(BuildContext context){
     return Padding(
@@ -37,10 +48,10 @@ class HorizontalCardScroll extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          _buildCard(context,'Starter Pack: \$60', '200' , PrimaryColor, 1),
-          _buildCard(context, 'Classic Pack: \$120', '500', PrimaryColor, 2),
-          _buildCard(context, 'Exclusive Pack: \$500', '2000', PrimaryColor, 3),
-          _buildCard(context, 'Social Pack: \$1200', '5000', PrimaryColor, 4),
+          _buildCard(context,'Starter Pack: \$60', '200' , PrimaryColor, 1, churchValue),
+          _buildCard(context, 'Classic Pack: \$120', '500', PrimaryColor, 2, churchValue),
+          _buildCard(context, 'Exclusive Pack: \$500', '2000', PrimaryColor, 3, churchValue),
+          _buildCard(context, 'Social Pack: \$1200', '5000', PrimaryColor, 4, churchValue),
         ],
       ),
     );
@@ -48,7 +59,7 @@ class HorizontalCardScroll extends StatelessWidget {
 
 }
 
-Widget _buildCard(BuildContext contextz,String title, String churchSize ,Color color, int code){
+Widget _buildCard(BuildContext contextz,String title, String churchSize ,Color color, int code, String cID){
 
   List<String> featureList = [
     "Text to Give",
@@ -118,7 +129,7 @@ Widget _buildCard(BuildContext contextz,String title, String churchSize ,Color c
                   padding: EdgeInsets.only(top: 60),
                   child: ElevatedButton(
                     onPressed: (){
-                      showPreparation(contextz, code);
+                      showPreparation(contextz, code, cID);
                   }
                   ,
                     child: Text("Select"),
@@ -136,34 +147,21 @@ Widget _buildCard(BuildContext contextz,String title, String churchSize ,Color c
 }
 
 
-void showPreparation(BuildContext context, int planID){
+void showPreparation(BuildContext context, int planID, String churchID){
   showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text("Before Continuing"),
+        title: const Text("Almost done"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // Main text
-            const Text('The process of registration can take up to 15 minutes. To make sure the process is as fast and smooth as possible, please have the following before pressing continue.',
+            const Text('An email about switching to the new plan will be sent to you in the next 2-3 business days.',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-
-                                const SizedBox(height: 20),
                                 
-                                const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('• ID Card of a financial and personal representative of the church'),
-                                    Text('• Address of the Church'),
-                                    Text('• Debit/Credit Card for payment'),
-                                    Text('• Social Security Number'),
-                                    Text("• Website. If non use 'www.social-orb.com' "),
-                                    Text('• Atleast 15 minutes of time'),
-                                    Text('• Once done you will be provided a code needed to move the next phase. Please Save that code', style:  TextStyle(color: SecondaryColor),),
-                                  ],
-                      ),
+                                
 
             // Spacing between the list and the buttons
             SizedBox(height: 20),
@@ -179,11 +177,16 @@ void showPreparation(BuildContext context, int planID){
                   child: Text('Cancel'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SignUpChurch(planID: planID)),
-              );
+                  onPressed: () async{
+                    editPlan(churchID, planID);
+                    Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const NavBar()));
+                    Fluttertoast.showToast(
+                      msg: "An email about purchasing your new plan will be sent to you in the next 2-3 business days.",
+                      toastLength: Toast.LENGTH_LONG,  // Show toast for a longer duration
+                      gravity: ToastGravity.BOTTOM,     // Position the toast at the bottom of the screen
+                      fontSize: 16.0,                   // Font size
+                    );
                   },
                   child: Text('OK'),
                 ),

@@ -197,6 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     email: snapshot1.data!['Email Address'],
                                     profilePic:
                                         snapshot1.data!['ProfilePicture'],
+                                    churchID: snapshot1.data!['Church ID'],
                                   )));
                       // if (userID == churchID) {
                       //   // Navigator.push(context,

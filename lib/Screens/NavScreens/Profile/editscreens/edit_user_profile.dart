@@ -1,9 +1,17 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:socialorb/Screens/authscreens/signup/church_sub.dart';
+import 'package:socialorb/firestore/deleteChurch.dart';
+import 'package:socialorb/firestore/deleteMemberAccount.dart';
+import 'package:socialorb/firestore/getChurchID.dart';
 import 'package:socialorb/firestore/update_profile.dart';
+import 'package:socialorb/main.dart';
 import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EditProfile extends StatefulWidget {
   final String firstName;
@@ -11,6 +19,7 @@ class EditProfile extends StatefulWidget {
   final String userID;
   final String email;
   final String profilePic;
+  final String churchID;
 
   const EditProfile(
       {super.key,
@@ -18,7 +27,7 @@ class EditProfile extends StatefulWidget {
       required this.lastName,
       required this.userID,
       required this.email,
-      required this.profilePic});
+      required this.profilePic, required this.churchID});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -33,8 +42,15 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController aboutController = TextEditingController();
 
   var imagePath = [];
+
+  bool cond = false;
+
   @override
   Widget build(BuildContext context) {
+    if (widget.userID == widget.churchID){
+      cond = true;
+    }
+
     return WillPopScope(
       onWillPop: () async {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -53,12 +69,7 @@ class _EditProfileState extends State<EditProfile> {
             },
           ),
           actions: [
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.settings,
-                  color: PrimaryColor,
-                ))
+            cond ? IconButtonWithDropdownC(vID: widget.churchID,) : IconButtonWithDropdown(value: widget.churchID),
           ],
         ),
         body: Container(
@@ -239,4 +250,154 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
+}
+
+
+//For users
+
+class IconButtonWithDropdown extends StatefulWidget {
+  late final String value;
+
+  // Accept value via constructor
+  IconButtonWithDropdown({required this.value});
+
+  @override
+  IconButtonWithDropdownUser createState() => IconButtonWithDropdownUser(churchValue: value);
+}
+
+class IconButtonWithDropdownUser extends State<IconButtonWithDropdown> {
+    late final String churchValue;
+
+  // Accept value via constructor
+  IconButtonWithDropdownUser({required this.churchValue});
+  @override
+  Widget build(BuildContext context) {
+    bool check = false;
+    return PopupMenuButton<String>(
+      icon: Icon(Icons.settings, color: PrimaryColor,), // The icon for the button
+      onSelected: (String result) {
+        if(result == 'Delete Account'){
+          verifyDialog(context, churchValue);
+        }
+      },
+
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>
+      [
+        
+        const PopupMenuItem<String>(
+          value: 'Delete Account',
+          child: Text('Delete Account'),
+        ),
+        
+      ],
+    );
+  }
+
+    // Function to show the alert dialog
+  Future<void> verifyDialog(BuildContext context, valueID) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap a button to dismiss the dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure you want to delete your account?'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('This action is permanent and will delete all information you have store in this account'),
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () async{
+                //Delete Account from Firebase Auththenication
+                User? user = FirebaseAuth.instance.currentUser;
+                await user!.delete();
+
+                
+
+                //Delete from Cloud Firestore
+                await deleteMember(user.uid, valueID);
+
+                //Sign out
+                await FirebaseAuth.instance.signOut();
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const MainPage()));
+                Fluttertoast.showToast(msg: "Account Deleted");
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+// For churches
+
+class IconButtonWithDropdownC extends StatefulWidget {
+  late final String vID; 
+
+    // Accept value via constructor
+  IconButtonWithDropdownC({required this.vID});
+
+  @override
+  IconButtonWithDropdownChurch createState() => IconButtonWithDropdownChurch(churchValue: vID);
+}
+
+class IconButtonWithDropdownChurch extends State<IconButtonWithDropdownC> {
+  late final String churchValue;
+
+  // Accept value via constructor
+  IconButtonWithDropdownChurch({required this.churchValue});
+  @override
+  Widget build(BuildContext context) {
+    bool check = false;
+    return PopupMenuButton<String>(
+      icon: Icon(Icons.settings, color: PrimaryColor,), // The icon for the button
+      onSelected: (String result) async {
+        if(result == 'Delete Account') {
+          await deleteChurch(widget.vID);
+            Fluttertoast.showToast(
+              msg: "Your account will be deleted in 2-3 business days.",
+              toastLength: Toast.LENGTH_LONG,  // Show toast for a longer duration
+              gravity: ToastGravity.BOTTOM,     // Position the toast at the bottom of the screen
+              fontSize: 16.0,                   // Font size
+            );
+        }else{
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChurchSub(churchID: widget.vID,)),
+            );
+        }
+      },
+
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>
+      [
+        
+        const PopupMenuItem<String>(
+          value: 'Delete Account',
+          child: Text('Delete Account'),
+        ),
+
+        const PopupMenuItem<String>(
+          value: 'Edit Subscription',
+          child: Text('Edit Subscription'),
+        ),
+        
+      ],
+    );
+  }
+
 }

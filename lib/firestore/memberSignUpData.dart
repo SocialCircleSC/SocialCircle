@@ -19,10 +19,21 @@ Future<void> userSetup(String fname, String lname, String email, String churchNa
     'Email Address': email,
     'Status': status,
     'Church Name': churchName,
-    'Church ID': "TBD",
+    'Church ID': removePar(churchID),
     'ProfilePicture': "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 
 
+}
+
+
+String removePar(String s){
+  String modifiedString = "";
+  if (s.length > 2) {
+    // Remove the first and last character
+    modifiedString = s.substring(1, s.length - 1);
+  }
+
+  return modifiedString;
 }
