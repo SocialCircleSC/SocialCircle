@@ -210,13 +210,13 @@ class _GiveScreenState extends State<GiveScreen> {
         'amount': calculateAmount(amount),
         'currency': currency,
         'payment_method_types[]': 'card',
-        'transfer_group': stripeID,
+        'transfer_data[destination]': stripeID,
         'receipt_email': receiptE,
       };
 
       
       var response = await http.post(
-        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),//This link mighty not work
         headers: {
           'Authorization':
               'Bearer ${dotenv.env['STRIPE_SECRET']!}', //SecretKey used here
