@@ -83,6 +83,42 @@ class _MainPageState extends State<MainPage> {
     initPushNotifications();
   }
 
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    //Setting up Remote Notifications
+    
+    // Request notification permissions
+    _firebaseMessaging.requestPermission();
+
+        // Listen to foreground messages (when the app is in the foreground)
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("Received a message while in foreground: ${message.notification?.title}");
+      if (message.notification != null) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(message.notification!.title ?? "Notification"),
+            content: Text(message.notification!.body ?? "No content"),
+            actions: [
+              TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("OK")),
+            ],
+          ),
+        );
+      }
+    });
+
+    // Handle when the app is opened from a notification
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const NavBar()));
+    });
+
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "socialcircle-4f104",
+  "private_key_id": "94e2934fc1831d871904309ab022f7a5c6789489",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCe81Lng+KdwJ74\nWEQeXinEnpLnmjD8toHcJNz1kOJmxno18b1Mxl3V5OJro/0Tv5WFcqwcoCll129M\nbchFLcJW6MG1YRDLJV+8bIYQtku4YEmYM0KuPURPLkdKyqv+dX7hQ6teYa9JmdVw\nFaYiWspM4ZjL8UdZNZNqQz0KUvIAARcpHg5Y+ZZsMC+zhmx3WPreZGC674TEBy4z\nGSYQQlBlU1am+8zzw85uQe4QM9d24CPAyb/6DHIZ1J3D7Y2T1zwy466epsO0EUX4\nhZNl4KTGDakOHKYBZjZREccEskp5PqvLzI4zW1+0snElCNmSoPNPjtUGhKl0Z/9X\nIzstCbqdAgMBAAECggEAAqFbK1qa2upvlwN66Re80DShkLST//KTNo3jnCqwHGxH\nZHIiJE2aCuqVNpvJmdSPSFyL7ZNW7AkDHfwpFr/5mc+TOQmoqfvt2CPhmhAyM5Rg\nU2TxwwlfgoHtCxdMflL6bQbeJJswN+MUTZ0GGUZwV5JaIXHWMOs6i8UeEvgpageT\n6XsbiOc84GqOFgrCMbgn+K4paiBzMLDzxFH9yYsH0ClKCHWbKbzJRqtp6xqT3zff\n3kVJTEOhlZ03nu7zmNi9dkYOxIEHwJS+jdDsH14tiEPE4zyZLPZ4qSnnakGgKWC2\nhhHh3xFnlfx5RFwOj5TfFNoYm3bUFrQhof0des+/IQKBgQDOYQmzWu/QpRg/qh9M\nrY7FsEco5AFFQkR9UOPBvdAqTH/uyshuJ54TbVfiI/Fdm0MFoxfU6JjADS6hai/f\nimefkePhB3zMpNAKl4sOMEKf2QH0yV1y3frocRJllU55k1g6Nfd9vIGarjLx30z8\noxuvqeNq5uftEOLTZ8eIwsO4LQKBgQDFKvs2SJEVSpdn7dI8l4u5/7K8UMQn3kKG\nF/fBrE6oHf6s9xPyP/GPOeBY/X4V0cJkx530nc1ueu6ifyNpZJdQYWDPs01QBoWJ\nncSYu74lZZkQcjDDHdZTRbip+9UF5CjMR/TyBmyO/rG3fhL8TE45riAnEe+yOxpl\nYrrVfIOiMQKBgAv5ATEQg30dNszqt6ohH3lEgrxSjehQsdx7RttEgcEScxGNXhdV\n4QvLeh+6ahQ+H6NCFO3bGJF7skrW+DQFuYE+W3QAlTLiFNeodv65ugO/+ScUT4GM\nczPs615NTSIsdB/cZaE7wGES3g2+IJ8/bym/t1vKTYYpRp9xE9hRRD15AoGBAIIW\nYbjnGBJcLJk9qECiHGaT9nGZOFK1ql6e4bC+5wa1A5tLSbXDyrUdEpCkb9QlmYS0\nz9rdYvVJ1rkP+WVIIS2/kgh33MK4CtNJbLT46fPynJLlRJb30LkQf05oAZzpdKGT\nuGEXK/kMwmS2ogAkuFgGMuCUTPnjVP8frPW+OXuBAoGAWUcgAfMcjveyplH/olTj\nl4bB0MWloxNwaFPLcKecIpLJ2G7vXXTfpnpZlEPQTVyhIzeP2dN3wxmQ+pRRJf+V\n/AUpGqkklbBWWSm6d6AMCBGMlYpTFxYodAR5YMurywpDZnjjqkpSTRiJ86oh7xbw\nFum+eUJDNQsFFkaoOGYvOgg=\n-----END PRIVATE KEY-----\n",
+  "client_email": "social-messaging-admin@socialcircle-4f104.iam.gserviceaccount.com",
+  "client_id": "107265159728622344181",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/social-messaging-admin%40socialcircle-4f104.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

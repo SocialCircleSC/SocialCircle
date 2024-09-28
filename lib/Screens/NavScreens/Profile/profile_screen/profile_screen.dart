@@ -1,9 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:socialorb/screens/navscreens/profile/editscreens/edit_user_profile.dart';
 import 'package:socialorb/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:googleapis_auth/auth_io.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -88,6 +95,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  String? fcmToken;
+
+  @override
+  void initState() {
+    super.initState();
+    getFCMToken();  // Fetch the FCM token when the app starts
+  }
+
+    // Method to get the FCM token
+  Future<void> getFCMToken() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // Request permission (for iOS)
+    await requestNotificationPermissions();
+
+    // Get the token
+    String? token = await messaging.getToken();
+    setState(() {
+      fcmToken = token;
+    });
+
+    // Print or send the token to your backend server
+    print("FCM Token: $fcmToken");
   }
 
   @override
@@ -218,7 +250,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       // }
                     },
                   ),
+
+                  
                 )),
+
+                TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: WhiteColor,
+                      backgroundColor: SecondaryColor,
+                    ),
+                    child: const Text("Push Noti"),
+                    onPressed: () {
+                        // Example usage: Replace with actual device token
+                        
+                        sendPushNotification(fcmToken!, 'New Post Alert!', 'A user has made a new post in the app.', dotenv.env['PROJECT_ID']!, dotenv.env['SERVER_KEY']! );
+                  
+                    },
+                  ),
               ],
             );
           }),
@@ -243,4 +291,101 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return false;
     }
   }
+  
+  // Function to get OAuth2 token from GCP metadata server
+Future<String?> getAccessToken() async {
+  var url = Uri.parse(
+      'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token');
+  
+  try {
+    var response = await http.get(url, headers: {
+      'Metadata-Flavor': 'Google',
+    });
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      return jsonResponse['access_token'];
+    } else {
+      print('Error fetching access token: ${response.body}');
+      return null;
+    }
+  } catch (e) {
+    print('Exception occurred: $e');
+    return null;
+  }
 }
+
+  //Curently Path is not working.
+  Future<void> sendPushNotification(String fcmToken, String title, String body, String projectID, String serverKey) async {
+  String? accessToken = await getAccessToken();
+
+  if (accessToken == null) {
+    print('Failed to get access token');
+    return;
+  }
+
+  // Firebase Cloud Messaging HTTP v1 API URL
+  String projectId = dotenv.env['PROJECT_ID']!;
+  var url = Uri.parse('https://fcm.googleapis.com/v1/projects/$projectId/messages:send');
+
+  // Device FCM token (replace with actual device token)
+  String deviceToken = fcmToken;
+
+  // Create the notification payload
+  var notificationPayload = {
+    "message": {
+      "token": deviceToken,
+      "notification": {
+        "title": "New Post Alert!",
+        "body": "Someone just posted on your social circle!"
+      },
+      "data": {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "1",
+        "status": "done"
+      }
+    }
+  };
+
+  try {
+    // Send the POST request with the OAuth2 token
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',  // Use OAuth2 access token
+      },
+      body: jsonEncode(notificationPayload),
+    );
+
+    if (response.statusCode == 200) {
+      print('Notification sent successfully!');
+    } else {
+      print('Failed to send notification: ${response.statusCode} ${response.body}');
+    }
+  } catch (e) {
+    print('Error sending notification: $e');
+  }
+
+  }
+
+
+Future<void> requestNotificationPermissions() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // Request permission on iOS (optional on Android)
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else {
+    print('User declined or has not accepted permission');
+  }
+}
+
+}
+
