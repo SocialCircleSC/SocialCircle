@@ -59,7 +59,7 @@ class _ChooseUserState extends State<ChooseUser> {
                 child: Text(
                   'I am a',
                   style: TextStyle(
-                    fontSize: 35,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Roboto',
                   ),
@@ -91,64 +91,10 @@ class _ChooseUserState extends State<ChooseUser> {
                 height: displayHeight(context) * 0.01,
               ),
               ElevatedButton(
-                onPressed: () async {
-                    showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text("Do you have your code?"),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Main text
-                                  TextFormField(
-                                    style: TextStyle(color: Colors.black),
-                                    controller: churchCode,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      hintText: 'Enter sign up code',
-                                      hintStyle: TextStyle(color: Colors.black, fontSize: 16),
-                                    ),
-                                  ),
-
-                                  // Spacing between the list and the buttons
-                                  SizedBox(height: 20),
-
-                                  // Row with two buttons
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ElevatedButton(
-                                        
-                                        onPressed: () {
-                                         
-                                          if(churchCode.text == dotenv.env['CHURCH_SIGNUP_CODE']!){
-                                            
-                                            Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => SignUpChurch(planID: 0)),);
-                                            
-                                            
-                                          }else{
-
-                                          }
-
-                                        },
-                                        child: Text('Yes'),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          openURl(dotenv.env['CALENDY_SITE']!);
-                                        },
-                                        child: Text('No'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-    },
-  );
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignUpChurch(planID: 0)),);
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: WhiteColor,

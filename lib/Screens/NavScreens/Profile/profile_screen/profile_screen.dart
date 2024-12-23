@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:googleapis_auth/auth_io.dart';
+// import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -263,7 +263,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () {
                         // Example usage: Replace with actual device token
                         
-                        sendPushNotification(fcmToken!, 'New Post Alert!', 'A user has made a new post in the app.', dotenv.env['PROJECT_ID']!, dotenv.env['SERVER_KEY']! );
+                        //sendPushNotification(fcmToken!, 'New Post Alert!', 'A user has made a new post in the app.', dotenv.env['PROJECT_ID']!, dotenv.env['SERVER_KEY']! );
                   
                     },
                   ),
@@ -294,80 +294,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   
   // Function to get OAuth2 token from GCP metadata server
 Future<String?> getAccessToken() async {
-  var url = Uri.parse(
-      'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token');
-  
-  try {
-    var response = await http.get(url, headers: {
-      'Metadata-Flavor': 'Google',
-    });
-
-    if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
-      return jsonResponse['access_token'];
-    } else {
-      print('Error fetching access token: ${response.body}');
-      return null;
-    }
-  } catch (e) {
-    print('Exception occurred: $e');
-    return null;
-  }
-}
-
-  //Curently Path is not working.
-  Future<void> sendPushNotification(String fcmToken, String title, String body, String projectID, String serverKey) async {
-  String? accessToken = await getAccessToken();
-
-  if (accessToken == null) {
-    print('Failed to get access token');
-    return;
-  }
-
-  // Firebase Cloud Messaging HTTP v1 API URL
-  String projectId = dotenv.env['PROJECT_ID']!;
-  var url = Uri.parse('https://fcm.googleapis.com/v1/projects/$projectId/messages:send');
-
-  // Device FCM token (replace with actual device token)
-  String deviceToken = fcmToken;
-
-  // Create the notification payload
-  var notificationPayload = {
-    "message": {
-      "token": deviceToken,
-      "notification": {
-        "title": "New Post Alert!",
-        "body": "Someone just posted on your social circle!"
-      },
-      "data": {
-        "click_action": "FLUTTER_NOTIFICATION_CLICK",
-        "id": "1",
-        "status": "done"
-      }
-    }
+  final serviceAccountJson = {
+    //Stuff from json file
   };
 
-  try {
-    // Send the POST request with the OAuth2 token
-    var response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // Use OAuth2 access token
-      },
-      body: jsonEncode(notificationPayload),
-    );
+  List<String> scopes = [
+    "https://www.googleapis.com/auth/userinfo.email"
+    "https://www.googleapis.com/auth/firebase.database"
+    "https://www.googleapis.com/auth/firebase.messaging"
+  ];
 
-    if (response.statusCode == 200) {
-      print('Notification sent successfully!');
-    } else {
-      print('Failed to send notification: ${response.statusCode} ${response.body}');
-    }
-  } catch (e) {
-    print('Error sending notification: $e');
-  }
+  //http.Client client = await 
+}
 
-  }
+
 
 
 Future<void> requestNotificationPermissions() async {

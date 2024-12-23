@@ -51,6 +51,7 @@
 	<array>
 		<string>https</string>
 		<string>http</string>
+		<string>socialorb</string>
 	</array>
 	<key>CFBundleURLTypes</key>
 

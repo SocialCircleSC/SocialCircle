@@ -9,6 +9,7 @@ Future<void> churchSetup(
   String phoneN,
   String email,
   String event1,
+  String stripeAccountID,
 ) async {
   CollectionReference circle = FirebaseFirestore.instance.collection('circles');
   CollectionReference typeUser = FirebaseFirestore.instance.collection('users');
@@ -23,7 +24,7 @@ Future<void> churchSetup(
     'Phone Number': phoneN,
     'Email Address': email,
     'Status': 'Church',
-    'Stripe Connected ID': "N/A",
+    'Stripe Connected ID': stripeAccountID,
 
     'Number of Members': 0,
     'Church ID': uid,
