@@ -208,7 +208,7 @@ class _NavBarState extends State<NavBar> {
     await FirebaseAuth.instance.signOut();
     // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const MainPage()));
+        MaterialPageRoute(builder: (context) => MainPage()));
     Fluttertoast.showToast(msg: "Logout Successful");
   }
 }

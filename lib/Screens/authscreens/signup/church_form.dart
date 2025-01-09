@@ -1,8 +1,9 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously
 
+import 'package:socialorb/Screens/authscreens/signup/subscription.dart';
 import 'package:socialorb/firestore/ChurchSignUpData.dart';
 import 'package:socialorb/screens/authscreens/login/login_screen.dart';
-
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:socialorb/themes/theme.dart';
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,28 +51,48 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController weeklyEventController = TextEditingController();
 
-  //@override
+//late WebViewController _webViewController;
 
-  // void initState(){
-  //   super.initState();
+  WebViewController? _webViewController;
 
-  //       // Listen for URL changes in the WebView
-  //   flutterWebViewPlugin.onUrlChanged.listen((String url) {
-  //     if (url.contains("your_redirect_url")) {
-  //       // The user has reached the redirect URL
-  //       // Close the WebView
-  //       flutterWebViewPlugin.close();
+  void launchOnboardingLink(String url) async {
+    _webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            if (url.contains("www.social-orb.com")) {
+              Navigator.of(context).pushNamedAndRemoveUntil('/SubScreen', (route) => false);
+            }
+          },
+          onPageFinished: (String url) {
+            debugPrint("Page finished loading: $url");
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(url));
 
-  //       // Navigate back to Flutter
-  //       Navigator.of(context).pop();
-  //     }
-  //   });
-  // }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: EdgeInsets.zero,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: WebViewWidget(controller: _webViewController!),
+          ),
+        );
+      },
+    );
+  }
+ 
   @override
   Widget build(BuildContext context) {
 
     return Column(
       children: [
+
         //Church Name Controller
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
@@ -275,11 +296,12 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
                     // Step 3: Redirect User to Onboarding
                     debugPrint(oID);
                     
-                    if(await launchUrl(Uri.parse(oID))){
-                      await launchUrl(Uri.parse(oID));
-                    }else{
-                      debugPrint('Could not launch url Link');
-                    }
+                    launchOnboardingLink(oID);
+                    // if(await launchUrl(Uri.parse(oID))){
+                    //   await launchUrl(Uri.parse(oID));
+                    // }else{
+                    //   debugPrint('Could not launch url Link');
+                    // }
                     
                     
 

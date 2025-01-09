@@ -47,14 +47,22 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>https</string>
-		<string>http</string>
-		<string>socialorb</string>
-	</array>
-	<key>CFBundleURLTypes</key>
+	
+	<dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>https</string>
+        </array>
+        <key>CFBundleURLName</key>
+        <string>www.social-orb.com</string>
+        <key>CFBundleURLName</key>
+        <string>www.social-orb.com/about-us</string>
+    </dict>
 
+	<key>LSApplicationQueriesSchemes</key>
+
+	<key>CFBundleURLTypes</key>
+	<key>FirebaseDynamicLinksCustomDomains</key>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<key>LSApplicationQueriesSchemes</key>
 	<key>NSAppTransportSecurity</key>
