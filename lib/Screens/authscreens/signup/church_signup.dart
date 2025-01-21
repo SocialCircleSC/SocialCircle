@@ -90,7 +90,7 @@ class _SignUpChurchState extends State<SignUpChurch> {
               ),
                Padding(
                 padding: DefaultPadding,
-                child: SignUpFormChurch(planID: widget.planID,),
+                child: SignUpFormChurch(guest: false,),
               ),
               SizedBox(
                 height: displayHeight(context) * 0.06,

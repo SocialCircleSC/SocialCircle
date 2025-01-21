@@ -35,165 +35,154 @@ class _SubScreenState extends State<SubScreen> {
 }
 
 class HorizontalCardScroll extends StatelessWidget {
-  late final String churchValue;
-
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          _buildCard(context,'Starter Pack: \$60', '200' , PrimaryColor, 1),
-          _buildCard(context, 'Classic Pack: \$120', '500', PrimaryColor, 2),
-          _buildCard(context, 'Exclusive Pack: \$500', '2000', PrimaryColor, 3),
-          _buildCard(context, 'Social Pack: \$1200', '5000', PrimaryColor, 4),
+          _buildModernCard(context, 'Free Pack: \$0', '200', 1),
+          _buildModernCard(context, 'Classic Pack: \$30', '500', 2),
+          _buildModernCard(context, 'Exclusive Pack: \$120', '5000', 3),
+          _buildModernCard(context, 'Social Pack: \$500', '10000', 4),
         ],
       ),
     );
   }
 
-}
+  Widget _buildModernCard(BuildContext context, String title, String churchSize, int code) {
+    List<String> featureList = [
+      "Text to Give",
+      "Media Engagement",
+      "Outreach and Community Collaboration",
+      "Messaging",
+      "Announcements",
+      "Event Management",
+      "Unlimited Guests",
+    ];
 
-Widget _buildCard(BuildContext contextz,String title, String churchSize ,Color color, int code){
-
-  List<String> featureList = [
-    "Text to Give",
-    "Media Engagement",
-    "Outreach and Community Collaboration",
-    "Messaging",
-    "Annoucements",
-    "Event Mangement"
-  ];
-
-  return Container(
-    width: 300, // Adjust the width of the card
-      margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 140),
+    return Container(
+      width: 300,
+      margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
       decoration: BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.circular(15.0),
+        color: const Color(0xFF073D5F),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: const [
-        BoxShadow(
-          color: Colors.black26,
-          offset: Offset(0, 4),
-          blurRadius: 5.0,
-        ),
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, 8),
+            blurRadius: 10,
+          ),
         ],
       ),
-
-          child: Column(
-            
-            children: <Widget>[
-              Container(
-                child:  Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    title + " Monthly",
-                    style: const TextStyle(color: BlackColor, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
-                  ),
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: const BoxDecoration(
+              color: Color(0xFF20BAB1),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
-
-              Container(
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "Max Members: $churchSize",
-                    style: TextStyle(color: BlackColor, fontSize: 23),
-                  ),
-                ),
+            ),
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
-
-              Container(
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "Features",
-                    style: TextStyle(color: BlackColor, fontSize: 23),
-                  ),
-                ),
-              ),
-
-              Container(
-                child: Column(
-                  children: featureList.map((e) => Text(e)).toList(),
-                )
-              ),
-
-              Container(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 60),
-                  child: ElevatedButton(
-                    onPressed: (){
-                      //showPreparation(contextz, code, cID);
-                  }
-                  ,
-                    child: Text("Select"),
-                    style: ElevatedButton.styleFrom(
-                      primary: WhiteColor,
-                    ),
-                    ),
-                ),
-              ),
-
-
-            ],
+            ),
           ),
-  );
+
+          // Content
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Max Members: $churchSize",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "Features:",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ...featureList.map(
+                  (feature) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.check_circle, color: Colors.white, size: 16),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            feature,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                
+
+              ],
+            ),
+          ),
+
+          // Footer with Button
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Action for selecting this plan
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  "Select",
+                  style: TextStyle(
+                    color: Color(0xFF073D5F),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 
-// void showPreparation(BuildContext context, int planID, String churchID){
-//   showDialog(
-//     context: context,
-//     builder: (context) {
-//       return AlertDialog(
-//         title: const Text("Almost done"),
-//         content: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             // Main text
-//             const Text('An email about switching to the new plan will be sent to you in the next 2-3 business days.',
-//                                 style: TextStyle(fontWeight: FontWeight.bold),
-//                                 ),
-                                
-                                
 
-//             // Spacing between the list and the buttons
-//             SizedBox(height: 20),
-
-//             // Row with two buttons
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     Navigator.of(context).pop();
-//                   },
-//                   child: Text('Cancel'),
-//                 ),
-//                 ElevatedButton(
-//                   onPressed: () async{
-//                     editPlan(churchID, planID);
-//                     Navigator.of(context).pushReplacement(
-//                     MaterialPageRoute(builder: (context) => const NavBar()));
-//                     Fluttertoast.showToast(
-//                       msg: "An email about purchasing your new plan will be sent to you in the next 2-3 business days.",
-//                       toastLength: Toast.LENGTH_LONG,  // Show toast for a longer duration
-//                       gravity: ToastGravity.BOTTOM,     // Position the toast at the bottom of the screen
-//                       fontSize: 16.0,                   // Font size
-//                     );
-//                   },
-//                   child: Text('OK'),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       );
-//     },
-//   );
-// }
 
 
 

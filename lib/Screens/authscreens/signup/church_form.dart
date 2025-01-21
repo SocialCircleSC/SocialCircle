@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously
 
+import 'package:socialorb/Screens/AuthScreens/signup/general_signup.dart';
 import 'package:socialorb/Screens/authscreens/signup/subscription.dart';
 import 'package:socialorb/firestore/ChurchSignUpData.dart';
 import 'package:socialorb/screens/authscreens/login/login_screen.dart';
@@ -18,8 +19,8 @@ import 'package:http/http.dart' as http;
 
 
 class SignUpFormChurch extends StatefulWidget {
-  final int planID;
-  const SignUpFormChurch({Key? key, required this.planID}) : super(key: key);
+  
+  const SignUpFormChurch({Key? key, required bool guest}) : super(key: key);
 
   @override
   State<SignUpFormChurch> createState() => _SignUpFormChurchState();
@@ -61,12 +62,17 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
-            if (url.contains("www.social-orb.com")) {
-              Navigator.of(context).pushNamedAndRemoveUntil('/SubScreen', (route) => false);
+            if (url.contains("google.com")) {
+              Navigator.of(context).pop();
+              
+            }else if (url.contains("social-orb")){
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => SubScreen()));
             }
           },
           onPageFinished: (String url) {
-            debugPrint("Page finished loading: $url");
+            debugPrint("Finished");
           },
         ),
       )
@@ -371,8 +377,8 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
 
       body: {
         'account': acID,
-        'refresh_url': 'https://www.youtube.com', // URL to reinitiate onboarding if interrupted https://your-app.com/reauth
-        'return_url': 'https://www.google.com', // URL to redirect after successful onboarding https://your-app.com/success
+        'refresh_url': 'https://www.google.com', // URL to reinitiate onboarding if interrupted https://your-app.com/reauth
+        'return_url': 'https://www.social-orb.com/', // URL to redirect after successful onboarding https://your-app.com/success
         'type': 'account_onboarding',
       },
     );

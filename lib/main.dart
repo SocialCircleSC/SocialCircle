@@ -1,3 +1,5 @@
+import 'package:socialorb/Screens/authscreens/signup/church_form.dart';
+import 'package:socialorb/Screens/authscreens/signup/general_form.dart';
 import 'package:socialorb/Screens/authscreens/signup/subscription.dart';
 import 'package:socialorb/notifications/push_noti.dart';
 import 'package:socialorb/screens/messaging/message_home.dart';
@@ -79,19 +81,6 @@ class _MainPageState extends State<MainPage> {
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
   }
 
-  void _setupDeepLinkListener() {
-    _deepLinkSub = uriLinkStream.listen((Uri? uri) {
-      if (uri != null && uri.path == 'www.social-orb.com/onboard') {
-        // Navigate to SubScreen when the deep link is detected
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const SubScreen()),
-        );
-      }
-    }, onError: (err) {
-      print('Failed to handle deep link: $err');
-    });
-  }
 
 
 
@@ -103,8 +92,6 @@ class _MainPageState extends State<MainPage> {
     initPushNotifications();
 
     // Set up deep link listener
-    _setupDeepLinkListener();
-
     // Request notification permissions
     firebaseMessaging.requestPermission();
 
