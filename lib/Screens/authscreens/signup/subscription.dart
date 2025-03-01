@@ -1,20 +1,28 @@
 import 'dart:convert';
-import 'dart:developer';
-
-
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:socialorb/Screens/NavScreens/navbar/nav_bar.dart';
-import 'package:socialorb/Screens/authscreens/signup/church_signup.dart';
-import 'package:socialorb/firestore/changePlan.dart';
-import 'package:socialorb/themes/theme.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:socialorb/Screens/authscreens/login/login_screen.dart';
+import 'package:socialorb/firestore/ChurchSignUpData.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SubScreen extends StatefulWidget {
-  const SubScreen({super.key});
+  final String churchStripeID;
+  final String churchName;
+  final String churchAddress;
+  final String email;
+  final String phoneNumber;
+  final String weeklyEvent;
 
-
+  const SubScreen({
+    Key? key,
+    required this.churchStripeID,
+    required this.churchName,
+    required this.churchAddress,
+    required this.email,
+    required this.phoneNumber,
+    required this.weeklyEvent,
+  }) : super(key: key);
 
   @override
   State<SubScreen> createState() => _SubScreenState();
@@ -25,16 +33,25 @@ class _SubScreenState extends State<SubScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: PrimaryColor,
-        title: const Text("Choose Your Plan"),
+        backgroundColor: Colors.white,
+        title: const Text("Final Step: Choose Plan"),
       ),
-
-      body: HorizontalCardScroll(),
+      body: HorizontalCardScroll(widget: widget),
     );
   }
 }
 
 class HorizontalCardScroll extends StatelessWidget {
+  final SubScreen widget;
+  HorizontalCardScroll({Key? key, required this.widget}) : super(key: key);
+
+  final Map<int, String> planPaymentLinks = {
+    1: "PAYMENT_LINK_HERE_FREE", 
+    2: "https://buy.stripe.com/test_28oeWudnK0dK0ZafZ5",
+    3: "https://buy.stripe.com/test_00g01Aaby3pWeQ0fZ6",
+    4: "https://buy.stripe.com/test_dR67u2bfCgcI9vG14d",
+  };
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,29 +59,19 @@ class HorizontalCardScroll extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          _buildModernCard(context, 'Free Pack: \$0', '200', 1),
-          _buildModernCard(context, 'Classic Pack: \$30', '500', 2),
-          _buildModernCard(context, 'Exclusive Pack: \$120', '5000', 3),
-          _buildModernCard(context, 'Social Pack: \$500', '10000', 4),
+          _buildModernCard(context, 'Free Pack: \$0', 1, widget),
+          _buildModernCard(context, 'Classic Pack: \$29', 2, widget),
+          _buildModernCard(context, 'Exclusive Pack: \$120', 3, widget),
+          _buildModernCard(context, 'Social Pack: \$400', 4, widget),
         ],
       ),
     );
   }
 
-  Widget _buildModernCard(BuildContext context, String title, String churchSize, int code) {
-    List<String> featureList = [
-      "Text to Give",
-      "Media Engagement",
-      "Outreach and Community Collaboration",
-      "Messaging",
-      "Announcements",
-      "Event Management",
-      "Unlimited Guests",
-    ];
-
+  Widget _buildModernCard(BuildContext context, String title, int code, SubScreen widget) {
     return Container(
-      width: 300,
-      margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+      width: 320,
+      margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
       decoration: BoxDecoration(
         color: const Color(0xFF073D5F),
         borderRadius: BorderRadius.circular(20),
@@ -79,7 +86,6 @@ class HorizontalCardScroll extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Container(
             padding: const EdgeInsets.all(16),
             decoration: const BoxDecoration(
@@ -93,79 +99,50 @@ class HorizontalCardScroll extends StatelessWidget {
               title,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-
-          // Content
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Max Members: $churchSize",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  "Features:",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ...featureList.map(
-                  (feature) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.check_circle, color: Colors.white, size: 16),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            feature,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                
-
-              ],
-            ),
-          ),
-
-          // Footer with Button
-          const Spacer(),
+          Expanded(child: SizedBox()),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Action for selecting this plan
+                onPressed: () async {
+                  String? paymentLink = planPaymentLinks[code];
+
+                  //Go to payment link site or create account based on data
+                  if (paymentLink != null) {
+                     if(paymentLink == "Free"){
+                     await churchSetup(widget.churchName, widget.churchAddress, widget.phoneNumber, widget.email, widget.weeklyEvent, widget.churchStripeID);
+                     Fluttertoast.showToast(msg: "All done! Feel free to Login Now.");
+                     // ignore: use_build_context_synchronously
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    );
+
+                     }else{
+                        _launchURL(context, paymentLink);
+                        //Keep track of which was pressed then go to payment link
+                        //This can be done using if statementsd or case statements to know which was clicked on
+                        //Once done create acc in church setup 
+                        //Go back to login page
+                     }
+                    
+                  } else {
+                    Fluttertoast.showToast(msg: "Error retrieving payment link.");
+                  }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   "Select",
                   style: TextStyle(
                     color: Color(0xFF073D5F),
@@ -181,40 +158,10 @@ class HorizontalCardScroll extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void _launchURL(BuildContext context, String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    Fluttertoast.showToast(msg: "Try Again");
+  }
+}

@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously
 
 import 'package:socialorb/Screens/AuthScreens/signup/general_signup.dart';
+import 'package:socialorb/Screens/authscreens/signup/confirm_signup.dart';
 import 'package:socialorb/Screens/authscreens/signup/subscription.dart';
 import 'package:socialorb/firestore/ChurchSignUpData.dart';
 import 'package:socialorb/screens/authscreens/login/login_screen.dart';
@@ -42,6 +43,7 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
   var jsonR;
   String aID = "";
   String oID = "";
+  String cID = "";
 
   final auth = FirebaseAuth.instance;
   TextEditingController churchNameController = TextEditingController();
@@ -56,42 +58,76 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
 
   WebViewController? _webViewController;
 
-  void launchOnboardingLink(String url) async {
-    _webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageStarted: (String url) {
-            if (url.contains("google.com")) {
-              Navigator.of(context).pop();
-              
-            }else if (url.contains("social-orb")){
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => SubScreen()));
-            }
-          },
-          onPageFinished: (String url) {
-            debugPrint("Finished");
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse(url));
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          insetPadding: EdgeInsets.zero,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: WebViewWidget(controller: _webViewController!),
-          ),
-        );
-      },
-    );
+void launchOnboardingLink(String url, String chName, String chAddress, String chEmail, String chPhoneN, String chWeekE, String cStripeID) {
+  if (url.isEmpty) {
+    Fluttertoast.showToast(msg: "Press Again");
+    return;
   }
+
+  _webViewController = WebViewController()
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..setNavigationDelegate(
+      NavigationDelegate(
+        onPageStarted: (String url) {
+
+          if (url.contains("social-orb.com")) {
+            // User successfully completes onboarding
+            //Navigator.of(context).pop(); // Close WebView
+         Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ConfirmSignUp(
+                churchStripeID: cStripeID,
+                churchName: chName,
+                churchAddress: chAddress,
+                email: chEmail,
+                phoneNumber: chPhoneN,
+                weeklyEvent: chWeekE,
+              ),
+            ),
+          );
+
+          }
+        },
+        onPageFinished: (String url) {
+          debugPrint("Page finished loading: $url");
+        },
+        onWebResourceError: (WebResourceError error) {
+          debugPrint("Webview Error: ${error.description}");
+          Navigator.of(context).pop();
+          Fluttertoast.showToast(msg: "Press Again");
+        },
+        onNavigationRequest: (NavigationRequest request) {
+          debugPrint("Navigation Request: ${request.url}");
+
+          if (request.url.contains("google.com")) {
+            // User interrupted onboarding (refresh or back button)
+            Navigator.of(context).pop(); // Close WebView
+            Fluttertoast.showToast(msg: "Onboarding interrupted. Try again.");
+            return NavigationDecision.prevent;
+          }
+
+          return NavigationDecision.navigate;
+        },
+      ),
+    )
+    ..loadRequest(Uri.parse(url));
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        insetPadding: EdgeInsets.zero,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: WebViewWidget(controller: _webViewController!),
+        ),
+      );
+    },
+  );
+}
+
  
   @override
   Widget build(BuildContext context) {
@@ -282,44 +318,25 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
               } else {
 
                 try{
-                    //Phase 1
-                    debugPrint("Phase 1");
-
                     // Step 1: Create Stripe Account
                     createStripeAccount(emailController.text, churchNameController.text, addressController.text);
 
-                    debugPrint(aID);
-
-                    //Phase 2
-                    debugPrint("Phase 2");
                     // Step 2: Generate Onboarding Link
                     generateOnboardingLink(aID);
 
 
-
-                     //Phase 3
-                    debugPrint("Phase 3");
-                    // Step 3: Redirect User to Onboarding
-                    debugPrint(oID);
+                    if(oID != null){
+                      launchOnboardingLink(oID, churchNameController.text, 
+                        addressController.text,
+                        emailController.text,
+                        phoneNumberController.text,
+                        weeklyEventController.text,
+                        aID,
+                      );
+                    } else{
+                      Fluttertoast.showToast(msg: "Press Again");
+                    }
                     
-                    launchOnboardingLink(oID);
-                    // if(await launchUrl(Uri.parse(oID))){
-                    //   await launchUrl(Uri.parse(oID));
-                    // }else{
-                    //   debugPrint('Could not launch url Link');
-                    // }
-                    
-                    
-
-
-
-
-                    //Phase 4
-                    debugPrint("Phase 4");
-                    // Step 4: Save Account Details to Firebase Server
-                    //signUp(emailController.text, passwordController.text, aID);
-                    //Phase 5
-                      debugPrint("Phase 5");
                   } catch (e){
                     debugPrint("Error with onboarding");
                 }
@@ -363,75 +380,38 @@ class _SignUpFormChurchState extends State<SignUpFormChurch> {
 
   }
 
-  //Generate the onboarding
-  void generateOnboardingLink(String acID) async {
-    final url = Uri.parse('https://api.stripe.com/v1/account_links');
+    //Generate onboarding link
+    void generateOnboardingLink(String acID) async {
+      final url = Uri.parse('https://api.stripe.com/v1/account_links');
 
-    final response = await http.post(
-      url,
-      headers: {
-        'Authorization': 'Bearer ${dotenv.env['STRIPE_TEST_SECRET']!} ', 
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      //This seems to be the issue
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer ${dotenv.env['STRIPE_TEST_SECRET']!}',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: {
+          'account': acID,
+          'refresh_url': 'https://google.com',
+          'return_url': 'https://www.social-orb.com',
+          //'cancel_url': 'https://google.com',
+          'type': 'account_onboarding',
+        },
+      );
 
-      body: {
-        'account': acID,
-        'refresh_url': 'https://www.google.com', // URL to reinitiate onboarding if interrupted https://your-app.com/reauth
-        'return_url': 'https://www.social-orb.com/', // URL to redirect after successful onboarding https://your-app.com/success
-        'type': 'account_onboarding',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      // setState(() {
-      //   oID = data['url'];
-      // });
-      debugPrint(data['url']);
-      oID = data['url'];
-      
-    } else {
-      throw Exception('Failed to create onboarding link: ${response.body}');
-    }
-  }
-
-  
-
-  //SignUp
-  void signUp(String email, String password, String accID) async {
-
-    //Remember to save account ID
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
-
-      await churchSetup(churchNameController.text, addressController.text, 
-        phoneNumberController.text, emailController.text, 
-        weeklyEventController.text, accID);
-
-
-      
-
-      await FirebaseAuth.instance.signOut();
-      Fluttertoast.showToast(
-          msg: "Congrats on making an account. Please login to use the app",
-          toastLength: Toast.LENGTH_LONG);
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginScreen()));
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        Fluttertoast.showToast(msg: "The Password is too weak");
-      } else if (e.code == 'email-already-in-use') {
-        Fluttertoast.showToast(msg: "Email already exists");
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        //oID = data['url']
+        setState(() {
+          oID = data['url'];
+        });
+        launchOnboardingLink(oID, churchNameController.text, addressController.text, emailController.text, phoneNumberController.text, weeklyEventController.text, acID);
+      } else {
+        Fluttertoast.showToast(msg: "Press Again");
       }
-    } catch (e) {
-      debugPrint(e.toString());
     }
+
   }
-
-}
-
 
 
 
