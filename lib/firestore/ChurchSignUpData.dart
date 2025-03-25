@@ -9,8 +9,12 @@ Future<void> churchSetup(
   String phoneN,
   String email,
   String event1,
-  String stripeAccountID,
-) async {
+  String stripeAccountID, {
+  String subscriptionPlan = 'free',
+  int maxMembers = 50,
+  String? customerId,
+  String? customerPortalUrl,
+}) async {
   CollectionReference circle = FirebaseFirestore.instance.collection('circles');
   CollectionReference typeUser = FirebaseFirestore.instance.collection('users');
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -25,6 +29,13 @@ Future<void> churchSetup(
     'Email Address': email,
     'Status': 'Church',
     'Stripe Connected ID': stripeAccountID,
+    
+    // Subscription data
+    'Subscription Plan': subscriptionPlan,
+    'Max Members': maxMembers,
+    'Subscription Date': FieldValue.serverTimestamp(),
+    'Stripe Customer ID': customerId,
+    'Customer Portal URL': customerPortalUrl,
 
     'Number of Members': 0,
     'Church ID': uid,
@@ -67,12 +78,11 @@ Future<void> churchSetup(
     'Members': FieldValue.arrayUnion([uid]),
   });
   
-    //For Giving
+  //For Giving
   await circle.doc(uid).collection("giving").doc().set({
     "Giver": uid,
     'Amount': 0,
     'Date': FieldValue.serverTimestamp(),
- 
   });
 
   //For interactions
@@ -128,9 +138,8 @@ Future<void> churchSetup(
     'TimeStamp': FieldValue.serverTimestamp(),
   });
 
-  // Upload to user collecetion
+  // Upload to user collection
   await typeUser.doc(uid).set({
-    //Maybe add church description?
     "First Name": churchName,
     "Last Name": ' ',
     'Church Name': churchName,
@@ -139,8 +148,97 @@ Future<void> churchSetup(
     "GiveUrl": "",
     "ID": uid,
     'Church ID': uid,
+    
+    // Add subscription data
+    'Subscription Plan': subscriptionPlan,
+    'Max Members': maxMembers,
+    'Subscription Date': FieldValue.serverTimestamp(),
+    'Stripe Customer ID': customerId,
+    'Customer Portal URL': customerPortalUrl,
+    
     'ProfilePicture':
         "https://firebasestorage.googleapis.com/v0/b/socialcircle-4f104.appspot.com/o/Everybody%2F1680057089423811?alt=media&token=87a625f7-6ef0-41c3-bc17-3c01279c089a",
     'TimeStamp': FieldValue.serverTimestamp(),
   });
+  
+  // Create a separate subscription tracking document
+  await FirebaseFirestore.instance.collection('subscriptions').doc(uid).set({
+    'Church ID': uid,
+    'Church Name': churchName,
+    'Email': email,
+    'Plan': subscriptionPlan,
+    'Max Members': maxMembers,
+    'Start Date': FieldValue.serverTimestamp(),
+    'Status': 'active',
+    'Stripe Connected ID': stripeAccountID,
+    'Stripe Customer ID': customerId,
+    'Customer Portal URL': customerPortalUrl,
+  });
+}
+
+// A dedicated function to update subscription details
+Future<void> updateChurchSubscription(
+  String churchId,
+  String subscriptionPlan,
+  int maxMembers, {
+  String? customerId,
+  String? customerPortalUrl,
+}) async {
+  CollectionReference circles = FirebaseFirestore.instance.collection('circles');
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference subscriptions = FirebaseFirestore.instance.collection('subscriptions');
+  
+  // Update subscription in circles collection
+  await circles.doc(churchId).update({
+    'Subscription Plan': subscriptionPlan,
+    'Max Members': maxMembers,
+    'Subscription Date': FieldValue.serverTimestamp(),
+    if (customerId != null) 'Stripe Customer ID': customerId,
+    if (customerPortalUrl != null) 'Customer Portal URL': customerPortalUrl,
+  });
+  
+  // Update subscription in users collection
+  await users.doc(churchId).update({
+    'Subscription Plan': subscriptionPlan,
+    'Max Members': maxMembers,
+    'Subscription Date': FieldValue.serverTimestamp(),
+    if (customerId != null) 'Stripe Customer ID': customerId,
+    if (customerPortalUrl != null) 'Customer Portal URL': customerPortalUrl,
+  });
+  
+  // Update subscription tracking document
+  await subscriptions.doc(churchId).update({
+    'Plan': subscriptionPlan,
+    'Max Members': maxMembers,
+    'Update Date': FieldValue.serverTimestamp(),
+    if (customerId != null) 'Stripe Customer ID': customerId,
+    if (customerPortalUrl != null) 'Customer Portal URL': customerPortalUrl,
+  });
+}
+
+// Function to check if a church has reached its member limit
+Future<bool> checkMemberLimit(String churchId) async {
+  try {
+    // Get church document
+    DocumentSnapshot churchDoc = await FirebaseFirestore.instance
+        .collection('circles')
+        .doc(churchId)
+        .get();
+    
+    if (!churchDoc.exists) {
+      return false;
+    }
+    
+    Map<String, dynamic> data = churchDoc.data() as Map<String, dynamic>;
+    
+    int currentMembers = data['Number of Members'] ?? 0;
+    int maxMembers = data['Max Members'] ?? 50;
+    
+    // Return true if limit reached
+    return currentMembers >= maxMembers;
+  } catch (e) {
+    print("Error checking member limit: $e");
+    // Default to false to allow member addition in case of error
+    return false;
+  }
 }

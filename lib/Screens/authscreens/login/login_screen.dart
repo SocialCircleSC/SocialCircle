@@ -2,8 +2,8 @@
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:socialorb/Screens/authscreens/signup/church_signup.dart';
+import 'package:socialorb/Screens/authscreens/signup/general_signup.dart';
 import 'package:socialorb/screens/authscreens/login/login_form.dart';
-import 'package:socialorb/screens/gettingstarted/choose_user_type.dart';
 import 'package:socialorb/themes/theme.dart';
 import 'package:socialorb/screens/authScreens/resetpassword/reset_password_screen.dart';
 import 'package:socialorb/sizes/size.dart';
@@ -31,6 +31,110 @@ class _LoginScreenState extends State<LoginScreen> {
   //CommunitCode
   TextEditingController churchCode = new TextEditingController();
 
+  // Show user type selection dialog
+  void _showSignUpOptions() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("I am a", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close dialog
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: WhiteColor,
+                      backgroundColor: PrimaryColor,
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    child: const Text(
+                      'Member',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close dialog
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignUpChurch(planID: 0)),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: WhiteColor,
+                      backgroundColor: PrimaryColor,
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    child: const Text(
+                      'Church',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+                // You can uncomment this if you want to add the Guest option back
+                /*
+                SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close dialog
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const GuestSignUp()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: WhiteColor,
+                      backgroundColor: PrimaryColor,
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    child: const Text(
+                      'Guest',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+                */
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,21 +153,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Image(image: AssetImage("lib/assets/logo.png")),
             ),
           ),
-
-          // SizedBox(
-          //   height: displayHeight(context) * 0.01,
-          // ),
-
-          // Align(
-          //   alignment: Alignment.center,
-          //   child: SizedBox(
-          //     height: displayHeight(context) * 0.03,
-          //     child: Text(
-          //       "SocialOrb",
-          //       style: TextStyle(fontSize: 23, fontWeight: FontWeight.w500),
-          //     ),
-          //   ),
-          // ),
 
           SizedBox(
             height: displayHeight(context) * 0.07,
@@ -84,26 +173,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(width: displayWidth(context) * 0.02),
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChooseUser(),
-                    ),
-                  );
-                },
-                child: GestureDetector(
-                  child: Text(
-                    "Sign Up",
-                    style: textButton.copyWith(
-                      decoration: TextDecoration.underline,
-                      decorationThickness: 1,
-                    ),
-                    
+                onTap: _showSignUpOptions, // Show the dialog when tapped
+                child: Text(
+                  "Sign Up",
+                  style: textButton.copyWith(
+                    decoration: TextDecoration.underline,
+                    decorationThickness: 1,
                   ),
-                  onTap: () async {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseUser()));
-                  },
                 ),
               ),
             ],
@@ -134,15 +210,6 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(
             height: displayHeight(context) * 0.01,
           ),
-
-          // Text(
-          //   "Or log in with:",
-          //   style: subTitle.copyWith(color: BlackColor),
-          // ),
-          SizedBox(
-            height: displayHeight(context) * 0.01,
-          ),
-          // AltLogin(),
         ]),
       ),
     );
